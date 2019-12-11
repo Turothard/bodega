@@ -24,6 +24,7 @@ class CreateColaboradoresTable extends Migration
             $table->date('fechaingresocolab');
             $table->date('fechasalidacolab');
             $table->date('estadocolab');
+            //
             $table->timestamps();
         });
     }
