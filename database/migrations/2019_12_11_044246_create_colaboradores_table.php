@@ -16,8 +16,14 @@ class CreateColaboradoresTable extends Migration
         Schema::create('colaboradores', function (Blueprint $table) {
             $table->string('rutcolaborador');
             $table->primery('rutcolaborador');
-            $table->nombre('nombrescolab');
-            $table->nombre('apellidoscolab');
+            $table->string('nombrescolab');
+            $table->string('apellidoscolab');
+            $table->string('deptocolab');
+            $table->string('sectorcolab');
+            $table->string('cargocolab');
+            $table->date('fechaingresocolab');
+            $table->date('fechasalidacolab');
+            $table->date('estadocolab');
             $table->timestamps();
         });
     }
