@@ -15,7 +15,14 @@ class CreateEstantesTable extends Migration
     {
         Schema::create('estantes', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('nroestante');
+            $table->string("bodega_id");
+            $table->foreign('bodega_id')->references('idbodega')->on('bodegas')->onDelete('cascade');
+            $table->integer('sectoresest');
+            $table->integer('nivelesest');
+            $table->string("descripcionest");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

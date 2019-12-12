@@ -14,8 +14,11 @@ class CreatePeriodosdevosTable extends Migration
     public function up()
     {
         Schema::create('periodosdevos', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idperiodo');
+            $table->string("periododevo");
+            $table->string("descripcionper");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

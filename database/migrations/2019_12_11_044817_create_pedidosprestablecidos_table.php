@@ -15,7 +15,12 @@ class CreatePedidosprestablecidosTable extends Migration
     {
         Schema::create('pedidosprestablecidos', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string("tipopedido");
+            $table->string("nombretipoped");
+            $table->unsignedInteger("pedido_id");
+            $table->foreign('pedido_id')->references('id')->on('pedidos')->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -8,7 +8,7 @@ class PeriodoDevo extends Model
 {
     use SoftDeletes;
     protected $primaryKey = 'idperiodo';
-    protected $table = 'periododevos';
+    protected $table = 'periodosdevos';
     //
     public function articulos()
     {

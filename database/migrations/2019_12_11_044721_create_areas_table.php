@@ -14,8 +14,13 @@ class CreateAreasTable extends Migration
     public function up()
     {
         Schema::create('areas', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idarea');
+            $table->unsignedInteger('sector_id');
+            $table->foreign('sector_id')->references('idsector')->on('sectores')->onDelete('cascade');
+            $table->string("nombrearea");
+            $table->string("descripcionarea");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

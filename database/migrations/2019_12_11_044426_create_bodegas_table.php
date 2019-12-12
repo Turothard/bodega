@@ -14,8 +14,12 @@ class CreateBodegasTable extends Migration
     public function up()
     {
         Schema::create('bodegas', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->timestamps();
+            $table->string('idbodega');
+            $table->primary('idbodega');
+            $table->string('nombrebod');
+            $table->string('tipobod');
+            $table->string('localizacionbod');
+            $table->softDeletes();
         });
     }
 

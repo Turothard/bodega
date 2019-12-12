@@ -18,4 +18,8 @@ class Bodega extends Model
     {
         return $this->hasMany('App\Estante', 'bodega_id', 'idbodega');
     }
+    public function ordencompras()
+    {
+        return $this->hasMany('App\OrdenCompra', 'bodega_id', 'idbodega');
+    }
 }

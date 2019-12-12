@@ -14,8 +14,16 @@ class CreatePosicionesTable extends Migration
     public function up()
     {
         Schema::create('posiciones', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idposicion');
+            $table->unsignedBigInteger("estante_id");
+            $table->foreign('estante_id')->references('id')->on('estantes')->onDelete('cascade');
+            $table->integer("sectorpos");
+            $table->integer("nivelpos");
+            $table->string("codigoart");
+            $table->foreign('codigoart')->references('codigoart')->on('articulos')->onDelete('cascade');
+            $table->integer("cantidadpos");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

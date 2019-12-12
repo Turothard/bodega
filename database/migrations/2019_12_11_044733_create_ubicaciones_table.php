@@ -14,8 +14,13 @@ class CreateUbicacionesTable extends Migration
     public function up()
     {
         Schema::create('ubicaciones', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('idubicacion');
+            $table->unsignedInteger('area_id');
+            $table->foreign('area_id')->references('idarea')->on('areas')->onDelete('cascade');
+            $table->string("nombreubi");
+            $table->string("descripcionubi");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

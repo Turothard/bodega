@@ -15,11 +15,11 @@ class Unidade extends Model
 
   public function articulos()
   {
-      return $this->hasmany('App\Articulos', 'tallaart', 'idtalla');
+      return $this->hasmany('App\Articulos', 'unidad_id', 'idunidad');
   }
 
   public function detalleordencompras()
   {
-      return $this->hasmany('App\DetalleOrdenCompra', 'talladetoc', 'idtalla');
+      return $this->hasmany('App\DetalleOrdenCompra', 'unidad_id', 'idunidad');
   }
 }

@@ -15,7 +15,20 @@ class CreateNotificacionesTable extends Migration
     {
         Schema::create('notificaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string("tipo");
+            $table->string("tabla");
+            $table->string("id_tabla");
+            $table->string("destino");
+            $table->string("grupo");
+            $table->unsignedInteger("usuario_proceso");
+            $table->foreign('usuario_proceso')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger("usuario_objetivo")->nullable();
+            $table->foreign('usuario_objetivo')->references('id')->on('users')->onDelete('cascade');
+            $table->string("grupo_objetivo");
+            $table->string("mensaje");
+            $table->string("estado");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -19,6 +19,6 @@ class Colore extends Model
       }
       public function detalleordencompra()
       {
-          return $this->hasMany('App\DetalleOrdenCompra', 'colorfinaldetoc', 'idcolor');
+          return $this->hasMany('App\DetalleOrdenCompra', 'color_id', 'idcolor');
       }
 }
