@@ -11,6 +11,7 @@ class Articulo extends Model
     protected $primaryKey = 'codigoart';
     protected $table = 'articulos';
     protected $casts = [
+        'codigoart'  =>  'string',
         'nombreart'  =>  'string',
         'descripcionart'  =>  'string',
       ];
@@ -48,6 +49,6 @@ class Articulo extends Model
     }
 
     public function periododevos(){
-        return $this->belongsTo("App\PerdiodoDevo",'periododevo_id', 'idperiodo');
+        return $this->belongsTo("App\PeriodoDevo",'periododevo_id', 'idperiodo');
     }
 }

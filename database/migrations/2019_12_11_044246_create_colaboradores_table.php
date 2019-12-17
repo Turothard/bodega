@@ -18,6 +18,7 @@ class CreateColaboradoresTable extends Migration
             $table->primary('rutcolaborador');
             $table->string('nombrescolab');
             $table->string('apellidoscolab');
+            $table->string('nombrecortocolab');
             $table->string('deptocolab');
             $table->string('sectorcolab');
             $table->string('cargocolab');

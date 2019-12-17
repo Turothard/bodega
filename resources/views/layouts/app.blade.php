@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,10 +18,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -36,34 +37,59 @@
 
                     </ul>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ml-auto">
+                    <!-- Right Side Of Na vbar -->
+                    <ul class="navbar-nav  ml-auto">
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                             </li>
-                            @if (Route::has('register'))
+                            {{--@if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('pedidos') }}">{{ __('Pedidos') }}</a>
                                 </li>
-                            @endif
+                            @endif--}}
                         @else
+                            @if (Auth::user()->department=='ADMIN' || Auth::user()->department=='BODEGA')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('bodega') }}">{{ __('Bodega') }}</a>
+                            </li>
+                            @endif
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('pedidos') }}">{{ __('Pedidos') }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('informes') }}">{{ __('Informes') }}</a>
+                            </li>
+                            @if (Auth::user()->department=='ADMIN' || Auth::user()->department=='BODEGA')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('mantenedores') }}">{{ __('Mantenedores') }}</a>
+                            </li>
+                            @endif
+                            @if (Auth::user()->department=='ADMIN')
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('configuraciones') }}">{{ __('Configuraciones') }}</a>
+                            </li>
+                            @endif
+                            
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-
+                                
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Desconectarse') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+                                    <a id="notificacionesa" class="dropdown-item hidden" data-toggle="modal" data-target="#notificacionesmodal" href="#" >
+                                         Notificaciones <span class="badge badge-primary badge-pill">1</span>
+                                    </a>
                                 </div>
                             </li>
                         @endguest
@@ -71,10 +97,14 @@
                 </div>
             </div>
         </nav>
-
+        @auth
+            <nofiticacion-vue></nofiticacion-vue>
+        @endauth
         <main class="py-4">
             @yield('content')
         </main>
+        
     </div>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>

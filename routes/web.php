@@ -20,5 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
+    Route::get('/bodega', 'BodegaController@index')->name("bodega");
+    Route::get('/pedidos', 'PedidosController@index')->name("pedidos");
+    Route::post('/pedidos/getdatos', 'PedidosController@getdatos')->name("pedidos.getdatos");
+    Route::post('/pedidos/store', 'PedidosController@store')->name("pedidos.store");
+    Route::get('/informes', 'InformesController@index')->name("informes");
+    Route::get('/mantenedores', 'MantenedoresController@index')->name("mantenedores");
+    Route::get('/configuraciones', 'ConfiguracionController@index')->name("configuraciones");
+    Route::post('/sistema/getdatos', 'SistemaController@getdatos')->name("sistema.getdatos");
+    Route::post('/sistema/setdatos', 'SistemaController@setdatos')->name("sistema.setdatos");
 
 });

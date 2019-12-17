@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class NotificacionesUser extends Model
 {
     use SoftDeletes;
-    protected $table = 'notificaciones';
+    protected $table = 'notificacionesuser';
 
     protected $casts = [
         'estado'  =>  'string',

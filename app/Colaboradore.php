@@ -13,9 +13,14 @@ class Colaboradore extends Model
     protected $casts = [
       'rutcolaborador'  =>  'string',
       'nombrescolab'  =>  'string',
+      'nombrecortocolab'  =>  'string',
       'apellidoscolab'  =>  'string',
       'deptocolab'  =>  'string'
     ];
+    public function pedidosautorizado()
+    {
+        return $this->hasMany('App\Pedido', 'autorizado_id','rutcolaborador');
+    }
     public function pedidosbodeguero()
     {
         return $this->hasMany('App\Pedido', 'bodeguero_id','rutcolaborador');

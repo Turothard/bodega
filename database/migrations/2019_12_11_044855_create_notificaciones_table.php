@@ -20,11 +20,11 @@ class CreateNotificacionesTable extends Migration
             $table->string("id_tabla");
             $table->string("destino");
             $table->string("grupo");
-            $table->unsignedInteger("usuario_proceso");
-            $table->foreign('usuario_proceso')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedInteger("usuario_objetivo")->nullable();
-            $table->foreign('usuario_objetivo')->references('id')->on('users')->onDelete('cascade');
-            $table->string("grupo_objetivo");
+            $table->unsignedInteger("userproceso_id");
+            $table->foreign('userproceso_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger("userobjetivo_id")->nullable();
+            $table->foreign('userobjetivo_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string("grupoobjetivo");
             $table->string("mensaje");
             $table->string("estado");
             $table->timestamps();

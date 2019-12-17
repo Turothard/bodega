@@ -28,7 +28,9 @@ class Pedido extends Model
     public function ubicaciones(){
         return $this->belongsTo("App\Ubicacione",'ubicacion_id', 'idubicacion');
     }
-
+    public function autorizados(){
+        return $this->belongsTo("App\Colaboradore",'autorizado_id', 'rutcolaborador');
+    }
     public function bodegueros(){
         return $this->belongsTo("App\Colaboradore",'bodeguero_id', 'rutcolaborador');
     }
@@ -40,4 +42,5 @@ class Pedido extends Model
     public function detallepedidos(){
         return $this->hasMany("App\DetallePedido",'pedido_id', 'id');
     }
+   
 }

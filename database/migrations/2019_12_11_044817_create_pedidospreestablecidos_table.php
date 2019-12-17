@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePedidosprestablecidosTable extends Migration
+class CreatePedidospreestablecidosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePedidosprestablecidosTable extends Migration
      */
     public function up()
     {
-        Schema::create('pedidosprestablecidos', function (Blueprint $table) {
+        Schema::create('pedidospreestablecidos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string("tipopedido");
             $table->string("nombretipoped");
@@ -31,6 +31,6 @@ class CreatePedidosprestablecidosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pedidosprestablecidos');
+        Schema::dropIfExists('pedidospreestablecidos');
     }
 }

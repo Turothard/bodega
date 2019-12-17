@@ -21,6 +21,7 @@ class CreateNotificacionesuserTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string("estado");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -15,14 +15,15 @@ class Notificacione extends Model
         'destino'  =>  'string',
         'grupo'  =>  'string',
         'mensaje'  =>  'string',
+        'grupoobjetivo'  =>  'string',
         'estado'  =>  'string',
     ];
-    public function usuario_proceso(){
-        return $this->belongsTo("App\User",'usuario_proceso', 'id');
+    public function userproceso(){
+        return $this->belongsTo("App\User",'userproceso_id', 'id');
     }
 
-    public function usuario_objetivo(){
-        return $this->belongsTo("App\Colaboradore",'usuario_objetivo', 'rutcolaborador');
+    public function userobjetivo(){
+        return $this->belongsTo("App\Colaboradore",'userobjetivo_id', 'rutcolaborador');
     }
     public function notificacionesuser(){
         return $this->hasMany("App\NotificacionesUser",'notificacion_id', 'id');

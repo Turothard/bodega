@@ -17,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','rut'
     ];
 
     /**
@@ -36,5 +36,19 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'rut'=>'string'
     ];
+
+    public function notificaciones_proceso(){
+        return $this->hasMany("App\Notificacione",'userproceso_id', 'id');
+    }
+    public function notificaciones_objetivo(){
+        return $this->hasMany("App\Notificacione",'userobjetivo_id', 'id');
+    }
+    public function notificacionesuser(){
+        return $this->hasMany("App\NotificacioneUser",'user_id', 'id');
+    }
+    public function ordenescompra(){
+        return $this->hasMany("App\OrdenCompra",'user_id', 'id');
+    }
 }

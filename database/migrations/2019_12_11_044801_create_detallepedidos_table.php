@@ -23,8 +23,10 @@ class CreateDetallepedidosTable extends Migration
             $table->integer("cantidaddetped");
             $table->integer("cantidadprodetped")->nullable();
             $table->integer("cantidaddifdetped")->nullable();
-            $table->string("identificadorusodetped")->nullable();
-            $table->string("observaciondevodetped")->nullable();
+            $table->string("identusodetped")->nullable();
+            $table->string("obsentped")->nullable();
+            $table->string("obsdevodetped")->nullable();
+            $table->string("estadodetped")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

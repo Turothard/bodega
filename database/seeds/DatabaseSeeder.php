@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
          $this->call(EstantesSeeder::class);
          $this->call(SectoresSeeder::class);
          $this->call(AreasSeeder::class);
+         $this->call(UbicacionesSeeder::class);
+         $this->call(PosicionesSeeder::class);
     }
 }
