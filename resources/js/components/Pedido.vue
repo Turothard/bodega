@@ -83,7 +83,7 @@
                         <select v-if="componenteactual=='pedido_detalle' && pedido.estadoped=='PROCESADO' && user=='BODEGA'" class="form-control form-control-sm t-regular w-l" v-model="pedido.receptor_id" required>
                             <option value="">------</option>
                             <option v-for="(itemxx, indexx) in colaboradores" :key="indexx" :value="itemxx.rutcolaborador">
-                                {{ itemxx.nombrescolab }} {{ itemxx.apellidoscolab }}
+                                {{ itemxx.nombrecortocolab }}
                         </option>
                         </select>
                         <button v-if="componenteactual=='pedido_generar'" type="button" class="btn btn-primary" @click="guardarpedido()" v-show="pedido.cantidad>0">Guardar Pedido</button>
@@ -119,6 +119,7 @@ import pedido_detalle from './pedidos/pedidodetalle.vue';
             pedido_generar, 
             pedido_detalle
         },
+        props: ['menupedido'],
         data(){
             return{
                 dt: null,

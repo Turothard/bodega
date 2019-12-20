@@ -19,6 +19,7 @@ use App\Unidade;
 use App\Pedido;
 use App\DetallePedido;
 use App\User;
+use App\Posicione;
 use App\Notificacione;
 use App\NotificacionesUser;
 
@@ -74,6 +75,11 @@ class SistemaController extends Controller
                     $notis = NotificacionesUser::where("user_id",auth()->id())->join('notificaciones', 'notificaciones.id','=','notificacionesuser.notificacion_id')->select('notificacionesuser.id','notificacionesuser.notificacion_id','notificaciones.tipo','notificaciones.tabla','notificaciones.id_tabla','notificaciones.destino','notificaciones.grupo','notificaciones.userproceso_id','notificaciones.userobjetivo_id','notificaciones.grupoobjetivo','notificaciones.mensaje','notificacionesuser.estado')->where("notificacionesuser.estado","<>","LEIDA")->get();
                     
                     return $notis;
+                case 'Bodega':
+                    $arreglo[8]=Bodega::all();
+                    $arreglo[9]=Estante::all();
+                    //$arreglo[10]=Posicione::all();
+                    break;
                 default:
                     # code...
                     break;
@@ -95,18 +101,32 @@ class SistemaController extends Controller
         if($request->ajax()){
             switch ($request->tipo) {
                 case 'notificacionesenviadas':
-                    foreach ($request->notis as $noti) {
-                        $notuser = NotificacionesUser::find($noti['id']);
+                    if((int)$request->cant==1){
+                        $notuser = NotificacionesUser::find($request->notis['id']);
                         $notuser->estado='ENVIADA';
                         $notuser->save();
+                    }else{
+                        foreach ($request->notis as $noti) {
+                            $notuser = NotificacionesUser::find($noti['id']);
+                            $notuser->estado='ENVIADA';
+                            $notuser->save();
+                        }
                     }
+                    
                     break;
                 case 'notificacionleida':
-                    foreach ($request->notis as $noti) {
-                        $notuser = NotificacionesUser::find($noti['id']);
-                        $notuser->estado='LEIDA';
-                        $notuser->save();
+                    if((int)$request->cant==1){
+                        $notuser = NotificacionesUser::find($request->notis['id']);
+                            $notuser->estado='LEIDA';
+                            $notuser->save();
+                    }else{
+                        foreach ($request->notis as $noti) {
+                            $notuser = NotificacionesUser::find($noti['id']);
+                            $notuser->estado='LEIDA';
+                            $notuser->save();
+                        }
                     }
+                    
                     break;
                 default:
                     # code...

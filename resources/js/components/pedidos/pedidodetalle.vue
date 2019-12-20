@@ -108,21 +108,21 @@
     export default {
         props: ['datapedido','infopedido','pedido','detallepedido'],
         data(){
-        return{
-            preestablecidovue:null,
-            codigos:null,
-            usuarios: [],
-            colaboradores: [],
-            areas: [],
-            ubicaciones: [],
-            sectores: [],
-            articulos: [],
-            periododevo:[],
-            pressaveflag:false,
-            presshowflag:false,
-            user:null,
-            dt:null
-        }
+            return{
+                preestablecidovue:null,
+                codigos:null,
+                usuarios: [],
+                colaboradores: [],
+                areas: [],
+                ubicaciones: [],
+                sectores: [],
+                articulos: [],
+                periododevo:[],
+                pressaveflag:false,
+                presshowflag:false,
+                user:null,
+                dt:null
+            }
         },
         created(){
             this.pedidos = this.datapedido[8];

@@ -21,6 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/bodega', 'BodegaController@index')->name("bodega");
+    Route::post('/bodega/getdatos', 'BodegaController@getdatos')->name("bodega.getdatos");
     Route::get('/pedidos', 'PedidosController@index')->name("pedidos");
     Route::post('/pedidos/getdatos', 'PedidosController@getdatos')->name("pedidos.getdatos");
     Route::post('/pedidos/store', 'PedidosController@store')->name("pedidos.store");
@@ -31,3 +32,4 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sistema/setdatos', 'SistemaController@setdatos')->name("sistema.setdatos");
 
 });
+//Url::forceScheme('https');

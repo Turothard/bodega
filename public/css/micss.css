@@ -1,8 +1,8 @@
 .t-regular{
-    font-size: 0.875em;
+    font-size: 0.875em !important;
 }
 .pointer{
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .w-xs{
     max-width: 4em;
@@ -15,6 +15,9 @@
 }
 .w-l{
     max-width: 16em;
+}
+#notificacionesa{
+    display:none;
 }
 @media only screen and (max-width: 900px) and (orientation: portrait){
     .modal-dialog {

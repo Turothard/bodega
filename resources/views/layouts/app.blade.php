@@ -70,8 +70,13 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('configuraciones') }}">{{ __('Configuraciones') }}</a>
                             </li>
-                            @endif
                             
+                            @endif
+                            <li id="notificacionesa" class="nav-item" data-toggle="modal" data-target="#notificacionesmodal" >
+                                <a class="nav-link" href="#">
+                                Notificaciones <span class="badge badge-primary badge-pill" if="notifcant">1</span>
+                                </a>
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
@@ -87,9 +92,7 @@
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
-                                    <a id="notificacionesa" class="dropdown-item hidden" data-toggle="modal" data-target="#notificacionesmodal" href="#" >
-                                         Notificaciones <span class="badge badge-primary badge-pill">1</span>
-                                    </a>
+                                    
                                 </div>
                             </li>
                         @endguest
