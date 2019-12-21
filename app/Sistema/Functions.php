@@ -70,7 +70,7 @@ if ( !function_exists('guardarnotificacion') )
 							
 						}
 						if($modeltabla->estadoped=='ENTREGADO'){							
-							$receptor = Colaboradore::find($modeltabla->recptor_id);
+							$receptor = Colaboradore::find($modeltabla->receptor_id);
 							$not->grupoobjetivo="SUPERVISORES";
 							$not->userobjetivo_id = $modeltabla->user_id;
 							$userobjetivo = $modeltabla->user_id;
@@ -78,13 +78,13 @@ if ( !function_exists('guardarnotificacion') )
 						}
 						if($modeltabla->estadoped=='FINALIZADO'){		
 							if($detalletipo=='ENTREGADO'){
-								$receptor = Colaboradore::find($modeltabla->recptor_id);
+								$receptor = Colaboradore::find($modeltabla->receptor_id);
 								$not->grupoobjetivo="SUPERVISORES";
 								$not->userobjetivo_id = $modeltabla->user_id;
 								$userobjetivo = $modeltabla->user_id;
 								$not->mensaje="Pedido <strong>".$modeltabla->id."</strong> ha sido entregado y Finalizado, <br />Entregado A:".$receptor->nombrecortocolab."<br /> Artículos:".$modeltabla->cantidadproped;
 							}else{
-								$receptor = Colaboradore::find($modeltabla->recptor_id);
+								$receptor = Colaboradore::find($modeltabla->receptor_id);
 								$not->grupoobjetivo="SUPERVISORES";
 								$not->userobjetivo_id = $modeltabla->user_id;
 								$userobjetivo = $modeltabla->user_id;

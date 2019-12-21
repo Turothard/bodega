@@ -4,18 +4,18 @@
            <table class="table table-striped table-sm table-bordered table-dark table-responsive-md t-regular w-100">
                <thead>
                    <tr>
-                        <th scope="col" class="all">ID</th>
-                        <th scope="col" >Tipo Pedido</th>
-                        <th scope="col" >Usuario</th>
-                        <th scope="col" >Sector</th>
-                        <th scope="col" >Área</th>
-                        <th scope="col" >Ubicación</th>
-                        <th scope="col" >Autorizado</th>
-                        <th scope="col" >Bodeguero</th>
-                        <th scope="col" >Receptor</th>
-                        <th scope="col" >Cant</th>
-                        <th scope="col" >Fecha</th>
-                        <th scope="col" >Estado</th>
+                        <th class="all">ID</th>
+                        <th>Tipo Pedido</th>
+                        <th>Usuario</th>
+                        <th>Sector</th>
+                        <th>Área</th>
+                        <th>Ubicación</th>
+                        <th>Autorizado</th>
+                        <th>Bodeguero</th>
+                        <th>Receptor</th>
+                        <th>Cant</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
                    </tr>
                </thead>
                <tbody>
@@ -44,20 +44,20 @@
            </table>
        </div>
        <div class="container-fluid">
-           <table id="tabladetalle" class="table table-striped table-sm table-bordered table-dark t-regular w-100">
+           <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                <thead>
                    <tr>
-                       <th scope="col" >Árticulo</th>
-                       <th scope="col" >Tipo entrega</th>
-                       <th scope="col" >Nombre Art</th>
-                       <th scope="col"  v-if=" pedido.estadoped!='PENDIENTE'">Bodega</th>
-                       <th scope="col"  v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Est</th>
-                       <th scope="col"  v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Sec</th>
-                       <th scope="col"  v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">nil</th>
-                       <th scope="col" >Solicitados</th>
-                       <th scope="col" >Procesado</th>
-                       <th scope="col" >Receptor</th>
-                       <th scope="col" >Devuelto</th>
+                       <th>Árticulo</th>
+                       <th>Tipo entrega</th>
+                       <th>Nombre Art</th>
+                       <th v-if=" pedido.estadoped!='PENDIENTE'">Bodega</th>
+                       <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Est</th>
+                       <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Sec</th>
+                       <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">nil</th>
+                       <th>Solicitados</th>
+                       <th>Procesado</th>
+                       <th>Receptor</th>
+                       <th>Devuelto</th>
                    </tr>
                </thead>
                <tbody>
@@ -85,7 +85,7 @@
                            <select class="form-control form-control-sm t-regular" v-model="item.receptor_vue" required>
                             <option value="">------</option>
                             <option v-for="(itemx, index) in colaboradores" :key="index" :value="itemx.rutcolaborador">
-                                {{ itemx.nombrescolab }} {{ itemx.apellidoscolab }}
+                                {{ itemx.nombrecortocolab }}
                             </option>
                         </select>
                        </td>
@@ -94,7 +94,7 @@
                         <!-- cantidaddevolucion --> 
                        <td v-if="pedido.estadoped=='INGRESADO' || pedido.estadoped=='PENDIENTE' || pedido.estadoped=='ANULADO'"></td>
                        <td v-else-if="pedido.estadoped=='ENTREGADO' && user=='BODEGA' && articulos.find(items => items.codigoart === item.codigoart ).periododevo_id>1">
-                           <input type="number" min="0" v-model="item.cantidaddevolucion" readonly class="form-control form-control-sm">
+                           <input type="number" min="0" v-model="item.cantidaddevolucion" readonly class="form-control form-control-sm w-s">
                        </td>
                        <td v-else>-------</td>
                    </tr>

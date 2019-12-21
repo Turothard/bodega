@@ -4,8 +4,8 @@
             <div class="p-2">
                 <ul id="ulbodega" class="list-group">
                     <li class="list-group-item pointer" @click="componenteactual='bodega_detalle'">Bodega</li>
-                    <li class="list-group-item pointer">Movimientos</li>
                     <li class="list-group-item pointer" @click="componenteactual='pedido'">Pedidos</li>
+                    <li class="list-group-item pointer">Movimientos</li>
                     <li class="list-group-item pointer">Inventario</li>
                 </ul>
             </div>
@@ -31,6 +31,7 @@
                 dt: null,
                 databodega:null,
                 pedido:{},
+                componenteactualvue:'',
                 detallepedido:[],
                 componenteactual:'',
                 infopedido:[],
@@ -45,6 +46,14 @@
                 user:null
             }
         },
+        watch: {
+            'componenteactual':function(val, oldVal){
+                if(val!=''){
+                    //this.componenteactualvue= val;
+                    sessionStorage.setItem("componenteactualvue",(val));
+                }
+            }
+        },
         created() {
             axios.post('/sistema/getdatos', {tipo:'Bodega'}).then((res) =>{
                     this.databodega = res.data;
@@ -54,34 +63,26 @@
                     this.sectores = this.databodega[5];
                     this.areas = this.databodega[6];
                     this.ubicaciones = this.databodega[7];
-                    
+                    if (sessionStorage.getItem("componenteactualvue")) {
+                    // Restaura el contenido al campo de texto
+                        this.componenteactual = sessionStorage.getItem("componenteactualvue");
+                        switch (this.componenteactual) {
+                            case 'pedido':
+                                $("#ulbodega li:nth-child(2)").addClass("active");
+                                break;
+                            case 'bodega_detalle':
+                                $("#ulbodega li:nth-child(1)").addClass("active");
+                                break;
+                            default:
+                                break;
+                        }
+                        //sessionStorage.clear();
+                    }
                     if(this.databodega[9]!=null){
                         this.pedido.id = parseInt(this.databodega[9])+1;
                     }
                     this.user = this.databodega[11];
-                    this.$nextTick(function () {
-                    
-                    this.dt = $('#tablapedidos').DataTable({
-                        "language": {
-                            "lengthMenu": "Mostrar _MENU_ filas por página",
-                            "zeroRecords": "Ningún resultado según criterio",
-                            "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                            "infoEmpty": "No se encontraron resultados",
-                            "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                            "search":         "Buscar:",
-                            "paginate": {
-                                "first":      "Primero",
-                                "last":       "Último",
-                                "next":       "Siguiente",
-                                "previous":   "Anterior"
-                            },
-                        },
-                    });
-                    
-                    
-                    console.log('cargado');
-                    this.terminado=1;
-                });
+                 
                 console.log(this.pedidos);
             }).catch((error) =>{
                 console.log(error.response.data.errors);

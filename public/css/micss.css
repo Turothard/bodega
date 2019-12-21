@@ -28,7 +28,7 @@
         width: 98% !important;
     }
 }
-@media (max-width: 576px){
+@media (min-width: 576px){
     .modal-dialog {
         max-width: 100% !important;
         /* margin: 1.75rem auto; */

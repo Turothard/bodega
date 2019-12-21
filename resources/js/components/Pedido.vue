@@ -5,59 +5,53 @@
             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#pedidomodal" @click="generarpedido()">Generar Pedido</button>
 
             </div>
-            <div class="container-fluid">
-                <table id="tablapedidos" class="table table-striped table-sm table-bordered table-dark dt-responsive t-regular w-100">
+            <div>
+                <table id="tablapedidos"  class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                     <thead>
                         <tr>
-                            <th scope="col" class="all">ID</th>
-                            <th scope="col" >Tipo Pedido</th>
-                            <th scope="col" >Usuario</th>
-                            <th scope="col" >Sector</th>
-                            <th scope="col" >Área</th>
-                            <th scope="col" >Ubicación</th>
-                            <th scope="col" >Autorizado</th>
-                            <th scope="col" >Bodeguero</th>
-                            <th scope="col" >Receptor</th>
-                            <th scope="col" >Cant</th>
-                            <th scope="col" >Fecha</th>
-                            <th scope="col" >Estado</th>
-                            <th scope="col" class="all">Funciones</th>
+                            <th class="all">ID</th>
+                            <th class="desktop">Tipo Pedido</th>
+                            <th class="all">Usuario</th>
+                            <th class="desktop">Sector</th>
+                            <th class="all">Área</th>
+                            <th class="all">Ubicación</th>
+                            <th class="desktop">Autorizado</th>
+                            <th class="desktop">Bodeguero</th>
+                            <th class="desktop">Receptor</th>
+                            <th class="all">Cant</th>
+                            <th class="all">Fecha</th>
+                            <th class="all">Estado</th>
+                            <th class="all">Funciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item,index) in pedidos" :key="index">
-                            <td data-label="Id">{{ item.id }}</td>
-                            <td data-label="Tipo Pedido">{{ item.tipopedido }}</td>
-                            
-                            <td v-if="item.user_id!=null" data-label="Usuario">{{ usuarios.find( items => items.id === item.user_id ).name }}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.tipopedido }}</td>
+                            <td v-if="item.user_id!=null" >{{ usuarios.find( items => items.id === item.user_id ).name }}</td>
+                            <td v-else >---------</td>
                             <td v-if="item.sector_id!=null" data-label="Sector">{{ sectores.find( items => items.idsector === item.sector_id ).nombresec }}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td v-else >---------</td>
                             <td v-if="item.area_id!=null" data-label="Area">{{ areas.find( items => items.idarea === item.area_id ).nombrearea }}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td v-else >---------</td>
                             <td v-if="item.ubicacion_id!=null" data-label="Ubicación">{{ ubicaciones.find( items => items.idubicacion === item.ubicacion_id ).nombreubi}}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td v-else >---------</td>
                             <td v-if="item.autorizado_id!=null" data-label="Autorizado por">{{ colaboradores.find( items => items.rutcolaborador === item.autorizado_id ).nombrecortocolab}}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td v-else >---------</td>
                             <td v-if="item.bodeguero_id!=null" data-label="Trabajado Por">{{ colaboradores.find( items => items.rutcolaborador === item.bodeguero_id ).nombrecortocolab}}</td>
-                            <td v-else data-label="Usuario">---------</td>
+                            <td v-else >---------</td>
                             <td v-if="item.receptor_id!=null" data-label="Entregado a">{{ colaboradores.find( items => items.rutcolaborador === item.receptor_id ).nombrecortocolab}}</td>
-                            <td v-else data-label="Usuario">---------</td>
-                            <td data-label="Cantidad Artículos">{{ item.cantidadped }}</td>
-                            <td data-label="Cantidad Artículos">{{ item.fechaped }}</td>
-                            <td data-label="estado">{{ item.estadoped }}</td>
-                            <td class="text-justify text-center">
-                                <button class="btn btn-dark btn-sm" data-toggle="modal" v-if="item.estadoped=='PENDIENTE' && ( user=='ADMIN' ||  user=='SUPERVISORES') ">
-                                    <i @click="aceptarpedido(item,item.id)" class="material-icons">
-                                        check_circle_outline
-                                    </i>
+                            <td v-else >---------</td>
+                            <td>{{ item.cantidadped }}</td>
+                            <td>{{ item.fechaped }}</td>
+                            <td>{{ item.estadoped }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm"  v-if="item.estadoped=='PENDIENTE' && ( user=='ADMIN' ||  user=='SUPERVISORES')"  @click="aceptarpedido(item,item.id)">
+                                    <img style="width:23px;heigth:23px;" src="css/img/aceptar.png"/>
                                 </button>
-                                <button class="btn btn-dark btn-sm" data-toggle="modal" data-target="#pedidomodal">
-                                    <i @click="detallepedidos(item,item.id)" class="material-icons">
-                                        unfold_more
-                                    </i>
-                                </button>
-                                
+                                <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)">
+                                    <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png"/>
+                                </button>                                
                             </td>
                         </tr>
                     </tbody>
@@ -171,6 +165,8 @@ import pedido_detalle from './pedidos/pedidodetalle.vue';
                             "previous":   "Anterior"
                         },
                     },
+                    "responsive": true,
+                    "order": [ 0, 'desc' ]
                 });
                 if (sessionStorage.getItem("pedido")) {
                 // Restaura el contenido al campo de texto
@@ -292,6 +288,7 @@ import pedido_detalle from './pedidos/pedidodetalle.vue';
                     .then((res) =>{
                         console.log(res.data);
                         pedido.estadoped='PROCESADO';
+                        $(".close").click();
                     }).catch(function (error) {
                         if (error.response) {
                         // Request made and server responded
@@ -312,7 +309,9 @@ import pedido_detalle from './pedidos/pedidodetalle.vue';
                     axios.post('/pedidos/store', {tipo:'entregarpedido',pedido:pedido, detalle:this.detallepedido})
                     .then((res) =>{
                         console.log(res.data);
-                        pedido.estadoped='PROCESADO';
+                        pedido.estadoped='ENTREGADO';
+                        $(".close").click();
+                        location.reload();
                     }).catch(function (error) {
                         if (error.response) {
                         // Request made and server responded

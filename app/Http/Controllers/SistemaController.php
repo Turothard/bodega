@@ -65,7 +65,7 @@ class SistemaController extends Controller
            
             switch ($request->tipo) {
                 case 'Pedido':
-                    $arreglo[8]=Pedido::where("estadoped",'<>','FINALIZADO')->get();
+                    $arreglo[8]=Pedido::all()->sortByDesc('id');
                     $arreglo[9]=Pedido::latest()->value('id');
                     $arreglo[10]=PedidoPreestabledido::all();
                     $arreglo[11]=User::where("id",auth()->id())->value("department");
