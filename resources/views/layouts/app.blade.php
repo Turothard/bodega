@@ -72,9 +72,9 @@
                             </li>
                             
                             @endif
-                            <li id="notificacionesa" class="nav-item" data-toggle="modal" data-target="#notificacionesmodal" >
+                            <li id="notificacionesa" class="nav-item" data-toggle="modal" style="display: none;" data-target="#notificacionesmodal" >
                                 <a class="nav-link" href="#">
-                                Notificaciones <span class="badge badge-primary badge-pill" if="notifcant">1</span>
+                                Notificaciones <span class="badge badge-primary badge-pill" id="notifcant"></span>
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
@@ -89,7 +89,7 @@
                                         {{ __('Desconectarse') }}
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" >
                                         @csrf
                                     </form>
                                     

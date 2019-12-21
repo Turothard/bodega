@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/pedidos/store', 'PedidosController@store')->name("pedidos.store");
     Route::get('/informes', 'InformesController@index')->name("informes");
     Route::get('/mantenedores', 'MantenedoresController@index')->name("mantenedores");
+    Route::post('/mantenedores/getdatos', 'MantenedoresController@getdatos')->name("mantenedores.getdatos");
     Route::get('/configuraciones', 'ConfiguracionController@index')->name("configuraciones");
     Route::post('/sistema/getdatos', 'SistemaController@getdatos')->name("sistema.getdatos");
     Route::post('/sistema/setdatos', 'SistemaController@setdatos')->name("sistema.setdatos");
