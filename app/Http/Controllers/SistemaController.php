@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Area;
 use App\Articulo;
@@ -22,7 +23,9 @@ use App\User;
 use App\Posicione;
 use App\Notificacione;
 use App\NotificacionesUser;
-
+use App\Proveedore;
+use App\Colore;
+use Image;
 class SistemaController extends Controller
 {
     /**
@@ -78,7 +81,14 @@ class SistemaController extends Controller
                 case 'Bodega':
                     $arreglo[8]=Bodega::all();
                     $arreglo[9]=Estante::all();
-                    //$arreglo[10]=Posicione::all();
+                    $arreglo[10]=Posicione::all();
+                break;
+                case 'Mantenedores':
+                    $arreglo[8]=Proveedore::all();
+                    $arreglo[9]=Colore::all();
+                    $arreglo[10]=Unidade::all();
+                    $arreglo[11]=Marca::all();
+                    $arreglo[12]=PeriodoDevo::all();
                     break;
                 default:
                     # code...
@@ -135,6 +145,27 @@ class SistemaController extends Controller
         }else{
             return;
         }
+    }
+    public function uploadimage(Request $request)
+    {
+        $this->validate($request, [
+            'image' => 'required',
+        ]);
+        
+        $image = $request->file('image');
+        $name = $request->input("nombre");
+        
+        $extension = $image->getClientOriginalExtension(); // Get the extension
+        
+        $fileName = trim($name). '.' . $extension;
+        $path = public_path('images/'.$fileName);
+    
+        Image::make($image)->save($path);
+        $art = Articulo::find($name);
+       $art->image = 'images/'.$fileName;
+       $art->save();
+    
+        //return $data;
     }
 
     /**

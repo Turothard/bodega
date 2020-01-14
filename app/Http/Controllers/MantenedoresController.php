@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Area;
+use App\Colore;
 use App\Articulo;
 use App\Bodega;
 use App\Categoria;
@@ -18,7 +18,7 @@ use App\Sectore;
 use App\Unidade;
 use App\Pedido;
 use App\DetallePedido;
-use App\DetallePedPosicione;
+use App\Correlativo;
 use App\Posicione;
 
 class MantenedoresController extends Controller
@@ -54,7 +54,7 @@ class MantenedoresController extends Controller
         if($request->ajax()){
             switch ($request->tipo) {
                 case 'articulos':
-                    $articulos = Articulo::where('codigoart','<>',"''")
+                    $arreglo[0] = Articulo::where('codigoart','<>',"''")
                     ->join('categorias', 'categorias.idcategoria','=', 'articulos.categoria_id')
                     ->join('subcategorias', 'subcategorias.idsubcategoria','=', 'articulos.subcategoria_id')
                     ->join('unidades', 'unidades.idunidad','=', 'articulos.unidad_id')
@@ -66,9 +66,57 @@ class MantenedoresController extends Controller
                     'articulos.descripcionart','articulos.color_id','colores.nombrecol','articulos.unidad_id','unidades.nombretipounimed','unidades.codigounimed',
                     'unidades.descripcionunimed','articulos.marca_id','marcas.nombremar','articulos.stockcriticoart','articulos.indicerotacionart',
                     'articulos.yearart','articulos.periododevo_id','periodosdevos.periododevo', 'periodosdevos.descripcionper','articulos.image')->get();
-                    return $articulos;
+                    $arreglo[1] = Correlativo::selectRaw("subcategoria_id,max(correlativo) as correlativo")->groupBy("subcategoria_id")->orderBy("subcategoria_id")->get();
+                    return $arreglo;
                     break;
                 
+                default:
+                    # code...
+                    break;
+            }
+        }else{
+            return view('mantenedores.index');
+        }
+    }
+    public function setdatos(Request $request)
+    {
+        if($request->ajax()){
+            switch ($request->tipo) {
+                case 'nuevoarticulo':
+                    $artvue=$request->detalle;
+                    $art = new Articulo();         
+                    $art->codigoart = $artvue["codigoart"];
+                    $art->categoria_id = $artvue["categoria_id"];
+                    $art->subcategoria_id = $artvue["subcategoria_id"];
+                    
+                    $art->proveedorart = $artvue["proveedorart"];
+                    $art->descripcionart = strtoupper($artvue["descripcionart"]);
+                    $art->color_id = $artvue["color_id"];
+                    $col = Colore::find($artvue["color_id"]);
+                    $uni = Unidade::find($artvue["unidad_id"]);
+                    $art->unidad_id = $artvue["unidad_id"];
+                    $art->marca_id = $artvue["marca_id"];
+                    $art->nombreart = strtoupper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
+                    $art->stockcriticoart = $artvue["stockcriticoart"];
+                    $art->indicerotacionart = $artvue["indicerotacionart"];
+                    $art->yearart = $artvue["yearart"];
+                    $art->periododevo_id = $artvue["periododevo_id"];
+                    $art->save();
+                    
+                break;
+                case 'editararticulo':
+                    $artvue=$request->detalle;
+                    $art = Articulo::find($artvue["codigoart"]);         
+                    $art->descripcionart = strtoupper($artvue["descripcionart"]);
+                    $col = Colore::find($art->color_id);
+                    $uni = Unidade::find($art->unidad_id);
+                    $art->nombreart = strtoupper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
+                    $art->stockcriticoart = $artvue["stockcriticoart"];
+                    $art->indicerotacionart = $artvue["indicerotacionart"];
+                    $art->yearart = $artvue["yearart"];
+                    $art->periododevo_id = $artvue["periododevo_id"];
+                    $art->save();
+                break;
                 default:
                     # code...
                     break;

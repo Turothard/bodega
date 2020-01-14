@@ -75,6 +75,7 @@
             /*this.audio.muted = true; // Turn off silent state
             this.audio.play();
             this.audio.muted = false;*/
+            
             $(document).click(function(e){
                 if(this.inicio==false){
                     this.inicio=true;

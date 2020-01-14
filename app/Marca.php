@@ -10,7 +10,10 @@ class Marca extends Model
     use SoftDeletes;
     protected $primaryKey = 'idmarca';
     protected $table = 'marcas';
+    protected $casts = [
+        'idmarca'  =>  'string'
 
+      ];
     public function articulos()
     {
         return $this->hasmany('App\Articulos', 'marca_id', 'idmarca');
