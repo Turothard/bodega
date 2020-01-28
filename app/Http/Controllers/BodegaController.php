@@ -18,8 +18,10 @@ use App\Sectore;
 use App\Unidade;
 use App\Movimiento;
 use App\DetallePedido;
-use App\DetallePedPosicione;
+use App\Inventario;
+use App\DetalleInventario;
 use App\Posicione;
+use Illuminate\Support\Facades\DB;
 class BodegaController extends Controller
 {
     /**
@@ -63,10 +65,105 @@ class BodegaController extends Controller
                     ->join('periodosdevos', 'periodosdevos.idperiodo','=', 'articulos.periododevo_id')
                     ->select('posiciones.idposicion','estantes.bodega_id', 'posiciones.estante_id', 'estantes.nroestante', 'posiciones.sectorpos', 'posiciones.nivelpos', 'posiciones.codigoart', 
                     'articulos.nombreart', 'posiciones.cantidadpos', 'articulos.stockcriticoart', 'articulos.indicerotacionart', 
-                    'periodosdevos.descripcionper')->get();
+                    'periodosdevos.descripcionper')
+                    ->orderBy("estantes.bodega_id","ASC")->orderBy("estantes.nroestante","ASC")
+                        ->orderBy("posiciones.sectorpos","ASC")->orderBy("posiciones.nivelpos","ASC")->get();
                     return $bodega;
                     break;
-                
+                case 'ingresos':
+                    $ingresos= Ingreso::where('cantidading','>','0')
+                    ->join('estantes', 'estantes.id','=', 'ingresos.estante_id')
+                    ->join('posiciones', 'posiciones.idposicion','=', 'ingresos.posicion_id')
+                    ->join('articulos', 'articulos.codigoart','=', 'ingresos.codigoart')
+                    ->join('colaboradores', 'colaboradores.rutcolaborador','=', 'ingresos.usering')
+                    ->select('ingresos.id','ingresos.codigoart', 'articulos.nombreart', 'ingresos.bodega_id', 'ingresos.estante_id', 'estantes.nroestante', 'ingresos.sectoring', 'ingresos.niveling',
+                     'ingresos.usering', 'colaboradores.nombrecortocolab', 'ingresos.cantidading','ingresos.posicion_id','ingresos.fechaing', 'ingresos.created_at','posiciones.updated_at')->get();
+                     return $ingresos;
+                break;
+                case 'movimientos':
+                    $movi = Movimiento::where("cantidad",">","0")
+                    ->join('posiciones', 'posiciones.idposicion','=', 'movimientos.posiciondes_id')
+                    ->join('articulos', 'articulos.codigoart','=', 'movimientos.codigoart')
+                    ->join('colaboradores', 'colaboradores.rutcolaborador','=', 'movimientos.usermov')
+                    ->select('movimientos.id', 'movimientos.codigoart', 'articulos.nombreart', 'movimientos.bodegaidori', 'movimientos.estanteori', 
+                    'movimientos.sectorori','movimientos.nivelori', 'movimientos.posicionori_id', 'movimientos.bodegaiddes', 'movimientos.estantedes', 
+                    'movimientos.sectordes','movimientos.niveldes', 'movimientos.posiciondes_id', 'movimientos.cantidad', 'movimientos.usermov',
+                    'colaboradores.nombrecortocolab', 'movimientos.fechamov', 'posiciones.updated_at')->get();
+                    return $movi;
+                break;
+                case 'generarinventario':
+                    $inv = null;
+                    $inventario = Inventario::where("estadoinv","PROCESO")->get();
+                    if($inventario->count()>0){
+                        return $inv;
+                    }
+                    if($request->detalle["tipoinv"]=='BODEGA COMPLETA'){
+                        $inv = Bodega::where("idbodega",$request->detalle["bodega_id"])
+                        ->join('estantes', 'estantes.bodega_id','=', 'bodegas.idbodega')
+                        ->join('posiciones', 'posiciones.estante_id','=', 'estantes.id')
+                        ->join('articulos', 'articulos.codigoart','=', 'posiciones.codigoart')
+                        ->select('estantes.nroestante',DB::raw("bodegas.idbodega as bodega_id, bodegas.nombrebod, posiciones.estante_id, 
+                        posiciones.idposicion as posicion_id, posiciones.sectorpos as sectorinv, posiciones.nivelpos as nivelinv, 
+                        posiciones.codigoart, articulos.nombreart,posiciones.cantidadpos as cantidadbod,0 as cantidadinv, posiciones.cantidadpos as cantidaddif"))
+                        ->where("posiciones.cantidadpos",">","0")
+                        ->orderBy("bodegas.idbodega","ASC")->orderBy("estantes.nroestante","ASC")
+                        ->orderBy("posiciones.sectorpos","ASC")->orderBy("posiciones.nivelpos","ASC")->get();
+                    }else{
+                        $inv =Bodega::where("idbodega",$request->detalle["bodega_id"])
+                        ->join('estantes', 'estantes.bodega_id','=', 'bodegas.idbodega')
+                        ->join('posiciones', 'posiciones.estante_id','=', 'estantes.id')
+                        ->join('articulos', 'articulos.codigoart','=', 'posiciones.codigoart')
+                        ->select('estantes.nroestante',DB::raw("bodegas.idbodega as bodega_id, bodegas.nombrebod, posiciones.estante_id, 
+                         posiciones.idposicion as posicion_id, posiciones.sectorpos as sectorinv, posiciones.nivelpos as nivelinv, 
+                         posiciones.codigoart, articulos.nombreart,posiciones.cantidadpos as cantidadbod,0 as cantidadinv, posiciones.cantidadpos as cantidaddif"))
+                        ->where("estantes.id",$request->detalle["estante_id"])
+                        ->where("posiciones.cantidadpos",">","0")
+                        ->orderBy("bodegas.idbodega","ASC")->orderBy("estantes.nroestante","ASC")
+                        ->orderBy("posiciones.sectorpos","ASC")->orderBy("posiciones.nivelpos","ASC")->get();
+                    }
+                    return $inv;
+                break;
+                case 'inventarios':
+                    if($request->detalle!=null){
+                        $inventario = Inventario::find($request->detalle);
+                        $arreglo[0] = DetalleInventario::where("inventario_id", $inventario->id)
+                        ->join('estantes', 'estantes.id','=', 'detalleinventarios.estante_id')
+                        ->join('articulos', 'articulos.codigoart','=', 'detalleinventarios.codigoart')
+                        ->select('detalleinventarios.id', 'detalleinventarios.inventario_id', 'detalleinventarios.bodega_id', 'detalleinventarios.posicion_id', 
+                        'detalleinventarios.estante_id', 'estantes.nroestante','detalleinventarios.sectorinv', 'detalleinventarios.nivelinv', 
+                        'detalleinventarios.codigoart', 'articulos.nombreart', 'detalleinventarios.cantidadbod', 'detalleinventarios.cantidadinv', 'detalleinventarios.cantidaddif')
+                        ->orderBy("detalleinventarios.bodega_id","ASC")
+                        ->orderBy("estantes.nroestante","ASC")
+                        ->orderBy("detalleinventarios.sectorinv","ASC")
+                        ->orderBy("detalleinventarios.nivelinv","ASC")->get();
+                        
+                    }else{
+                        $arreglo[0] =Inventario::where("estadoinv","<>","PROCESO")
+                        ->join('colaboradores', 'colaboradores.rutcolaborador','=', 'inventarios.userinv')
+                        ->select( 'inventarios.id', 'inventarios.tipoinv', 'inventarios.bodega_id', 'inventarios.estante_id', 'inventarios.fechainv', 
+                        'inventarios.userinv','colaboradores.nombrecortocolab', 'inventarios.fechainicioinv', 'inventarios.fechafininv', 
+                        'inventarios.cantidadbodtotal', 'inventarios.cantidadinvtotal', 'inventarios.cantidaddiftotal', 'inventarios.observacioninv', 
+                        'inventarios.estadoinv', 'inventarios.created_at', 'inventarios.updated_at', 'inventarios.deleted_at')->get();
+                        $inventario = Inventario::where("estadoinv","PROCESO")->first();
+                        if($inventario!=null){
+                            $arreglo[1] = $inventario;
+                            $arreglo[2] = DetalleInventario::where("inventario_id", $inventario->id)
+                            ->join('estantes', 'estantes.id','=', 'detalleinventarios.estante_id')
+                            ->join('articulos', 'articulos.codigoart','=', 'detalleinventarios.codigoart')
+                            ->select('detalleinventarios.id', 'detalleinventarios.inventario_id', 'detalleinventarios.bodega_id', 'detalleinventarios.posicion_id', 
+                            'detalleinventarios.estante_id', 'estantes.nroestante','detalleinventarios.sectorinv', 'detalleinventarios.nivelinv', 
+                            'detalleinventarios.codigoart', 'articulos.nombreart', 'detalleinventarios.cantidadbod', 'detalleinventarios.cantidadinv', 'detalleinventarios.cantidaddif')
+                            ->orderBy("detalleinventarios.bodega_id","ASC")
+                            ->orderBy("estantes.nroestante","ASC")
+                            ->orderBy("detalleinventarios.sectorinv","ASC")
+                            ->orderBy("detalleinventarios.nivelinv","ASC")->get();
+                        }else{
+                            $arreglo[1] = null;
+                            $arreglo[2] = null;
+                        }
+                    }
+                    return $arreglo;
+                break;
                 default:
                     # code...
                     break;
@@ -89,12 +186,16 @@ class BodegaController extends Controller
                         ->where("sectorpos",$destino["sector_id"])
                         ->where("nivelpos", $destino["nivel_id"])->first();
                     $fecha='';
+                    $posicionori_id='';
+                    $posiciondes_id='';
                     if($pos!=null){
                         $pos->cantidadpos = $pos->cantidadpos+ (int)$destino["cantidad"];
                         $ori->cantidadpos = $ori->cantidadpos- (int)$destino["cantidad"];
                         $ori->save();
                         $pos->save();
                         $fecha= $pos->updated_at;
+                        $posicionori_id = $ori->idposicion;
+                        $posiciondes_id = $pos->idposicion;
                     }else{
                         $newpos= new Posicione();
                         $newpos->estante_id = $destino["estante_id"];
@@ -105,6 +206,8 @@ class BodegaController extends Controller
                         $newpos->save();
                         $ori->cantidadpos = $ori->cantidadpos- (int)$destino["cantidad"];
                         $ori->save();
+                        $posicionori_id = $ori->idposicion;
+                        $posiciondes_id = $newpos->idposicion;
                         $fecha= $newpos->updated_at;
                     }
                     $mov = new Movimiento();
@@ -119,6 +222,8 @@ class BodegaController extends Controller
                     $mov->niveldes= $destino["nivel_id"];
                     $mov->cantidad = (int)$destino["cantidad"];
                     $mov->usermov = User::where("id",auth()->id())->first()->value('rut');
+                    $mov->posicionori_id =$posicionori_id;
+                    $mov->posiciondes_id =$posiciondes_id;
                     $mov->fechamov = $fecha;
                     $mov->save();
                     break;
@@ -130,10 +235,12 @@ class BodegaController extends Controller
                         ->where("sectorpos",$det["sector_id"])
                         ->where("nivelpos", $det["nivel_id"])->first();
                         $fecha='';
+                        $id='';
                         if($pos!=null){
                             $pos->cantidadpos = $pos->cantidadpos+ (int)$det["cantidad"];
                             $pos->save();
                             $fecha= $pos->updated_at;
+                            $id = $pos->idposicion;
                         }else{
                             $newpos= new Posicione();
                             $newpos->estante_id = $det["estante_id"];
@@ -143,6 +250,7 @@ class BodegaController extends Controller
                             $newpos->cantidadpos = (int)$det["cantidad"];
                             $newpos->save();
                             $fecha= $newpos->updated_at;
+                            $id = $newpos->idposicion;
                         }
                         $ingreso = new Ingreso();
                         $ingreso->codigoart=$det["codigoart"];
@@ -151,10 +259,106 @@ class BodegaController extends Controller
                         $ingreso->sectoring=$det["sector_id"];
                         $ingreso->niveling=$det["nivel_id"];
                         $ingreso->cantidading=(int)$det["cantidad"];
+                        $ingreso->fechaing = $fecha;
+                        $ingreso->posicion_id = $id;
                         $ingreso->usering = User::where("id",auth()->id())->first()->value('rut');
                         $ingreso->save();
                     }
                     break;
+                case 'revertiringreso':
+                    $ingreso = Ingreso::find($request->detalle["id"]);
+                    $posicion = Posicione::find($request->detalle["posicion_id"]);
+                    $posicion->cantidadpos = $posicion->cantidadpos-$ingreso->cantidading;
+                    $ingreso->delete();
+                    $posicion->save();
+                    return;
+                    break;
+                case 'revertirmovimiento':
+                    $movimiento = Movimiento::find($request->detalle["id"]);
+                    $posicionori = Posicione::find($request->detalle["posicionori_id"]);
+                    $posiciondes = Posicione::find($request->detalle["posiciondes_id"]);
+                    $posicionori->cantidadpos = $posicionori->cantidadpos+$movimiento->cantidad;
+                    $posiciondes->cantidadpos = $posiciondes->cantidadpos-$movimiento->cantidad;
+                    $movimiento->delete();
+                    $posicionori->save();
+                    $posiciondes->save();
+                    return;
+                    break;
+                case 'guardaravance':
+                    $invvue =$request->inventario;
+                    $detinvvue =$request->detalle;
+                    $inv = Inventario::where("estadoinv","PROCESO")->first();
+                    if($inv!=null){
+                        $inv->cantidadbodtotal = $invvue["cantidadbodtotal"];
+                        $inv->cantidadinvtotal = $invvue["cantidadinvtotal"];
+                        $inv->cantidaddiftotal = $invvue["cantidaddiftotal"];
+                        $inv->save();
+                        time_nanosleep(0, 200000000);
+                        foreach ($detinvvue as $det) {
+                            $detinv= DetalleInventario::find($det["id"]);
+                            $detinv->cantidadbod = $det["cantidadbod"];
+                            $detinv->cantidadinv = $det["cantidadinv"];
+                            $detinv->cantidaddif = $det["cantidadbod"]- $det["cantidadinv"];
+                            $detinv->save();
+                        }
+                        guardarnotificacion(auth()->id(), 'ACTUALIZACION','ACTUALIZACION', 'inventarios',$inv,null);
+                        return $inv->id;
+                    }else{
+                        
+                        $inv = new Inventario();
+                        $inv->tipoinv = $invvue["tipoinv"];
+                        $inv->bodega_id = $invvue["bodega_id"];
+                        $inv->estante_id = $invvue["estante_id"];
+                        $inv->fechainv = date("Y-m-d");
+                        $inv->cantidadbodtotal = $invvue["cantidadbodtotal"];
+                        $inv->cantidadinvtotal = $invvue["cantidadinvtotal"];
+                        $inv->cantidaddiftotal = $invvue["cantidaddiftotal"];
+                        $inv->userinv = User::where("id",auth()->id())->first()->value('rut');
+                        $inv->estadoinv = 'PROCESO';
+                        $inv->fechainicioinv = date("Y-m-d H:i:s");
+                        $inv->save();
+                        time_nanosleep(0, 200000000);
+                        foreach ($detinvvue as $det) {
+                            $detinv= new DetalleInventario();
+                            $detinv->inventario_id =$inv->id;
+                            $detinv->bodega_id = $det["bodega_id"];
+                            $detinv->estante_id = $det["estante_id"];
+                            $detinv->posicion_id = $det["posicion_id"];
+                            $detinv->sectorinv = $det["sectorinv"];
+                            $detinv->nivelinv = $det["nivelinv"];
+                            $detinv->codigoart = $det["codigoart"];
+                            $detinv->cantidadbod = $det["cantidadbod"];
+                            $detinv->cantidadinv = $det["cantidadinv"];
+                            $detinv->cantidaddif = $det["cantidadbod"]- $det["cantidadinv"];
+                            $detinv->save();
+                        }
+                        guardarnotificacion(auth()->id(), 'INGRESO','INGRESADO', 'inventarios',$inv,null);
+                        return $inv->id;
+                    }
+                    
+                break;
+                case 'finalizarinventario':
+                    $invvue =$request->inventario;
+                    $detinvvue =$request->detalle;
+                    $inv = Inventario::where("estadoinv","PROCESO")->first();
+                    if($inv!=null){
+                        $inv->estadoinv = 'FINALIZADO';
+                        $inv->fechafininv = date("Y-m-d H:i:s");
+                        $inv->cantidadbodtotal = $invvue["cantidadbodtotal"];
+                        $inv->cantidadinvtotal = $invvue["cantidadinvtotal"];
+                        $inv->cantidaddiftotal = $invvue["cantidaddiftotal"];
+                        $inv->save();
+                        time_nanosleep(0, 200000000);
+                        foreach ($detinvvue as $det) {
+                            $detinv= DetalleInventario::find($det["id"]);
+                            $detinv->cantidadbod = $det["cantidadbod"];
+                            $detinv->cantidadinv = $det["cantidadinv"];
+                            $detinv->cantidaddif = $det["cantidadbod"]- $det["cantidadinv"];
+                            $detinv->save();
+                        }
+                        guardarnotificacion(auth()->id(), 'FINALIZADO','FINALIZADO', 'inventarios',$inv,null);
+                    }
+                break;
                 default:
                     # code...
                     break;

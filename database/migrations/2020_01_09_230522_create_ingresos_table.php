@@ -15,6 +15,7 @@ class CreateIngresosTable extends Migration
     {
         Schema::create('ingresos', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger("posicion_id");
             $table->string("codigoart");
             $table->string("bodega_id");
             $table->integer("estante_id");
@@ -22,6 +23,8 @@ class CreateIngresosTable extends Migration
             $table->integer("niveling");
             $table->integer("cantidading");
             $table->string("usering");
+            $table->timestamp("fechaing");
+
             $table->timestamps();
             $table->softDeletes();
         });

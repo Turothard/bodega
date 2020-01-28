@@ -4,8 +4,14 @@
 .pointer{
     cursor: pointer !important;
 }
+.table-dark th{
+    text-transform: uppercase;
+}
 .w-xs{
     max-width: 4em;
+}
+.w-xs2{
+    max-width: 6em;
 }
 .w-s{
     max-width: 8em;
@@ -20,7 +26,7 @@
     display:none;
 }
 @media only screen and (max-width: 900px) and (orientation: portrait){
-    .modal-dialog {
+    .modal-xl  {
         max-width: 100% !important;
         /* margin: 1.75rem auto; */
     }
@@ -29,11 +35,15 @@
     }
 }
 @media (min-width: 576px){
-    .modal-dialog {
+    .modal-xl  {
         max-width: 100% !important;
         /* margin: 1.75rem auto; */
     }
     .modal-xl {
         width: 98% !important;
     }
+}
+#tablainventario.dataTables_wrapper {
+    width: 800px;
+    margin: 0 auto;
 }

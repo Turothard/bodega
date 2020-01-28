@@ -17,6 +17,8 @@ use App\Unidade;
 use App\Pedido;
 use App\DetallePedido;
 use App\User;
+use App\Inventario;
+use App\DetalleInventario;
 
 if ( !function_exists('guardarnotificacion') )
 {
@@ -99,7 +101,35 @@ if ( !function_exists('guardarnotificacion') )
 				}
 				
 				break;
-			
+			case 'inventarios':
+				
+				$inv = Inventario::find($modeltabla->id);
+				$userinventario = User::where("rut",$inv->userinv)->first();
+				$not->id_tabla = $modeltabla->id;
+				$not->destino ='/bodega';
+				$not->grupo=$usuario->department;
+				switch ($tipo) {
+					case 'INGRESO':
+						
+						$not->grupoobjetivo="ADMIN";
+						$grupoobjetivo="ADMIN";
+						$not->mensaje="Nuevo inventario <strong>".$modeltabla->id." - ".$inv->tipoinv."</strong> Creado <br />Usuario:".$userinventario->name."<br /> Bodega:".$inv->bodega_id;
+						break;
+					case 'ACTUALIZACION':
+						$not->grupoobjetivo="ADMIN";
+						$grupoobjetivo="ADMIN";
+						$not->mensaje="Actualización inventario <strong>".$modeltabla->id."</strong><br />Total Bodega: ".$inv->cantidadbodtotal."<br />Total Inventario: ".$inv->cantidadinvtotal."<br />Total Diferencia: ".$inv->cantidaddiftotal."";
+						break;
+					case 'FINALIZADO':
+						$not->grupoobjetivo="ADMIN";
+						$grupoobjetivo="ADMIN";
+						$not->mensaje="Inventario Finalizado<strong>".$modeltabla->id."</strong><br />Total Bodega: ".$inv->cantidadbodtotal."<br />Total Inventario: ".$inv->cantidadinvtotal."<br />Total Diferencia: ".$inv->cantidaddiftotal."";
+						break;
+					default:
+						# code...
+						break;
+				}
+			break;
 			default:
 				# code...
 				break;
@@ -109,20 +139,25 @@ if ( !function_exists('guardarnotificacion') )
 		time_nanosleep(0, 200000000);		
 		
 		if($userobjetivo!=''){
-			$notiuser = new NotificacionesUser();
-			$notiuser->notificacion_id = $not->id;
-			$notiuser->user_id = $userobjetivo;
-			$notiuser->estado = 'INGRESADO';
-			$notiuser->save();
-		}else{
-			$users = User::where("department",$grupoobjetivo)->get();
-			foreach ($users as $usuario) {
+			if($grupoobjetivo!='ADMIN'){
 				$notiuser = new NotificacionesUser();
 				$notiuser->notificacion_id = $not->id;
-				$notiuser->user_id = $usuario->id;
+				$notiuser->user_id = $userobjetivo;
 				$notiuser->estado = 'INGRESADO';
 				$notiuser->save();
 			}
+		}else{
+			if($grupoobjetivo!='ADMIN'){
+				$users = User::where("department",$grupoobjetivo)->get();
+				foreach ($users as $usuario) {
+					$notiuser = new NotificacionesUser();
+					$notiuser->notificacion_id = $not->id;
+					$notiuser->user_id = $usuario->id;
+					$notiuser->estado = 'INGRESADO';
+					$notiuser->save();
+				}
+			}
+			
 		}
 		$users = User::where("department",'ADMIN')->get();
 			foreach ($users as $usuario) {

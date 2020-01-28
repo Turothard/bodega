@@ -32,10 +32,10 @@
                         <td :title="item.nombretipounimed+' '+item.codigounimed">{{item.codigounimed}}</td>
                         <td>{{item.nombremar}}</td>
                         <td v-if="item.image!=null">
-                            <button class="btn btn-info btn-sm" @click="imagen(item.imagen)"><img style="width:23px;heigth:23px;" src="css/img/verimage.png"/></button>
+                            <button class="btn btn-info btn-sm" @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = item.image,showPreview2 = true" data-toggle="modal" data-target="#imagemodal"><img style="width:23px;heigth:23px;" src="css/img/verimage.png"/></button>
                         </td>
                         <td v-else>
-                            <button class="btn btn-info btn-sm" @click="imagen(item.imagen)"><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
+                            <button class="btn btn-info btn-sm" @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = '',showPreview2 = false" data-toggle="modal" data-target="#imagemodal" ><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
                         </td>
                         <td :title="item.descripcionper">{{item.periododevo}}</td>
                         <td>{{item.stockcriticoart}}</td>
@@ -167,12 +167,60 @@
                     </div>
                 </div>
             </div>
+           <!--  <component v-bind:is="imagenactual" :imagen="imagenart" :articulo="articuloimagen" ></component>
+           <imagenvue :imagen="imagenart" :articulo="articuloimagen" />!-->
+           <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Imagen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <table class="table table-striped table-sm table-bordered table-dark t-regular">
+                            <thead>
+                                <tr>
+                                    <th>Código Artículo</th>
+                                    <th>Nombre Artículo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{articuloimagen.codigoart}}</td>
+                                    <td>{{articuloimagen.nombreart}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <button class="btn btn-info btn-sm" @click="$refs.subirnewimageold.click()"><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
+                        <input type="file" accept="image/*" ref="subirnewimageold" capture="camera" id="2" @change="handleFileUpload2()" style="display:none"/> 
+                    <div v-if="imagenart!=null">
+                        
+                        <img v-bind:src="imagePreview2" v-show="showPreview2" class="img-fluid" alt="Responsive image"/>
+                    </div>
+                    <div v-if="imagenart==null">
+                        
+                        <img v-bind:src="imagePreview2" v-show="showPreview2" class="img-fluid" alt="Responsive image"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @click="guardararticulo2()">Subir Imagen</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
+
     export default {
         props: ['datamantenedor'],
+        
         data(){
             return{
                 preestablecidovue:null,
@@ -188,10 +236,16 @@
                     nombreart: '', proveedorart: '', descripcionart: '', color_id: '', unidad_id: '', 
                     marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: 2019, 
                     periododevo_id: 1, image: ''},
+                articuloimagen:'',
+                imagenart:'',
+                imagenactual:'',
                 dt:null,
                 file: '',
                 showPreview: false,
-                imagePreview: ''
+                imagePreview: '',
+                showPreview2 : false,
+                imagePreview2 : ''
+
             }
         },
         computed: {
@@ -306,6 +360,95 @@
                 })(navigator.userAgent||navigator.vendor||window.opera);
                 return check;
             },
+            handleFileUpload2(){
+                this.file = this.$refs.subirnewimageold.files[0];
+                let reader  = new FileReader();
+                reader.addEventListener("load", function () {
+                    this.showPreview2 = true;
+                    this.imagePreview2 = reader.result;
+                }.bind(this), false);
+                if( this.file ){
+                    if ( /\.(jpe?g|png|gif)$/i.test( this.file.name ) ) {
+                        reader.readAsDataURL( this.file );
+                    }
+                }
+            },
+            guardararticulo2(){
+                let file = this.$refs.subirnewimageold.files[0];
+                if(typeof file !=='undefined' && file !=null ){
+                    console.log("entro a guardar imagen");
+                    let formData = new FormData();
+                    formData.append('image',file);
+                    formData.append('nombre',this.articuloimagen.codigoart);
+                    axios.post('/sistema/uploadimage', formData, {
+                        headers: {
+                        'Content-Type': 'multipart/form-data'
+                        }
+                    })
+                    .then(response => {
+                        console.log(response.data.message, 'success');
+                        axios.post('/mantenedores/getdatos', {tipo:'articulos'}).then((res) =>{
+                                this.articulos = res.data[0];
+                                this.correlativos= res.data[1];
+                                this.showPreview2 = false;
+                                this.$refs.subirnewimageold='';
+                            this.imagePreview2 = '';
+                                //this.cargando=false;
+                                console.log(this.correlativos);
+                                this.$nextTick(function () {
+                                    this.dt.destroy();
+                                    this.dt =null;
+                                    this.dt = $('#tabladetalle').DataTable({
+                                        "language": {
+                                            "lengthMenu": "Mostrar _MENU_ filas por página",
+                                            "zeroRecords": "Ningún resultado según criterio",
+                                            "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                            "infoEmpty": "No se encontraron resultados",
+                                            "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                            "search":         "Buscar:",
+                                            "paginate": {
+                                                "first":      "Primero",
+                                                "last":       "Último",
+                                                "next":       "Siguiente",
+                                                "previous":   "Anterior"
+                                            },
+                                        },                        
+                                    });
+                                    this.cargando=false;
+                                });  
+                                
+                            }).catch(function (error) {
+                                if (error.response) {
+                                    // Request made and server responded
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                    console.log(error.response.headers);
+                                    } else if (error.request) {
+                                    // The request was made but no response was received
+                                    console.log(error.request);
+                                    } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                            $(".close").click();
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                        }
+                    });
+                }
+            },
             handleFileUpload(){
                 this.file = this.$refs.subirnewimage.files[0];
                 let reader  = new FileReader();
@@ -323,16 +466,10 @@
                 if(this.tipoarticulo == 'nuevoarticulo'){
                     art.codigoart = this.codigoartvue;
                 }
-                
-                console.log(art);
-                console.log(art.codigoart.length);
                 if(art.codigoart.length<15 || art.proveedorart=='' || art.nombreart=='' || art.descripcionart =='' || art.stockcriticoart=='' || art.indicerotacionart=='' || art.yearart=='' || art.periododevo_id==''){
                     this.$toastr.w("Favor de ingresar datos obligatorios!!");
                     return;
                 }
-                
-                
-               //return;
                  axios.post('/mantenedores/setdatos', {tipo:this.tipoarticulo,detalle: art, correlativo: this.correlativox})
                     .then((res) =>{
                         console.log(res.data);

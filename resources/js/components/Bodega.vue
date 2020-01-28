@@ -5,8 +5,9 @@
                 <ul id="ulbodega" class="list-group">
                     <li class="list-group-item pointer" @click="componenteactual='bodega_detalle'">Bodega</li>
                     <li class="list-group-item pointer" @click="componenteactual='pedido'">Pedidos</li>
-                    <li class="list-group-item pointer">Movimientos</li>
-                    <li class="list-group-item pointer">Inventario</li>
+                    <li class="list-group-item pointer" @click="componenteactual='bodega_ingresos'">Ingresos</li>
+                    <li class="list-group-item pointer" @click="componenteactual='bodega_movimientos'">Movimientos</li>
+                    <li class="list-group-item pointer" @click="componenteactual='bodega_inventarios'">Inventario</li>
                 </ul>
             </div>
             <div class="p-2">
@@ -19,12 +20,19 @@
 
 <script>
     import bodega_detalle from './bodega/bodegadetalle.vue';
-    /*import pedido_detalle from './pedidos/pedidodetalle.vue';*/
+    import bodega_ingresos from './bodega/bodeingresos.vue';
+    import bodega_movimientos from './bodega/bodemovimientos.vue';
+    import bodega_inventarios from './bodega/bodeinventarios.vue';
+    /*import bodega_detalle from './bodega/bodegadetalle.vue';
+    import pedido_detalle from './pedidos/pedidodetalle.vue';*/
     import pedido from './Pedido.vue';
     export default {
         components: {
             pedido, 
-            bodega_detalle
+            bodega_detalle,
+            bodega_ingresos,
+            bodega_movimientos,
+            bodega_inventarios
         },
         data(){
             return{

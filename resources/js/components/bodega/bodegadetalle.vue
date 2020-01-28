@@ -56,7 +56,7 @@
                             <td>{{item.indicerotacionart}}</td>
                             <td>{{item.descripcionper}}</td>
                             <td>
-                                <button class="btn btn-info btn-sm" @click="moverarticulo(item)" data-toggle="modal" data-target="#bodegadetmodal"><img style="width:23px;heigth:23px;" src="css/img/mover.png"/></button>
+                                <button class="btn btn-info btn-sm" @click="moverarticulo(item)" title="Mover artículos" data-toggle="modal" data-target="#bodegadetmodal"><img style="width:23px;heigth:23px;" src="css/img/mover.png"/></button>
                             </td>
                         </tr>
                     </tbody>
@@ -64,7 +64,7 @@
             </div>
        </div>
        <div class="modal fade" id="bodegadetmodal" tabindex="-1" role="dialog" aria-labelledby="bodegadetmodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Movimiento Artículos</h5>
@@ -74,120 +74,45 @@
                 </div>
                 <div class="modal-body">
                     <table id="detalleart" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
-                    <thead>
-                        <tr>
-                            <th colspan="2">Detalle Artículo</th>
-                            <th colspan="5">Posición Original</th>
-                            <th></th>
-                            <th colspan="5">Nueva Posición</th>
-                        </tr>
-                        <tr>
-                            <th>Código</th>
-                            <th>Nombre Art</th>
-                            <th>Bodega</th>
-                            <th>Estante</th>
-                            <th>Sector</th>
-                            <th>Nivel</th>
-                            <th>Cantidad</th>
-                            <th>-</th>
-                            <th>Bodega</th>
-                            <th>Estante</th>
-                            <th>Sector</th>
-                            <th>Nivel</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>{{articulomov.codigoart}}</td>
-                            <td>{{articulomov.nombreart}}</td>
-                            <td>{{articulomov.bodega_id}}</td>
-                            <td>{{articulomov.nroestante}}</td>
-                            <td>{{articulomov.sectorpos}}</td>
-                            <td>{{articulomov.nivelpos}}</td>
-                            <td>{{articulomov.cantidadpos}}</td>
-                            <td></td>
-                            <td>
-                                <select class="form-control w-s" v-model="newposicion.bodega_id" >
-                                    <option value="">------</option>
-                                    <option v-for="(item, index) in bodega" :key="index" :value="item.idbodega">
-                                        {{ item.idbodega }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control w-s" v-model="newposicion.estante_id" >
-                                    <option value="">---</option>
-                                    <option v-for="(item, index) in estantefiltradomov" :key="index" :value="item.id">
-                                        {{ item.nroestante }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control w-xs" v-model="newposicion.sector_id" >
-                                    <option value="">---</option>
-                                    <option v-for="n in parseInt(sectorfiltradormov)" :key="n" :value="n">
-                                        {{ n }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td>
-                                <select class="form-control w-xs" v-model="newposicion.nivel_id" >
-                                    <option value="">---</option>
-                                    <option v-for="n in parseInt(nivelfiltradormov)" :key="n" :value="n">
-                                        {{ n }}
-                                    </option>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" v-model="newposicion.cantidad" class="form-control w-xs" :id="'cantidadmov'" name="cantidadmov">
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" @click="realizarmovimiento()" class="btn btn-primary">Realizar Movimiento</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    
-                </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal fade" id="bodegaingmodal" tabindex="-1" role="dialog" aria-labelledby="bodegaingmodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Ingreso de Artículos</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table id="detalleart" class="table table-striped table-sm table-bordered table-dark t-regular">
                         <thead>
                             <tr>
-                                <th>Código</th>
+                            <th colspan="5">Código</th>
+                            <th colspan="5">Nombre Art</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5">{{articulomov.codigoart}}</td>
+                                <td colspan="5">{{articulomov.nombreart}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table id="detalleart" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
+                        <thead>
+                            <tr>
+                                <th colspan="5">Posición Original</th>
+                                <th colspan="5">Nueva Posición</th>
+                            </tr>
+                            <tr>
                                 <th>Bodega</th>
                                 <th>Estante</th>
                                 <th>Sector</th>
                                 <th>Nivel</th>
                                 <th>Cantidad</th>
-                                <th rowspan="2">
-                                    <button type="button" @click="agregararticulo()" class="btn btn-primary">Agregar Artículos</button>
-                                </th>
+                                <th>Bodega</th>
+                                <th>Estante</th>
+                                <th>Sector</th>
+                                <th>Nivel</th>
+                                <th>Cantidad</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <vue-bootstrap-typeahead 
-                                        v-model="newposicion.codigoart"
-                                        :minMatchingChars="3"
-                                        ref="articulos"
-                                        :data="codigos">
-                                    </vue-bootstrap-typeahead>
-                                </td>
+                            <tr>   
+                                <td>{{articulomov.bodega_id}}</td>
+                                <td>{{articulomov.nroestante}}</td>
+                                <td>{{articulomov.sectorpos}}</td>
+                                <td>{{articulomov.nivelpos}}</td>
+                                <td>{{articulomov.cantidadpos}}</td>
                                 <td>
                                     <select class="form-control w-s" v-model="newposicion.bodega_id" >
                                         <option value="">------</option>
@@ -223,6 +148,90 @@
                                 <td>
                                     <input type="text" v-model="newposicion.cantidad" class="form-control w-xs" :id="'cantidadmov'" name="cantidadmov">
                                 </td>
+                            </tr>
+                        </tbody>
+                        
+
+                </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" @click="realizarmovimiento()" class="btn btn-primary">Realizar Movimiento</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="bodegaingmodal" tabindex="-1" role="dialog" aria-labelledby="bodegaingmodalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ingreso de Artículos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table id="detalleart" class="table table-striped table-sm table-bordered table-dark t-regular">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Bodega</th>
+                                <th>Estante</th>
+                                <th>Sector</th>
+                                <th>Nivel</th>
+                                <th>Cantidad</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <vue-bootstrap-typeahead 
+                                        v-model="newposicion.codigoart"
+                                        :minMatchingChars="3"
+                                        ref="articulos"
+                                        :data="codigos">
+                                    </vue-bootstrap-typeahead>
+                                </td>
+                                <td>
+                                    <select class="form-control w-s" v-model="newposicion.bodega_id" >
+                                        <option value="">------</option>
+                                        <option v-for="(item, index) in bodega" :key="index" :value="item.idbodega">
+                                            {{ item.idbodega }}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control w-s" v-model="newposicion.estante_id" >
+                                        <option value="">---</option>
+                                        <option v-for="(item, index) in estantefiltradomov" :key="index" :value="item.id">
+                                            {{ item.nroestante }}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control w-xs2" v-model="newposicion.sector_id" >
+                                        <option value="">---</option>
+                                        <option v-for="n in parseInt(sectorfiltradormov)" :key="n" :value="n">
+                                            {{ n }}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control w-xs2" v-model="newposicion.nivel_id" >
+                                        <option value="">---</option>
+                                        <option v-for="n in parseInt(nivelfiltradormov)" :key="n" :value="n">
+                                            {{ n }}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="text" v-model="newposicion.cantidad" class="form-control w-xs" :id="'cantidadmov'" name="cantidadmov">
+                                </td>
+                                <th>
+                                    <button type="button" @click="agregararticulo()" title="Agregar Artículo" class="btn btn-primary">Agregar</button>
+                                </th>
                             </tr>
                         </tbody>
                     </table>
@@ -411,7 +420,7 @@
             });
         },
         mounted() {
-        
+            this.$toastr.defaultPosition = "toast-top-left";
         },
         methods: {
             selectbodega(idbodega){
@@ -426,13 +435,34 @@
                 }
                 if(this.bodegaselect==idbodega){
                     this.bodegaselect='';
-                    
+                    return;
                 }else{
                     this.estanteselect='';
                     this.bodegaselect=idbodega;
                     $("#estantebuttons button.btn-primary").addClass("btn-secondary");
                     $("#estantebuttons button.btn-primary").removeClass("btn-primary");
                 }
+                this.dt.destroy();
+                        this.$nextTick(function () {
+                            
+                            this.dt = $('#tabladetalle').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar _MENU_ filas por página",
+                                    "zeroRecords": "Ningún resultado según criterio",
+                                    "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                    "infoEmpty": "No se encontraron resultados",
+                                    "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                    "search":         "Buscar:",
+                                    "paginate": {
+                                        "first":      "Primero",
+                                        "last":       "Último",
+                                        "next":       "Siguiente",
+                                        "previous":   "Anterior"
+                                    },
+                                },                        
+                            });
+                            this.cargando=false;
+                        }); 
                
             },
             selectestante(idestante){
@@ -447,10 +477,31 @@
                 }
                 if(this.estanteselect==idestante){
                     this.estanteselect='';
+                    return
                 }else{
                     this.estanteselect=idestante;
                 }
-                
+                this.dt.destroy();
+                        this.$nextTick(function () {
+                            
+                            this.dt = $('#tabladetalle').DataTable({
+                                "language": {
+                                    "lengthMenu": "Mostrar _MENU_ filas por página",
+                                    "zeroRecords": "Ningún resultado según criterio",
+                                    "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                    "infoEmpty": "No se encontraron resultados",
+                                    "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                    "search":         "Buscar:",
+                                    "paginate": {
+                                        "first":      "Primero",
+                                        "last":       "Último",
+                                        "next":       "Siguiente",
+                                        "previous":   "Anterior"
+                                    },
+                                },                        
+                            });
+                            this.cargando=false;
+                        }); 
             },
             eliminarcantart(art, index){
                 console.log("--cantidad");
@@ -565,12 +616,12 @@
                     console.log(res.data);
                     if(res.data==''){
                         this.$toastr.s("Movimiento realizado con éxito");
-                        if(parseInt(this.articulomov.cantidadpos)-parseInt(this.newposicion.cantidad)==0){
+                        
                             setTimeout(function() {
                                 location.reload();
                             }, 2000);
                             //location.reload();
-                        }
+                        
                         this.newposicion={
                             codigoart:'',
                             bodega_id:'',
