@@ -108,16 +108,16 @@
                                         <div class="custom-control custom-checkbox">
                                             <input type="checkbox" v-model="item.tipo" class="custom-control-input" :id="'tipo'+-index" name="example1">
                                             <label class="custom-control-label" :for="'tipo'+-index"></label>
-                                            <i @click="eliminarcantart(item,index)" class="material-icons pointer">
-                                                remove_circle_outline
-                                            </i>
-                                             <i @click="agregarcantart(item, index)" class="material-icons pointer">
-                                                add_circle_outline
-                                            </i>
-                                            <i @click="eliminarart(item, index)" class="material-icons pointer">
-                                                delete_forever
-                                            </i>
-                                           
+                                            
+                                           <button @click="eliminarcantart(item,index)" class="btn btn-warning btn-sm">
+                                                <img style="width:23px;heigth:23px;" src="css/img/remover.png" />
+                                            </button>
+                                            <button @click="agregarcantart(item,index)" class="btn btn-success btn-sm">
+                                                <img style="width:23px;heigth:23px;" src="css/img/agregar.png" />
+                                            </button>
+                                            <button @click="eliminarart(item,index)" class="btn btn-danger btn-sm">
+                                                <img style="width:23px;heigth:23px;" src="css/img/delete.png" />
+                                            </button>
                                         </div>
                                         
                                     </td>

@@ -32,17 +32,37 @@
                         <td :title="item.nombretipounimed+' '+item.codigounimed">{{item.codigounimed}}</td>
                         <td>{{item.nombremar}}</td>
                         <td v-if="item.image!=null">
-                            <button class="btn btn-info btn-sm" @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = item.image,showPreview2 = true" data-toggle="modal" data-target="#imagemodal"><img style="width:23px;heigth:23px;" src="css/img/verimage.png"/></button>
+                            <button 
+                            class="btn btn-info btn-sm" 
+                            @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = item.image,showPreview2 = true" 
+                            data-toggle="modal" 
+                            data-target="#imagemodal">
+                                <img style="width:23px;heigth:23px;" src="css/img/verimage.png"/>
+                            </button>
                         </td>
                         <td v-else>
-                            <button class="btn btn-info btn-sm" @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = '',showPreview2 = false" data-toggle="modal" data-target="#imagemodal" ><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
+                            <button 
+                            class="btn btn-info btn-sm" 
+                            @click.capture="imagenart = item.image, imagenactual='imagenvue', articuloimagen=item,imagePreview2 = '',showPreview2 = false" 
+                            data-toggle="modal" 
+                            data-target="#imagemodal" >
+                                <img style="width:23px;heigth:23px;" src="css/img/addimage.png"/>
+                            </button>
                         </td>
                         <td :title="item.descripcionper">{{item.periododevo}}</td>
                         <td>{{item.stockcriticoart}}</td>
                         <td>{{item.indicerotacionart}}</td>
                         <td>
-                            <button class="btn btn-info btn-sm" @click="cargareditar(item)" data-toggle="modal" data-target="#articulosmodal"><img style="width:23px;heigth:23px;" src="css/img/editar.png"/></button>
-                            <button class="btn btn-danger btn-sm"><img style="width:23px;heigth:23px;" src="css/img/delete.png"/></button>
+                            <button 
+                            class="btn btn-info btn-sm" 
+                            @click="cargareditar(item)" 
+                            data-toggle="modal" 
+                            data-target="#articulosmodal">
+                                <img style="width:23px;heigth:23px;" src="css/img/editar.png"/>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                                <img style="width:23px;heigth:23px;" src="css/img/delete.png"/>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

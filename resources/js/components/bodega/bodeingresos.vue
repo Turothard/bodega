@@ -29,7 +29,14 @@
                         <td>{{item.cantidading}}</td>
                         <td>{{item.created_at}}</td>
                         <td>
-                             <button v-if="item.fechaing == item.updated_at" @click="revertiringreso(item, index)" title="Revertir Ingreso" class="btn btn-danger btn-sm"><img style="width:23px;heigth:23px;" src="css/img/revertir.png"/></button>
+                             <button 
+                                v-if="item.fechaing == item.updated_at" 
+                                @click="revertiringreso(item, index)" 
+                                title="Revertir Ingreso" 
+                                class="btn btn-danger btn-sm"
+                            >
+                                <img style="width:23px;heigth:23px;" src="css/img/revertir.png"/>
+                            </button>
                         </td>
                     </tr>
                 </tbody>

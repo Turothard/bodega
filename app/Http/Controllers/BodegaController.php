@@ -123,6 +123,20 @@ class BodegaController extends Controller
                     }
                     return $inv;
                 break;
+                case 'inventariosajuste':
+                    $inventario = Inventario::find($request->detalle);
+                    $arreglo[0] = DetalleInventario::where("inventario_id", $inventario->id)
+                    ->join('estantes', 'estantes.id','=', 'detalleinventarios.estante_id')
+                    ->join('articulos', 'articulos.codigoart','=', 'detalleinventarios.codigoart')
+                    ->select('detalleinventarios.id', 'detalleinventarios.inventario_id', 'detalleinventarios.bodega_id', 'detalleinventarios.posicion_id', 
+                    'detalleinventarios.estante_id', 'estantes.nroestante','detalleinventarios.sectorinv', 'detalleinventarios.nivelinv', 
+                    'detalleinventarios.codigoart', 'articulos.nombreart', 'detalleinventarios.cantidadbod', 'detalleinventarios.cantidadinv', 'detalleinventarios.cantidaddif')
+                    ->orderBy("detalleinventarios.bodega_id","ASC")
+                    ->orderBy("estantes.nroestante","ASC")
+                    ->orderBy("detalleinventarios.sectorinv","ASC")
+                    ->orderBy("detalleinventarios.nivelinv","ASC")->get();
+                    return $arreglo;  
+                break;
                 case 'inventarios':
                     if($request->detalle!=null){
                         $inventario = Inventario::find($request->detalle);

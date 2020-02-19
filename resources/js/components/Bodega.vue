@@ -3,11 +3,11 @@
         <div class="d-flex flex-row">
             <div class="p-2">
                 <ul id="ulbodega" class="list-group">
-                    <li class="list-group-item pointer" @click="componenteactual='bodega_detalle'">Bodega</li>
-                    <li class="list-group-item pointer" @click="componenteactual='pedido'">Pedidos</li>
-                    <li class="list-group-item pointer" @click="componenteactual='bodega_ingresos'">Ingresos</li>
-                    <li class="list-group-item pointer" @click="componenteactual='bodega_movimientos'">Movimientos</li>
-                    <li class="list-group-item pointer" @click="componenteactual='bodega_inventarios'">Inventario</li>
+                    <li class="list-group-item pointer" id="li_bodega_detalle" @click="componenteactual='bodega_detalle'">Bodega</li>
+                    <li class="list-group-item pointer" id="li_pedido" @click="componenteactual='pedido'">Pedidos</li>
+                    <li class="list-group-item pointer" id="li_bodega_ingresos" @click="componenteactual='bodega_ingresos'">Ingresos</li>
+                    <li class="list-group-item pointer" id="li_bodega_movimientos" @click="componenteactual='bodega_movimientos'">Movimientos</li>
+                    <li class="list-group-item pointer" id="li_bodega_inventarios" @click="componenteactual='bodega_inventarios'">Inventario</li>
                 </ul>
             </div>
             <div class="p-2">
@@ -59,6 +59,8 @@
                 if(val!=''){
                     //this.componenteactualvue= val;
                     sessionStorage.setItem("componenteactualvue",(val));
+                     $("#ulbodega li.active").removeClass('active');
+                    $("#li_"+val).addClass('active');
                 }
             }
         },

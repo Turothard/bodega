@@ -26,14 +26,10 @@
                                     <td data-label="Codigo" v-html="item.mensaje"></td>
                                     <td>
                                         <button class="btn btn-secondary btn-sm" title="Abrir Enlace" @click="abrirnotificacion(item,1)">
-                                        <i class="material-icons pointer">
-                                            drafts
-                                        </i>
+                                            <img style="width:23px;heigth:23px;" src="css/img/abrirsobre.png"/>
                                         </button>
-                                        <button class="btn btn-secondary btn-sm" title="Marcar como leida" @click="leernotificacion(item,1)">
-                                        <i class="material-icons pointer">
-                                            mobile_friendly
-                                        </i>
+                                        <button class="btn btn-secondary btn-sm" title="Marcar como leída" @click="leernotificacion(item,1)">
+                                            <img style="width:23px;heigth:23px;" src="css/img/notileer.png"/>
                                         </button>
                                     </td>
                                </tr>

@@ -39,6 +39,7 @@ Vue.component('informe-vue', require('./components/Informe.vue').default);
 Vue.component('pedido-vue', require('./components/Pedido.vue').default);
 Vue.component('mantenedor-vue', require('./components/Mantenedor.vue').default);
 Vue.component('configuracion-vue', require('./components/Configuracion.vue').default);
+Vue.component('ordencompra-vue', require('./components/OrdenCompra.vue').default);
 Vue.component('nofiticacion-vue', require('./components/configuraciones/notificaciones.vue').default);
 
 /**

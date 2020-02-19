@@ -4,8 +4,19 @@
 .pointer{
     cursor: pointer !important;
 }
-.table-dark th{
+.table-dark th, .upcase{
     text-transform: uppercase;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
 }
 .w-xs{
     max-width: 4em;
@@ -16,11 +27,20 @@
 .w-s{
     max-width: 8em;
 }
+.w-d1{
+    max-width: 10em;
+}
 .w-d{
     max-width: 12em;
 }
 .w-l{
     max-width: 16em;
+}
+.w-xl{
+    max-width: 20em;
+}
+.w-xxl{
+    max-width: 24em;
 }
 #notificacionesa{
     display:none;

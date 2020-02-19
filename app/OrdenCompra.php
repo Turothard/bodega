@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class OrdenCompra extends Model
 {
     use SoftDeletes;
-    protected $primaryKey = 'idsector';
-    protected $table = 'sectores';
+    protected $primaryKey = 'nrooc';
+    protected $table = 'ordencompras';
 
     public function categorias(){
         return $this->belongsTo("App\Categoria",'categoria_id', 'idcategoria');

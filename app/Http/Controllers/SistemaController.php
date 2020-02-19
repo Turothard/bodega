@@ -25,6 +25,8 @@ use App\Notificacione;
 use App\NotificacionesUser;
 use App\Proveedore;
 use App\Colore;
+use App\OrdenCompra;
+use App\DetalleOrdenCompra;
 use Image;
 class SistemaController extends Controller
 {
@@ -78,10 +80,12 @@ class SistemaController extends Controller
                     $notis = NotificacionesUser::where("user_id",auth()->id())->join('notificaciones', 'notificaciones.id','=','notificacionesuser.notificacion_id')->select('notificacionesuser.id','notificacionesuser.notificacion_id','notificaciones.tipo','notificaciones.tabla','notificaciones.id_tabla','notificaciones.destino','notificaciones.grupo','notificaciones.userproceso_id','notificaciones.userobjetivo_id','notificaciones.grupoobjetivo','notificaciones.mensaje','notificacionesuser.estado')->where("notificacionesuser.estado","<>","LEIDA")->get();
                     
                     return $notis;
+                break;
                 case 'Bodega':
                     $arreglo[8]=Bodega::all();
                     $arreglo[9]=Estante::all();
                     $arreglo[10]=Posicione::all();
+                    $arreglo[11]=User::where("id",auth()->id())->value("department");
                 break;
                 case 'Mantenedores':
                     $arreglo[8]=Proveedore::all();
@@ -89,6 +93,18 @@ class SistemaController extends Controller
                     $arreglo[10]=Unidade::all();
                     $arreglo[11]=Marca::all();
                     $arreglo[12]=PeriodoDevo::all();
+                    $arreglo[13]=User::where("id",auth()->id())->value("department");
+                    break;
+                case 'OrdenCompra':
+                    $arreglo[8]=OrdenCompra::all();
+                    $arreglo[9]=Proveedore::all();
+                    $arreglo[10]=Colore::all();
+                    $arreglo[11]=Unidade::all();
+                    $arreglo[12]=Marca::all();
+                    $arreglo[13]=PeriodoDevo::all();
+                    $arreglo[14]=Bodega::all();
+                    $arreglo[15]=Estante::all();
+                    $arreglo[16]=User::where("id",auth()->id())->value("department");
                     break;
                 default:
                     # code...

@@ -54,6 +54,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('bodega') }}">{{ __('Bodega') }}</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('ordencompra') }}">{{ __('Orden Compra') }}</a>
+                            </li>
                             @endif
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('pedidos') }}">{{ __('Pedidos') }}</a>

@@ -34,6 +34,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/sistema/getdatos', 'SistemaController@getdatos')->name("sistema.getdatos");
     Route::post('/sistema/setdatos', 'SistemaController@setdatos')->name("sistema.setdatos");
     Route::post('/sistema/uploadimage', 'SistemaController@uploadimage')->name("sistema.uploadimage");
+    Route::get('/ordencompra', 'OrdenCompraController@index')->name("ordencompra");
+    Route::post('/ordencompra/setdatos', 'OrdenCompraController@setdatos')->name("ordencompra.setdatos");
+    Route::post('/ordencompra/getdatos', 'OrdenCompraController@getdatos')->name("ordencompra.getdatos");
 
     
 });

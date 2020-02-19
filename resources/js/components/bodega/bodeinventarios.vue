@@ -31,6 +31,7 @@
                         <th>Cant Sistema</th>
                         <th>Cant Inventario</th>
                         <th>Diferencia</th>
+                        <th>Estado</th>
                         <th>Funciones</th>
                     </tr>
                 </thead>
@@ -45,14 +46,20 @@
                         <td>{{item.cantidadbodtotal}}</td>
                         <td>{{item.cantidadinvtotal}}</td>
                         <td>{{item.cantidaddiftotal}}</td>
+                        <td>{{item.estadoinv}}</td>
                         <td>
-                            <button>
-                                <img style="width:23px;heigth:23px;"
-                                    data-toggle="modal"
-                                    data-target="#inventariomodal"
-                                    @click="tableresp('detalle',item)" 
-                                    src="css/img/moreinfo.png" 
-                                />
+                            <button class="btn btn-info btn-sm"
+                                data-toggle="modal"
+                                data-target="#inventariomodal"
+                                @click="tableresp('detalle',item)" >
+                                <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                            </button>
+                            <button class="btn btn-info btn-sm" 
+                                v-if="item.estadoinv=='FINALIZADO' && user=='ADMIN'"
+                                data-toggle="modal"
+                                data-target="#inventariomodal"
+                                @click="tableresp('detalleajuste',item)">
+                                <img style="width:23px;heigth:23px;" src="css/img/ajuste.png"  />
                             </button>
                         </td>
                     </tr>
@@ -82,6 +89,7 @@
                                     <th v-show="newinventario.length>0">Total Artículos</th>
                                     <th v-show="newinventario.length>0">Total Inventario</th>
                                     <th v-show="newinventario.length>0">Total Diferencia</th>
+                                    
                                     <th></th>
                                 </tr>
                             </thead>
@@ -154,7 +162,7 @@
                                     <td>{{item.codigoart}}</td>
                                     <td>{{item.nombreart}}</td>
                                     <td>{{item.cantidadbod}}</td>
-                                    <td v-if="tipoinventario=='ingresar'">
+                                    <td v-if="tipoinventario=='ingresar' || tipoinventario=='detalleajuste'">
                                         <input type="number" class="form-control p-2 w-xs2 cantidades"
                                         style="height: calc(1.1em + 0.75rem + 2px) !important;"
                                         @keyup.enter="onSubmit(item, index)" 
@@ -258,7 +266,7 @@
             var cod =_.mapValues(this.databodega[4], function(o) { return o.codigoart; });
             var nom = _.mapValues(this.databodega[4], function(o) { return o.nombreart; });
             this.codigos =Object.values(cod).concat(Object.values(nom));
-            
+            this.user = this.databodega[11];
             //this.posiciones = this.databodega[10];
             this.estantes = this.databodega[9];
             
@@ -363,66 +371,97 @@
             },
             tableresp(tipo,inv){
                 this.tipoinventario=tipo;
-                if(tipo=='detalle'){
-                    this.inventario = inv;
-                    axios.post('/bodega/getdatos', {tipo:'inventarios',detalle:inv.id}).then((res) =>{
-                        console.log(res.data);
-                        this.newinventario =res.data[0];
-                        //this.inventario.id = res.data;
-                        /*if (sessionStorage.getItem("inventario")) {
-                            sessionStorage.removeItem("inventario");
-                            sessionStorage.removeItem("newinventario");
-                        }*/
-                        setTimeout(function(){
-                            console.log("resize");
-                            $("#tablainv").show();
-                            this.dt2.columns.adjust().draw();
-                            console.log("resize");
-                        }.bind(this), 500);
-                    }).catch(function(error) {
-                        if (error.response) {
-                        // Request made and server responded
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                        } else if (error.request) {
-                        // The request was made but no response was received
-                        console.log(error.request);
-                        } else {
-                        // Something happened in setting up the request that triggered an Error
-                        console.log("Error", error.message);
+                switch (tipo) {
+                    case 'detalle':
+                        this.inventario = inv;
+                        axios.post('/bodega/getdatos', {tipo:'inventarios',detalle:inv.id}).then((res) =>{
+                            console.log(res.data);
+                            this.newinventario =res.data[0];
+                            setTimeout(function(){
+                                console.log("resize");
+                                $("#tablainv").show();
+                                this.dt2.columns.adjust().draw();
+                                console.log("resize");
+                            }.bind(this), 500);
+                        }).catch(function(error) {
+                            if (error.response) {
+                            // Request made and server responded
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                            } else if (error.request) {
+                            // The request was made but no response was received
+                            console.log(error.request);
+                            } else {
+                            // Something happened in setting up the request that triggered an Error
+                            console.log("Error", error.message);
+                            }
+                        });
+                        break;
+                    case 'ingresar':
+                        if (sessionStorage.getItem("inventario")) {
+                            // Restaura el contenido al campo de texto
+                            
+                            this.inventario = JSON.parse(sessionStorage.getItem("inventario"));
+                            this.newinventario = JSON.parse(sessionStorage.getItem("newinventario"));
+                            this.tipoinventario ='ingresar';
+                            /*this.$nextTick(function () {
+                                this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false                 
+                                });
+                                this.cargando=false;
+                            });*/
+                            //sessionStorage.clear();
+                        }else{
+                            this.inventario={id:'',bodega_id:'', tipoinv:'',estante_id:'', cantidadbodtotal: 0, cantidadinvtotal: 0,
+                            cantidaddiftotal: 0,observacioninv:'', estadoinv:''};
+                        this.newinventario=[];
                         }
-                    });
-                }else{
-                    if (sessionStorage.getItem("inventario")) {
-                        // Restaura el contenido al campo de texto
-                        
-                        this.inventario = JSON.parse(sessionStorage.getItem("inventario"));
-                        this.newinventario = JSON.parse(sessionStorage.getItem("newinventario"));
-                        this.tipoinventario ='ingresar';
-                        /*this.$nextTick(function () {
-                            this.dt2 = $('#newinventario').DataTable({
-                                "scrollY":        "300px",
-                                "scrollCollapse": true,
-                                "paging":         false                 
-                            });
-                            this.cargando=false;
-                        });*/
-                        //sessionStorage.clear();
-                    }else{
-                        /*this.inventario={id:'',bodega_id:'', tipoinv:'',estante_id:'', cantidadbodtotal: 0, cantidadinvtotal: 0,
-                        cantidaddiftotal: 0,observacioninv:'', estadoinv:''};
-                    this.newinventario=[];*/
-                    }
-                    if(this.newinventario.length>0){
-                        setTimeout(function(){
-                            console.log("resize");
-                            $("#tablainv").show();
-                            this.dt2.columns.adjust().draw();
-                            console.log("resize");
-                        }.bind(this), 500);
-                    }
-                }                
+                        if(this.newinventario.length>0){
+                            setTimeout(function(){
+                                console.log("resize");
+                                $("#tablainv").show();
+                                this.dt2.columns.adjust().draw();
+                                console.log("resize");
+                            }.bind(this), 500);
+                        }
+                        break;
+                    case 'detalleajuste':
+                        this.inventario = inv;
+                        axios.post('/bodega/getdatos', {tipo:'inventariosajuste',detalle:inv.id}).then((res) =>{
+                            console.log(res.data);
+                            this.newinventario =res.data[0];
+                            setTimeout(function(){
+                                this.dt2.destroy();
+                                this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY": "250px",
+                                    "scrollCollapse": true,
+                                    "paging": false
+                                });
+                                $("#tablainv").show();
+                                this.dt2.columns.adjust().draw();
+                            }.bind(this), 1000);
+                        }).catch(function(error) {
+                            if (error.response) {
+                            // Request made and server responded
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                            } else if (error.request) {
+                            // The request was made but no response was received
+                            console.log(error.request);
+                            } else {
+                            // Something happened in setting up the request that triggered an Error
+                            console.log("Error", error.message);
+                            }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+                               
             },
             eliminarinventario(){
                 if(confirm("¿Está seguro de eliminar este inventario?")){
