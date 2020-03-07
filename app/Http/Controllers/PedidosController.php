@@ -247,7 +247,6 @@ class PedidosController extends Controller
                                 if($detalleped->receptor_prod==null){
                                     $flag=false;
                                 }
-                                
                             }                                                       
                         }else{
                             if($pedvue['receptor_id']!=''){
@@ -260,6 +259,7 @@ class PedidosController extends Controller
                         }
                         $detalleped->save();
                     }
+
                     if($pedvue['receptor_id']!=''){
                         $ped->receptor_id =$pedvue['receptor_id'];
                     }else{
@@ -271,10 +271,12 @@ class PedidosController extends Controller
                     if($flag){
                         $ped->estadoped='ENTREGADO';
                         
-                        $detalleped = DetallePedido::find($pedvue['id']);
+                        $detalleped = DetallePedido::where("ordencompra_id",$pedvue['id']);
+                        
                         $flag2=true;
                         foreach ($detalleped as $det) {
-                            $periodo =Articulo::find("A01EPP00570940")->periododevos()->first();
+                            
+                            $periodo =Articulo::find($det->codigoart)->periododevos()->first();
                             if($periodo->periododevo!=0){
                                 $flag2=false;
                             }
@@ -294,7 +296,7 @@ class PedidosController extends Controller
                         $ped->save();
                         guardarnotificacion(auth()->id(), 'ACTUALIZACION','ENTREGADO', 'pedidos',$ped,null);
                     }
-                   
+                   return $flag;
                    
                 break;
                 default:

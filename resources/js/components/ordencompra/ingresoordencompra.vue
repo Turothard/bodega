@@ -118,21 +118,21 @@
                                 </div>
                                 <div class="col-2">
                                     Cantidad:<br>
-                                    <input type="text" v-model="detoc.cantidaddetoc" class="form-control form-control-sm w-d t-regular p-2" id="cantidaddetoc" name="cantidaddetoc"
+                                    <input type="number" v-model="detoc.cantidaddetoc" class="form-control form-control-sm w-d t-regular p-2" id="cantidaddetoc" name="cantidaddetoc"
                                         @focus="detoc.cantidaddetoc=quitarcero(detoc.cantidaddetoc)"
                                         @focusout="detoc.cantidaddetoc=ponercero(detoc.cantidaddetoc)"
                                     >
                                 </div>
                                 <div class="col-2">
                                     Monto:<br>
-                                    <input type="text" v-model="detoc.montounitariodetoc" class="form-control form-control-sm w-d t-regular p-2" id="montounitariodetoc" name="montounitariodetoc"
+                                    <input type="number" v-model="detoc.montounitariodetoc" class="form-control form-control-sm w-d t-regular p-2" id="montounitariodetoc" name="montounitariodetoc"
                                         @focus="detoc.montounitariodetoc=quitarcero(detoc.montounitariodetoc)"
                                         @focusout="detoc.montounitariodetoc=ponercero(detoc.montounitariodetoc)"
                                     >
                                 </div>
                                 <div class="col-2">
                                     Total:<br>
-                                    <input type="text" :value="detoc.cantidaddetoc*detoc.montounitariodetoc" readonly class="form-control form-control-sm w-d t-regular p-2" id="montototaldetoc" name="montototaldetoc">
+                                    <input type="number" :value="detoc.cantidaddetoc*detoc.montounitariodetoc" readonly class="form-control form-control-sm w-d t-regular p-2" id="montototaldetoc" name="montototaldetoc">
                                 </div>
                                 <div class="col-3">
                                     <br>

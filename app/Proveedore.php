@@ -16,4 +16,9 @@ class Proveedore extends Model
     {
         return $this->hasMany('App\OrdenCompra', 'proveedor_id', 'rutproveedor');
     }
+
+    public function documentooc()
+    {
+        return $this->hasMany('App\DocumentoOrdenCompra', 'proveedor_id', 'rutproveedor');
+    }
 }

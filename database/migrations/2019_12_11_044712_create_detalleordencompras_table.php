@@ -32,6 +32,7 @@ class CreateDetalleordencomprasTable extends Migration
             $table->string("unidad_id");
             $table->foreign('unidad_id')->references('idunidad')->on('unidades')->onDelete('cascade');
             $table->integer("cantidaddetoc");
+            $table->integer("cantidadrecoc")->nullable();
             $table->integer("montounitariodetoc");
             $table->integer("montototaldetoc");
             $table->timestamps();

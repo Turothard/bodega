@@ -1,5 +1,6 @@
 .t-regular{
     font-size: 0.875em !important;
+    text-transform: uppercase;
 }
 .pointer{
     cursor: pointer !important;

@@ -10,7 +10,9 @@ class OrdenCompra extends Model
     use SoftDeletes;
     protected $primaryKey = 'nrooc';
     protected $table = 'ordencompras';
-
+    protected $casts = [
+        'estadooc'  =>  'string',
+    ];
     public function categorias(){
         return $this->belongsTo("App\Categoria",'categoria_id', 'idcategoria');
     }
@@ -24,5 +26,13 @@ class OrdenCompra extends Model
 
     public function detalleordencompras(){
         return $this->hasMany("App\DetalleOrdenCompra",'ordencompra_id', 'nrooc');
+    }
+
+    public function recepcionoc(){
+        return $this->hasMany("App\RecepcionOc",'nrooc', 'nrooc');
+    }
+
+    public function documentosoc(){
+        return $this->hasMany("App\DocumentoOrdenCompra",'nrooc', 'nrooc');
     }
 }

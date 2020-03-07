@@ -32,4 +32,7 @@ class DetalleOrdenCompra extends Model
     public function unidades(){
         return $this->belongsTo("App\Unidade",'unidad_id', 'idunidad');
     }
+    public function recepcionoc(){
+        return $this->hasMany("App\RecepcionOc",'detoc_id', 'iddetalleoc');
+    }
 }

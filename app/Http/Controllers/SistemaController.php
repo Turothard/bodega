@@ -27,6 +27,8 @@ use App\Proveedore;
 use App\Colore;
 use App\OrdenCompra;
 use App\DetalleOrdenCompra;
+use App\DocumentoOrdenCompra;
+use Illuminate\Support\Facades\DB;
 use Image;
 class SistemaController extends Controller
 {
@@ -96,7 +98,8 @@ class SistemaController extends Controller
                     $arreglo[13]=User::where("id",auth()->id())->value("department");
                     break;
                 case 'OrdenCompra':
-                    $arreglo[8]=OrdenCompra::all();
+                    //$arreglo[8]=DB::table('ordencompras')->get();
+                    $arreglo[8]=OrdenCompra::all()->sortByDesc('created_at');
                     $arreglo[9]=Proveedore::all();
                     $arreglo[10]=Colore::all();
                     $arreglo[11]=Unidade::all();
@@ -170,16 +173,31 @@ class SistemaController extends Controller
         
         $image = $request->file('image');
         $name = $request->input("nombre");
+        $tipo = $request->input("tipo");
+        if($tipo =='actualizarprod'){
+            $extension = $image->getClientOriginalExtension(); // Get the extension
         
-        $extension = $image->getClientOriginalExtension(); // Get the extension
+            $fileName = trim($name). '.' . $extension;
+            $path = public_path('images/'.$fileName);
         
-        $fileName = trim($name). '.' . $extension;
-        $path = public_path('images/'.$fileName);
-    
-        Image::make($image)->save($path);
-        $art = Articulo::find($name);
-       $art->image = 'images/'.$fileName;
-       $art->save();
+            Image::make($image)->save($path);
+            $art = Articulo::find($name);
+            $art->image = 'images/'.$fileName;
+            $art->save();
+        }
+        if($tipo=='documentooc'){
+            
+            $extension = $image->getClientOriginalExtension(); // Get the extension
+        
+            $fileName = trim($name). '.' . $extension;
+            $path = public_path('documents/'.$fileName);
+            $nombres = explode("_", $name);
+            Image::make($image)->save($path);
+            $doc = DocumentoOrdenCompra::where("nrooc",$nombres[0])->where("nrodocumento", $nombres[1])->first();
+            $doc->dctofisico = 'documents/'.$fileName;
+            $doc->save();
+        }
+        
     
         //return $data;
     }

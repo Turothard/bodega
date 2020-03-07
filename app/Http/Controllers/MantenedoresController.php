@@ -102,6 +102,8 @@ class MantenedoresController extends Controller
                     $art->yearart = $artvue["yearart"];
                     $art->periododevo_id = $artvue["periododevo_id"];
                     $art->save();
+                    $corr = Correlativo::selectRaw("subcategoria_id,max(correlativo) as correlativo")->where("subcategoria_id", $artvue["subcategoria_id"])->groupBy("subcategoria_id")->orderBy("subcategoria_id")->first();
+                    $cor = new Correlativo();
                     
                 break;
                 case 'editararticulo':

@@ -427,7 +427,7 @@ export default {
             console.log(res.data);
             pedido.estadoped = "ENTREGADO";
             $(".close").click();
-            location.reload();
+            //location.reload();
           })
           .catch(function(error) {
             if (error.response) {

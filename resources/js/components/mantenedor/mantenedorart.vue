@@ -408,50 +408,50 @@
                     .then(response => {
                         console.log(response.data.message, 'success');
                         axios.post('/mantenedores/getdatos', {tipo:'articulos'}).then((res) =>{
-                                this.articulos = res.data[0];
-                                this.correlativos= res.data[1];
-                                this.showPreview2 = false;
-                                this.$refs.subirnewimageold='';
+                            this.articulos = res.data[0];
+                            this.correlativos= res.data[1];
+                            this.showPreview2 = false;
+                            this.$refs.subirnewimageold='';
                             this.imagePreview2 = '';
-                                //this.cargando=false;
-                                console.log(this.correlativos);
-                                this.$nextTick(function () {
-                                    this.dt.destroy();
-                                    this.dt =null;
-                                    this.dt = $('#tabladetalle').DataTable({
-                                        "language": {
-                                            "lengthMenu": "Mostrar _MENU_ filas por página",
-                                            "zeroRecords": "Ningún resultado según criterio",
-                                            "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                            "infoEmpty": "No se encontraron resultados",
-                                            "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                            "search":         "Buscar:",
-                                            "paginate": {
-                                                "first":      "Primero",
-                                                "last":       "Último",
-                                                "next":       "Siguiente",
-                                                "previous":   "Anterior"
-                                            },
-                                        },                        
-                                    });
-                                    this.cargando=false;
-                                });  
-                                
-                            }).catch(function (error) {
-                                if (error.response) {
-                                    // Request made and server responded
-                                    console.log(error.response.data);
-                                    console.log(error.response.status);
-                                    console.log(error.response.headers);
-                                    } else if (error.request) {
-                                    // The request was made but no response was received
-                                    console.log(error.request);
-                                    } else {
-                                    // Something happened in setting up the request that triggered an Error
-                                    console.log('Error', error.message);
-                                }
-                            });
-                            $(".close").click();
+                            //this.cargando=false;
+                            console.log(this.correlativos);
+                            this.$nextTick(function () {
+                                this.dt.destroy();
+                                this.dt =null;
+                                this.dt = $('#tabladetalle').DataTable({
+                                    "language": {
+                                        "lengthMenu": "Mostrar _MENU_ filas por página",
+                                        "zeroRecords": "Ningún resultado según criterio",
+                                        "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                        "infoEmpty": "No se encontraron resultados",
+                                        "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                        "search":         "Buscar:",
+                                        "paginate": {
+                                            "first":      "Primero",
+                                            "last":       "Último",
+                                            "next":       "Siguiente",
+                                            "previous":   "Anterior"
+                                        },
+                                    },                        
+                                });
+                                this.cargando=false;
+                            });  
+                            
+                        }).catch(function (error) {
+                            if (error.response) {
+                                // Request made and server responded
+                                console.log(error.response.data);
+                                console.log(error.response.status);
+                                console.log(error.response.headers);
+                                } else if (error.request) {
+                                // The request was made but no response was received
+                                console.log(error.request);
+                                } else {
+                                // Something happened in setting up the request that triggered an Error
+                                console.log('Error', error.message);
+                            }
+                        });
+                        $(".close").click();
                     })
                     .catch(function (error) {
                         if (error.response) {
@@ -500,6 +500,7 @@
                                 let formData = new FormData();
                                 formData.append('image',file);
                                 formData.append('nombre',art.codigoart);
+                                formData.append('tipo','actualizarprod');
                                 axios.post('/sistema/uploadimage', formData, {
                                     headers: {
                                     'Content-Type': 'multipart/form-data'
