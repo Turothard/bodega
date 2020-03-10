@@ -135,7 +135,7 @@ class PedidosController extends Controller
             switch ($request->tipo) {
                 case 'aceptarpedido':
                     $ped = Pedido::find($request->id);
-                    $ped->autorizado_id =User::where("id",auth()->id())->first()->value('rut');
+                    $ped->autorizado_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
                     $ped->estadoped='INGRESADO';
                     guardarnotificacion(auth()->id(), 'INGRESO','INGRESADO', 'pedidos',$ped,null);
                     $ped->save();
@@ -144,7 +144,7 @@ class PedidosController extends Controller
                 case 'guardarpedido':
                     $pedvue=$request->ped;
                     $detpedvue=$request->det;
-                    $depto = User::where("id",auth()->id())->value('department');
+                    $depto = User::where("id",auth()->id())->get("department")->first()->value("department");
                     
                     $ped = new Pedido();
                     $ped->tipopedido = 'NORMAL';
@@ -159,7 +159,7 @@ class PedidosController extends Controller
                     $ped->fechaped = date("Y-m-d");
                     if($depto=='SUPERVISOR' || $depto=='ADMIN'){
                         $ped->estadoped='INGRESADO';
-                        $ped->autorizado_id =User::where("id",auth()->id())->first()->value('rut');
+                        $ped->autorizado_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
                     }else{
                         $ped->estadoped='PENDIENTE';
                     }
@@ -191,7 +191,7 @@ class PedidosController extends Controller
                 case 'procesarpedido':
                     $ped = Pedido::find($request->id);
                     $detpedvue = $request->detalle;
-                    $ped->bodeguero_id =User::where("id",auth()->id())->first()->value('rut');
+                    $ped->bodeguero_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
                     $ped->estadoped='PROCESADO';
                     $cantidad=0;
                     foreach ($detpedvue as $dped) {

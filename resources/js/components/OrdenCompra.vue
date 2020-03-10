@@ -1,13 +1,20 @@
 <template>
     <div class="container-fluid">
         <div v-show="terminado==1" class="container-fluid">
-            <div class="btn-group" role="group" aria-label="Generar Orden">
+            <div class="w-100">
                 <button
                 type="button"
                 class="btn btn-info"
                 data-toggle="modal"
                 data-target="#ordencompramodal"
+                @click="componenteactual='ingresooc'"
                 >Generar Orden Compra</button>
+                <button
+                type="button"
+                class="btn btn-info pl-3 float-right"
+                v-show="ocexist"
+                @click="eliminarocmemoria()"
+                >Eliminar OC en Memoria</button>
             </div>
             <div>
                 <table
@@ -367,12 +374,16 @@
                 terminado:0,
                 cantidaddetdocs:0,
                 file: '',
+                ocexist:false,
                 showPreview: false,
                 imagePreview: '',
                 user:null
             }
         },
         created() {
+            if (sessionStorage.getItem("newoc")) {
+                this.ocexist =true;
+            }
             axios.post('/sistema/getdatos', {tipo:'OrdenCompra'}).then((res) =>{
                 this.dataordencompra = res.data;
                 this.usuarios = this.dataordencompra[0];
@@ -384,7 +395,7 @@
                 this.proveedores = this.dataordencompra[9];
                 console.log(this.ordencompras);
                 this.terminado=1;
-                this.componenteactual='ingresooc';
+                //this.;
                 this.$nextTick(function() {
                     if(this.dt!=null){
                         this.dt.destroy();
@@ -463,8 +474,6 @@
                                 "paging": false,
                                 "searching": false
                             });
-                        
-                            
                         });
                     }
                    // console.log(this.detordencompra);
@@ -552,6 +561,12 @@
                     console.log('Error', error.message);
                     }
                 });
+            },
+            eliminarocmemoria(){
+                sessionStorage.removeItem("newoc");
+                sessionStorage.removeItem("detnewoc");
+                sessionStorage.removeItem("allmarcas");
+                location.reload();
             },
             quitarcero(item){
                 if(parseInt(item.cantvuerec)==0){
@@ -692,8 +707,8 @@
                               
                         
                             setTimeout(function() {
-                                 $(".close").click();
-                                location.reload();
+                                $(".close").click();
+                                //location.reload();
                             }, 2000);                     
                     }).catch(function (error) {
                         if (error.response) {

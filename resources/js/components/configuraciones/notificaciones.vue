@@ -37,7 +37,7 @@
                        </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" @click="leertodas(notificaciones,null)" class="btn btn-primary">Leer Todas</button>
+                    <button type="button" @click="leernotificacion(notificaciones,2)" class="btn btn-primary">Leer Todas</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     
                 </div>
@@ -299,6 +299,12 @@
             },
             leernotificacion(notif, cant){
                 console.log(notif, cant);
+                if(cant==2){
+                    this.notificaciones =[];
+                    $("#notifcant").hide();
+                    $("#notifcant").html(0);
+                    $(".close").click();
+                }
                 axios.post('/sistema/setdatos', {tipo:'notificacionleida', notis:notif, cant:cant }).then((res) =>{
                     console.log(res.data);
                        //this.buscarnotificaciones(); 

@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Articulo;
 use App\User;
 use App\Marca;
 use App\OrdenCompra;
@@ -95,7 +97,11 @@ class OrdenCompraController extends Controller
                         $det= new DetalleOrdenCompra();
                         $det->ordencompra_id = $oc->nrooc;
                         $det->articulodetoc = $detocvue["articulodetoc"];
-                        //$det->codigoart = $detocvue["codigoart"];
+                        $articulo= Articulo::find($detocvue["codigoart"]);
+                        if($articulo!=null){
+                            $det->codigoart = $detocvue["codigoart"];
+                        }
+                        $det->descripcionart = $detocvue["descripcionart"];
                         $det->bodega_id = $detocvue["bodega_id"];
                         $det->sector_id = $detocvue["sector_id"];
                         $det->colordetoc = $detocvue["colordetoc"];

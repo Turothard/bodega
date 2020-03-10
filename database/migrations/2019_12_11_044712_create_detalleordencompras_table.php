@@ -18,6 +18,7 @@ class CreateDetalleordencomprasTable extends Migration
             $table->unsignedInteger('ordencompra_id');
             $table->foreign('ordencompra_id')->references('nrooc')->on('ordencompras')->onDelete('cascade');
             $table->string("articulodetoc");
+            $table->string("descripcionart")->nullable();
             $table->string("codigoart")->nullable();
             $table->foreign('codigoart')->references('codigoart')->on('articulos')->onDelete('cascade');
             $table->string("bodega_id");

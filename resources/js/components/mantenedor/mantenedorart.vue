@@ -81,12 +81,12 @@
                     <div class="modal-body">
                         <dir class="row">
                             <div class="col-3">
-                                Código Artículo (*)<br>
+                                Código (*)<br>
                                 <input v-if="tipoarticulo=='nuevoarticulo'" type="text"  class="form-control form-control-sm w-d" name="codigoart" readonly id="codigoart" v-model="codigoartvue">
                                 <input v-if="tipoarticulo=='editararticulo'" type="text"  class="form-control form-control-sm w-d" name="codigoart" readonly id="codigoart" v-model="articulovue.codigoart">
                             </div>
                             <div class="col-3">
-                                Categoría Artículo (*)<br>
+                                Categoría (*)<br>
                                 <select v-model="articulovue.categoria_id" :disabled=disabled class="form-control form-control-sm t-regular w-d text-uppercase">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in datamantenedor[2]" :key="index" :value="item.idcategoria">
@@ -95,7 +95,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                SubCategoría Artículo (*) <br>
+                                SubCategoría (*) <br>
                                 <select v-model="articulovue.subcategoria_id" :disabled=disabled class="form-control form-control-sm t-regular w-l">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in filteredsubcat" :key="index" :value="item.idsubcategoria">
@@ -103,17 +103,24 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-3">
-                                Marca Artículo (*) <br>
-                                <select v-model="articulovue.marca_id" :disabled=disabled class="form-control form-control-sm t-regular w-d">
+                            <div class="col-3" id="lamarca">
+                                Marca (*) <br>
+                                <vue-bootstrap-typeahead 
+                                    v-model="marcaaux"
+                                    :inputClass="'upcase form-control form-control-sm'"
+                                    :minMatchingChars="3"
+                                    ref="marcas"
+                                    :data="marcas">
+                                </vue-bootstrap-typeahead>
+                                <!-- <select v-model="articulovue.marca_id" :disabled=disabled class="form-control form-control-sm t-regular w-d">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in datamantenedor[11]" :key="index" :value="item.idmarca">
                                         {{ item.nombremar }}
                                     </option>
-                                </select>
+                                </select> -->
                             </div>
                             <div class="col-4">
-                                Proveedor Artículo (*) <br>
+                                Proveedor (*) <br>
                                 <select v-model="articulovue.proveedorart" :disabled=disabled class="form-control form-control-sm t-regular">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in datamantenedor[8]" :key="index" :value="item.rutproveedor">
@@ -122,11 +129,11 @@
                                 </select>
                             </div>
                             <div class="col-5">
-                                Nombre Artículo (*) <br>
+                                Nombre (*) <br>
                                 <textarea v-model="articulovue.nombreart" maxlength="40" class="form-control form-control-sm text-uppercase" rows="1" id="nombreart"></textarea>
                             </div>
                             <div class="col-3">
-                                Color Artículo (*) <br>
+                                Color (*) <br>
                                 <select v-model="articulovue.color_id" :disabled=disabled class="form-control form-control-sm t-regular w-d text-uppercase">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in datamantenedor[9]" :key="index" :value="item.idcolor">
@@ -135,7 +142,7 @@
                                 </select>
                             </div>
                             <div class="col-3">
-                                Talla Artículo (*)<br>
+                                Talla (*)<br>
                                 <select v-model="articulovue.unidad_id" :disabled=disabled class="form-control form-control-sm t-regular w-d">
                                     <option value="">------</option>
                                     <option v-for="(item, index) in datamantenedor[10]" :key="index" :value="item.idunidad">
@@ -215,8 +222,10 @@
                             </tbody>
                         </table>
                     </div>
-                     <button class="btn btn-info btn-sm" @click="$refs.subirnewimageold.click()"><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
-                        <input type="file" accept="image/*" ref="subirnewimageold" capture="camera" id="2" @change="handleFileUpload2()" style="display:none"/> 
+                     <button v-if="articuloimagen.image ==null"  class="btn btn-info btn-sm" @click="$refs.subirnewimageold.click()"><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
+                     <button  v-if="articuloimagen.image !=null" class="btn btn-info btn-sm" @click="eliminarimagen(articuloimagen)"><img style="width:23px;heigth:23px;" src="css/img/delete.png"/></button>
+                        <input type="file" accept="image/*" ref="subirnewimageold" capture="camera" id="subirnewimageold" @change="handleFileUpload2()" style="display:none"/> 
+                        
                     <div v-if="imagenart!=null">
                         
                         <img v-bind:src="imagePreview2" v-show="showPreview2" class="img-fluid" alt="Responsive image"/>
@@ -240,7 +249,6 @@
 
     export default {
         props: ['datamantenedor'],
-        
         data(){
             return{
                 preestablecidovue:null,
@@ -251,11 +259,16 @@
                 correlativosvue: [],
                 correlativox:'',
                 tipoarticulo:'',
+                marcaaux:'',
+                marcas:'',
+                lamarca:{},
+                ultimamarca:'',
                 articulovue:
                     {codigoart: '', codigoalternativoart: '', categoria_id: '', subcategoria_id: '', 
                     nombreart: '', proveedorart: '', descripcionart: '', color_id: '', unidad_id: '', 
-                    marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: 2019, 
+                    marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: new Date().getFullYear(), 
                     periododevo_id: 1, image: ''},
+                letras: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] ,
                 articuloimagen:'',
                 imagenart:'',
                 imagenactual:'',
@@ -268,6 +281,52 @@
 
             }
         },
+        created() {
+            console.log('Component created.');
+           this.ultimamarca = _.findLastKey(this.datamantenedor[11]);
+            var nom = _.mapValues(this.datamantenedor[11], function(o) { return o.nombremar; });
+            this.marcas =Object.values(nom);
+            axios.post('/mantenedores/getdatos', {tipo:'articulos'}).then((res) =>{
+                this.articulos = res.data[0];
+                this.correlativos= res.data[1];
+                //this.cargando=false;
+                console.log(this.correlativos);
+                this.$nextTick(function () {
+                    this.dt = $('#tabladetalle').DataTable({
+                        "language": {
+                            "lengthMenu": "Mostrar _MENU_ filas por página",
+                            "zeroRecords": "Ningún resultado según criterio",
+                            "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                            "infoEmpty": "No se encontraron resultados",
+                            "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                            "search":         "Buscar:",
+                            "paginate": {
+                                "first":      "Primero",
+                                "last":       "Último",
+                                "next":       "Siguiente",
+                                "previous":   "Anterior"
+                            },
+                        },                        
+                    });
+                    this.cargando=false;
+                });  
+                
+            }).catch(function (error) {
+                if (error.response) {
+                    // Request made and server responded
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(error.request);
+                    } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                }
+            });
+           
+        },
         computed: {
         // a computed getter
             filteredsubcat: function () {
@@ -275,7 +334,7 @@
                    let subcat = this.datamantenedor[3];
                    return _.filter(subcat, {'categoria_id':this.articulovue.categoria_id});
                }else{
-                   return null
+                   return null;
                }
             },
             codigoartvue: function () {
@@ -287,11 +346,21 @@
                 let codtalla='';
                 let codcolor='';
                 let art = this.articulovue;
-                console.log(art);
-                if(art.marca_id!=''){
+                //console.log(art);
+                if(this.marcaaux!=''){
+                    let lemarc = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux);
+                    //console.log(lemarc);
+                    //return;
+                    if(!_.isUndefined(lemarc)){
+                        codmarca=lemarc.idmarca;
+                    }else{
+                        codmarca =this.newmarca(this.marcaaux.toString().toUpperCase(), 0);
+                    }
+                }
+                /*if(art.marca_id!=''){
                     console.log("marca "+art.marca_id);
                     codmarca=art.marca_id;
-                }
+                }*/
                 if(art.subcategoria_id!=''){
                     let subcat=_.filter(this.datamantenedor[3], {'idsubcategoria':art.subcategoria_id});
                     //console.log(subcat);
@@ -323,51 +392,6 @@
                 return codigoart;
             }
         },
-        created() {
-            
-            console.log('Component created.');
-            axios.post('/mantenedores/getdatos', {tipo:'articulos'}).then((res) =>{
-                this.articulos = res.data[0];
-                this.correlativos= res.data[1];
-                //this.cargando=false;
-                console.log(this.correlativos);
-                this.$nextTick(function () {
-                
-                    this.dt = $('#tabladetalle').DataTable({
-                        "language": {
-                            "lengthMenu": "Mostrar _MENU_ filas por página",
-                            "zeroRecords": "Ningún resultado según criterio",
-                            "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                            "infoEmpty": "No se encontraron resultados",
-                            "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                            "search":         "Buscar:",
-                            "paginate": {
-                                "first":      "Primero",
-                                "last":       "Último",
-                                "next":       "Siguiente",
-                                "previous":   "Anterior"
-                            },
-                        },                        
-                    });
-                    this.cargando=false;
-                });  
-                
-            }).catch(function (error) {
-                    if (error.response) {
-                        // Request made and server responded
-                        console.log(error.response.data);
-                        console.log(error.response.status);
-                        console.log(error.response.headers);
-                        } else if (error.request) {
-                        // The request was made but no response was received
-                        console.log(error.request);
-                        } else {
-                        // Something happened in setting up the request that triggered an Error
-                        console.log('Error', error.message);
-                    }
-                });
-           
-        },
         mounted() {
             //alert(" es"+(this.isMobileTablet()).toString());
         },
@@ -383,6 +407,7 @@
             handleFileUpload2(){
                 this.file = this.$refs.subirnewimageold.files[0];
                 let reader  = new FileReader();
+                this.articuloimagen.image = this.file.name;
                 reader.addEventListener("load", function () {
                     this.showPreview2 = true;
                     this.imagePreview2 = reader.result;
@@ -393,6 +418,38 @@
                     }
                 }
             },
+            newmarca(marca, carga){
+                let marquita=_.filter(this.datamantenedor[11], {'nombremar':marca});
+                let marc ='';
+                if(marquita.length>0){
+                    this.lamarca ={};
+                    return marquita[0].idmarca;
+                }else{
+                    let ultima = this.datamantenedor[11][this.ultimamarca];
+                    let number = ultima.idmarca.toString().substring(1,3);
+                    let letra = ultima.idmarca.toString().substring(0,1);
+                    if(parseInt(number) == '99'){
+                        number = '01';
+                        const index = this.letras.findIndex(letrax => letrax === letra);
+                        marc = this.letras[index+1].toString()+number;
+                    }else{
+                        number = parseInt(number)+1;
+                        if(number<10){
+                            number ='0'+number.toString();
+                        }
+                        marc = letra+number.toString();
+                    }
+                    this.lamarca ={idmarca: marca, nombremar: marc};
+                    return marc;
+                    //console.log(number);
+                }
+            },
+            eliminarimagen(doc){
+                doc.image=null;
+                this.showPreview2 = false;
+                this.imagePreview2 = '';
+                this.$refs.subirnewimageold.value=null;
+            },
             guardararticulo2(){
                 let file = this.$refs.subirnewimageold.files[0];
                 if(typeof file !=='undefined' && file !=null ){
@@ -400,6 +457,7 @@
                     let formData = new FormData();
                     formData.append('image',file);
                     formData.append('nombre',this.articuloimagen.codigoart);
+                    formData.append('tipo','actualizarprod');
                     axios.post('/sistema/uploadimage', formData, {
                         headers: {
                         'Content-Type': 'multipart/form-data'
@@ -411,7 +469,7 @@
                             this.articulos = res.data[0];
                             this.correlativos= res.data[1];
                             this.showPreview2 = false;
-                            this.$refs.subirnewimageold='';
+                            this.$refs.subirnewimageold.value='';
                             this.imagePreview2 = '';
                             //this.cargando=false;
                             console.log(this.correlativos);
@@ -485,6 +543,7 @@
             guardararticulo(art){
                 if(this.tipoarticulo == 'nuevoarticulo'){
                     art.codigoart = this.codigoartvue;
+                    art.marca_id = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux).idmarca;
                 }
                 if(art.codigoart.length<15 || art.proveedorart=='' || art.nombreart=='' || art.descripcionart =='' || art.stockcriticoart=='' || art.indicerotacionart=='' || art.yearart=='' || art.periododevo_id==''){
                     this.$toastr.w("Favor de ingresar datos obligatorios!!");
@@ -527,7 +586,7 @@
                             this.$toastr.s("Artículo "+art.codigoart+" creado con éxito");
                             this.articulovue= {codigoart: '', codigoalternativoart: '', categoria_id: '', subcategoria_id: '', 
                             nombreart: '', proveedorart: '', descripcionart: '', color_id: '', unidad_id: '', 
-                            marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: 2019, 
+                            marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: new Date().getFullYear(), 
                             periododevo_id: 1, image: ''};
                             this.$refs.subirnewimage.value="";
                             axios.post('/mantenedores/getdatos', {tipo:'articulos'}).then((res) =>{
@@ -590,11 +649,22 @@
             },
             cargarcrear(){
                 this.tipoarticulo = 'nuevoarticulo';
+                this.articulovue= {codigoart: '', codigoalternativoart: '', categoria_id: '', subcategoria_id: '', 
+                            nombreart: '', proveedorart: '', descripcionart: '', color_id: '', unidad_id: '', 
+                            marca_id: '', stockcriticoart: 1, indicerotacionart: 180, yearart: new Date().getFullYear(), 
+                            periododevo_id: 1, image: ''};
                 this.disabled = false;
+                
+                this.marcaaux ='';
+                $("#lamarca input").val('');
+                $("#lamarca input").removeAttr("readonly");
             },
             cargareditar(arti){
                 this.tipoarticulo = 'editararticulo';
                 this.articulovue = _.cloneDeep(arti);
+                this.marcaaux = this.datamantenedor[11].find( items => items.idmarca === this.articulovue.marca_id).nombremar;
+                $("#lamarca input").val(this.marcaaux);
+                $("#lamarca input").attr("readonly", "true");
                 this.disabled = true;
             },
         },

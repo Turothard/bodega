@@ -315,7 +315,8 @@ export default {
             det: this.detallepedido
           })
           .then(res => {
-            $(".close").click();
+			$(".close").click();
+			this.$toastr.s("Pedido ingresado exitosamente");
             this.detallepedido = [];
             this.pedido = {
               id: parseInt(res.data.id) + 1,
@@ -328,7 +329,11 @@ export default {
             };
             sessionStorage.clear();
             this.pedidos.push(res.data);
-            this.componenteactual = "";
+			this.componenteactual = "";
+			setTimeout(function() {
+              $(".close").click();
+              location.reload();
+            }, 2000);
             console.log(res.data);
           })
           .catch(function(error) {
@@ -426,7 +431,10 @@ export default {
           .then(res => {
             console.log(res.data);
             pedido.estadoped = "ENTREGADO";
-            $(".close").click();
+            setTimeout(function() {
+              $(".close").click();
+              location.reload();
+            }, 1500);
             //location.reload();
           })
           .catch(function(error) {

@@ -1,25 +1,25 @@
 <template>
     <div class="container-fluid">
-        <div v-if="terminado==1" class="modal fade" id="ordencompramodal" tabindex="-1" role="dialog" aria-labelledby="NofificacionesmodalTitle" aria-hidden="true">
+        <div  class="modal fade" id="ordencompramodal" tabindex="-1" role="dialog" aria-labelledby="NofificacionesmodalTitle" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Ingreso OC</h5>
+                        <h5 class="modal-title" id="exampleModalLongTitle">Ingreso Orden de Compra</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" v-if="terminado==1">
                         <div>
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Orden Compra</th>
+                                        <th>OC</th>
                                         <th>Categoría</th>
                                         <th>Proveedor</th>
                                         <th>Fecha</th>
-                                        <th>Cantidad Total</th>
-                                        <th>Monto Total</th>
+                                        <th>Cant OC</th>
+                                        <th>Monto OC</th>
                                     </tr>
                                     <tr>
                                         <td>
@@ -54,11 +54,21 @@
                                 </thead>
                             </table>
                             <div class="row" id="infodetoc" >
-                                <div class="col-5">
+                                <div class="col-6">
                                     Detalle Artículo:<br>
-                                    <input type="text" maxlength="50" v-model="detoc.articulodetoc" class="form-control form-control-sm t-regular p-2 upcase" id="articulodetoc" name="articulodetoc">
+                                    <vue-bootstrap-typeahead                         
+                                        v-model="detoc.articulodetoc"
+                                        :inputClass="'upcase form-control form-control-sm'"
+                                        @hit="verificardato()"
+                                        :minMatchingChars="3"
+                                        ref="articulodetoc"
+                                        :data="codigos"
+                                        >
+                                        
+                                    </vue-bootstrap-typeahead>
+                                    <!-- <input type="text" maxlength="50" v-model="detoc.articulodetoc" class="form-control form-control-sm t-regular p-2 upcase" id="articulodetoc" name="articulodetoc"> -->
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3" id="lamarca">
                                     Marca <br>
                                     <div class="upcase">
                                         <vue-bootstrap-typeahead 
@@ -73,6 +83,7 @@
                                 <div class="col-3">
                                     Código Sistema (*)<br>
                                     <input type="text"  class="form-control form-control-sm w-d t-regular" name="codigoart" readonly id="codigoart" v-model="codigoartvue">
+                                    
                                 </div>
                                 <div class="col-3">
                                     Bodega :
@@ -94,7 +105,7 @@
                                 </div>                                
                                 <div class="col-3">
                                     Color Sis :
-                                    <select v-model="detoc.color_id" class="form-control form-control-sm t-regular text-uppercase">
+                                    <select v-model="detoc.color_id" class="form-control form-control-sm t-regular text-uppercase" >
                                         <option value="">------</option>
                                         <option v-for="(item, index) in dataordencompra[10]" :key="index" :value="item.idcolor">
                                             {{ item.nombrecol }}
@@ -105,7 +116,7 @@
                                 
                                 <div class="col-3">
                                     Talla Art :
-                                    <select v-model="detoc.unidad_id" class="form-control form-control-sm t-regular">
+                                    <select v-model="detoc.unidad_id" class="form-control form-control-sm t-regular" >
                                         <option value="">------</option>
                                         <option v-for="(item, index) in dataordencompra[11]" :key="index" :value="item.idunidad">
                                             {{ item.descripcionunimed }}
@@ -138,6 +149,10 @@
                                     <br>
                                    <button type="button" @click="agregararticulo()" class="btn btn-sm btn-primary">Agregar Artículo </button>
                                 </div>
+                                <div class="col-12">
+                                    Descripción Artículo
+                                    <input type="text" maxlength="100" v-model="detoc.descripcionart" class="form-control form-control-sm t-regular upcase p-2" id="descripcionart" name="descripcionart">
+                                </div>
                             </div>
                             <br>
                             <div style="height:250px; overflow:auto;">
@@ -146,6 +161,7 @@
                                         <tr>
                                             <th class="all">Detalle Art</th>
                                             <th class="desktop">Código Art</th>
+                                            <th class="never">Descripcion Art</th>
                                             <th class="desktop">Bodega</th>
                                             <th class="desktop">Sector</th>
                                             <th class="all">Color</th>
@@ -162,11 +178,12 @@
                                         <tr v-for="(item,index) in detnewoc" :key="index">
                                             <td>{{item.articulodetoc}}</td>
                                             <td>{{item.codigoart}}</td>
+                                            <td :title="item.descripcionart">{{item.descripcionart}}</td>
                                             <td>{{item.bodega_id}}</td>
                                             <td>{{dataordencompra[5].find( items => items.idsector === item.sector_id ).nombresec}}</td>
                                             <td>{{item.colordetoc}}</td>
                                             <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
-                                            <td>{{item.marca_id}}</td>
+                                            <td>{{allmarcas.find( items => items.idmarca === item.marca_id).nombremar}}</td>
                                             <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
                                             <td>{{item.cantidaddetoc}}</td>
                                             <td>{{item.montounitariodetoc}}</td>
@@ -181,6 +198,13 @@
                                 </table>
                             </div>
                         </div>
+                    </div>
+                    <div v-show="terminado!=1" class="container-fluid">
+                    <div class="d-flex justify-content-center" v-show="terminado==1">
+                        <div class="spinner-border" style="width: 4rem; height: 4rem;" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary" @click="guardaroc()">Guardar </button>
@@ -200,17 +224,20 @@
         props: ['dataordencompra'],
         data(){
             return{
-                dt: null,
+                dtnewoc: null,
                 pedido:{},
+                codigos:null,
                 newoc:{nrooc:'',categoria_id:'',proveedor_id:'',fechaoc:'',cantidadoc:0,montooc:0, user_id:'', estadooc:''},
-                detoc:{articulodetoc:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0},
+                detoc:{articulodetoc:'', descripcionart:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0},
                 componenteactual:'',
                 detnewoc:[],
                 usuarios: [],
                 colaboradores: [],
                 areas: [],
+                articulo:[],
                 correlativoint:'00001',
                 allmarcas:null,
+                readonly:false,
                 marcaaux:'',
                 ultimamarca:0,
                 ubicaciones: [],
@@ -224,7 +251,9 @@
         computed: {
         // a computed getter
             codigoartvue: function () {
-                
+                if(this.readonly){
+                    return this.articulo[0].codigoart;
+                }
                 let codigoart='';
                 let codmarca='';
                 let codsubcat='';
@@ -277,12 +306,14 @@
 
                 //console.log("codigoart "+codigoart);
                 //this.correlativoint = codcorrel;
+                
                 return codigoart;
             }
         },
         created() {
             this.allmarcas = this.dataordencompra[12];
-          
+            var nom = _.mapValues(this.dataordencompra[4], function(o) { return o.nombreart; });
+            this.codigos =Object.values(nom);
             if (sessionStorage.getItem("newoc")) {
                 // Restaura el contenido al campo de texto
                 this.newoc = JSON.parse(sessionStorage.getItem("newoc"));
@@ -299,13 +330,14 @@
                     
                 }
 
-                
             }
+            
             this.ultimamarca = _.findLastKey(this.allmarcas);
             var marca = _.mapValues(this.allmarcas, function(o) { return o.nombremar; });
-              this.marcas = Object.values(marca);
+            this.marcas = Object.values(marca);
             setTimeout(function(){
                 this.terminado=1;
+                
             }.bind(this), 1000);
             axios.post('/sistema/getdatos', {tipo:'OrdenCompra'}).then((res) =>{
               
@@ -333,9 +365,11 @@
                 if(cant>0){
                     this.$toastr.w("Favor de ingresar datos obligatorios!!");
                     return;
-                }
+                }this.detoc.codigoart = this.codigoartvue;
+                this.readonly= false;
+                
                 this.detoc.marca_id = this.newmarca(this.marcaaux.toString().toUpperCase(),1);
-                this.detoc.codigoart = this.codigoartvue;
+                
                 this.detoc.articulodetoc = this.detoc.articulodetoc.toUpperCase();
                 this.detoc.colordetoc = this.detoc.colordetoc.toUpperCase();
                 this.detoc.montototaldetoc = parseInt(this.detoc.cantidaddetoc) * parseInt(this.detoc.montounitariodetoc);
@@ -346,8 +380,13 @@
                 this.detnewoc.push(_.cloneDeep(this.detoc));
                 sessionStorage.setItem("newoc",JSON.stringify(this.newoc));
                 sessionStorage.setItem("detnewoc",JSON.stringify(this.detnewoc));
+                this.$refs.articulodetoc.inputValue = '';
                 this.$refs.marcas.inputValue = '';
-                this.detoc={articulodetoc:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0};
+                $("#lamarca input").val('');
+                
+                
+                
+                this.detoc={articulodetoc:'', descripcionart:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0};
                 this.marcaaux='';
                 let codcorrel = (parseInt(this.correlativoint)+1).toString();
                 while(codcorrel.length<5){
@@ -355,6 +394,26 @@
                 }
                 console.log(this.allmarcas);
                 this.correlativoint = codcorrel;
+                this.articulo=[];
+            },
+            verificardato(){
+                
+                if(this.detoc.articulodetoc.length==0){
+                    this.readonly.false;
+                    return;
+                }
+                this.articulo=_.filter(this.dataordencompra[4], {'nombreart':this.detoc.articulodetoc.toString().toUpperCase()});
+                if(this.articulo.length==0){
+                    this.readonly.false;
+                    return;
+                }
+                this.readonly = true;
+                this.detoc.color_id = this.articulo[0].color_id;
+                this.detoc.codigoart = this.articulo[0].codigoart;
+                this.detoc.descripcionart = this.articulo[0].descripcionart;
+                this.marcaaux= this.dataordencompra[12].find( items => items.admarca === this.articulo.marca_id ).nombremar;
+                $("#lamarca input").val(this.marcaaux);
+                this.detoc.unidad_id = this.articulo[0].unidad_id;
                 
             },
             newmarca(marca, carga){
@@ -418,6 +477,7 @@
                                 location.reload();
                             }, 2000);
                         }
+                        
                         if(res.data=='EXISTE'){
                             this.$toastr.w("Ya existe la órden de compra "+this.newoc.nrooc+", favor de verificar!!");
                             return;

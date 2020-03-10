@@ -74,12 +74,11 @@
                    <div class="col-md-6">
                        Articulo:
                        <vue-bootstrap-typeahead 
-                        
-                        v-model="newarticulo.codigo"
-                        :minMatchingChars="3"
-                        ref="articulos"
-                        :data="codigos">
-                    </vue-bootstrap-typeahead>
+                            v-model="newarticulo.codigo"
+                            :minMatchingChars="3"
+                            ref="articulos"
+                            :data="codigos">
+                        </vue-bootstrap-typeahead>
                        
                    </div>
                    <div class="col-md-3">
@@ -231,7 +230,7 @@
                     this.$refs.articulos.inputValue = '';
                 }).catch(function (error) {
                     if (error.response) {
-                    // Request made and server responded
+                    // Request made and server responde
                     console.log(error.response.data);
                     console.log(error.response.status);
                     console.log(error.response.headers);

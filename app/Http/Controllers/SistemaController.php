@@ -196,6 +196,8 @@ class SistemaController extends Controller
             $doc = DocumentoOrdenCompra::where("nrooc",$nombres[0])->where("nrodocumento", $nombres[1])->first();
             $doc->dctofisico = 'documents/'.$fileName;
             $doc->save();
+            
+            
         }
         
     

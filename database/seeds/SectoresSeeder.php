@@ -13,7 +13,7 @@ class SectoresSeeder extends Seeder
      */
     public function run()
     {
-        $arreglo= ["RDA_Recinto Depósito Aduanero_Camino La Pólvora km 12.7 Valparaíso Chile","ZAO_Zona de Actividades Obligatorias_Camino La Pólvora km 12.7 Valparaíso Chile"];
+        $arreglo= ["RDA_Recinto Depósito Aduanero_Camino La Pólvora km 12.7 Valparaíso Chile","ZAO_Zona de Actividades Obligatorias_Camino La Pólvora km 12.7 Valparaíso Chile", "Z-Serv_Sector Zeal servicios_Camino La PólvoraLa Pólvora km 12.7 Valparaíso Chile"];
         for ($i=0; $i < count($arreglo); $i++) { 
             $array = explode("_",$arreglo[$i]);
             Sectore::create([
