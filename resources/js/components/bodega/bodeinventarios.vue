@@ -300,6 +300,7 @@
                 }else{
                     this.cargando=false;
                 }
+                console.log(res.data[1]);
                 if(res.data[1]!=null){
                     this.inventario = res.data[1];
                     this.newinventario = res.data[2];
@@ -308,6 +309,8 @@
                         sessionStorage.removeItem("inventario");
                         sessionStorage.removeItem("newinventario");
                     }
+                    sessionStorage.setItem("inventario",JSON.stringify(this.inventario));
+                    sessionStorage.setItem("newinventario",JSON.stringify(this.newinventario));
                     this.$nextTick(function () {              
                         this.dt2 = $('#newinventario').DataTable({
                             "scrollY":        "250px",
