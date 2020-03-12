@@ -315,6 +315,7 @@ export default {
             det: this.detallepedido
           })
           .then(res => {
+            //console.log(res.data);return;
 			$(".close").click();
 			this.$toastr.s("Pedido ingresado exitosamente");
             this.detallepedido = [];
@@ -403,6 +404,7 @@ export default {
           .then(res => {
             console.log(res.data);
             pedido.estadoped = "PROCESADO";
+            this.$toastr.s("Pedido procesado con éxito");
             $(".close").click();
           })
           .catch(function(error) {
@@ -429,8 +431,9 @@ export default {
             detalle: this.detallepedido
           })
           .then(res => {
-            console.log(res.data);
+            //console.log(res.data);return;
             pedido.estadoped = "ENTREGADO";
+            this.$toastr.s("Pedido entregado con éxito");
             setTimeout(function() {
               $(".close").click();
               location.reload();
@@ -453,6 +456,39 @@ export default {
           });
       }
       if (pedido.estadoped == "ENTREGADO") {
+        if(!confirm("¿Está seguro de ingresar la recepción de este pedido?")){
+          return;
+        }
+        console.log(pedido,this.detallepedido)
+        axios
+          .post("/pedidos/store", {
+            tipo: "ingresardevolucion",
+            pedido: pedido,
+            detalle: this.detallepedido
+          })
+          .then(res => {
+            //console.log(res.data);return;
+            pedido.estadoped = "FINALIZADO";
+            setTimeout(function() {
+              $(".close").click();
+              location.reload();
+            }, 1500);
+            //location.reload();
+          })
+          .catch(function(error) {
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
+          });
       }
     }
   }

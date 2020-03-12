@@ -70,7 +70,7 @@ class PedidosController extends Controller
                         ->join('detallepedposiciones','detallepedidos.id','=','detallepedposiciones.detallepedido_id')
                         ->join('posiciones','detallepedposiciones.posicion_id','=','posiciones.idposicion')
                         ->join('estantes','estantes.id','=','posiciones.estante_id')
-                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod',DB::raw("'' as receptor_vue"))->get();
+                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante',DB::raw("'' as receptor_vue"))->get();
                         return $detped;
                     }
                     if($ped->estadoped=='INGRESADO'){
@@ -135,7 +135,7 @@ class PedidosController extends Controller
             switch ($request->tipo) {
                 case 'aceptarpedido':
                     $ped = Pedido::find($request->id);
-                    $ped->autorizado_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
+                    $ped->autorizado_id =User::where("id",auth()->id())->value("rut");
                     $ped->estadoped='INGRESADO';
                     guardarnotificacion(auth()->id(), 'INGRESO','INGRESADO', 'pedidos',$ped,null);
                     $ped->save();
@@ -144,7 +144,7 @@ class PedidosController extends Controller
                 case 'guardarpedido':
                     $pedvue=$request->ped;
                     $detpedvue=$request->det;
-                    $depto = User::where("id",auth()->id())->get("department")->first()->value("department");
+                    $depto = User::where("id",auth()->id())->value("department");
                     
                     $ped = new Pedido();
                     $ped->tipopedido = 'NORMAL';
@@ -159,7 +159,7 @@ class PedidosController extends Controller
                     $ped->fechaped = date("Y-m-d");
                     if($depto=='SUPERVISOR' || $depto=='ADMIN'){
                         $ped->estadoped='INGRESADO';
-                        $ped->autorizado_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
+                        $ped->autorizado_id =User::where("id",auth()->id())->value("rut");
                     }else{
                         $ped->estadoped='PENDIENTE';
                     }
@@ -191,7 +191,7 @@ class PedidosController extends Controller
                 case 'procesarpedido':
                     $ped = Pedido::find($request->id);
                     $detpedvue = $request->detalle;
-                    $ped->bodeguero_id =User::where("id",auth()->id())->get("rut")->first()->value("rut");
+                    $ped->bodeguero_id =User::where("id",auth()->id())->value("rut");
                     $ped->estadoped='PROCESADO';
                     $cantidad=0;
                     foreach ($detpedvue as $dped) {
@@ -271,13 +271,14 @@ class PedidosController extends Controller
                     if($flag){
                         $ped->estadoped='ENTREGADO';
                         
-                        $detalleped = DetallePedido::where("ordencompra_id",$pedvue['id']);
+                        $detalleped = DetallePedido::where("pedido_id",$pedvue['id'])->get();
                         
                         $flag2=true;
                         foreach ($detalleped as $det) {
-                            
-                            $periodo =Articulo::find($det->codigoart)->periododevos()->first();
-                            if($periodo->periododevo!=0){
+                            //return Articulo::find($det->codigoart)->periododevos()->value('periododevo');
+                            $periodo =Articulo::find($det->codigoart)->periododevos()->value('periododevo');
+                            //return $periodo->periododevo;
+                            if($periodo!=0){
                                 $flag2=false;
                             }
                         }
@@ -298,6 +299,28 @@ class PedidosController extends Controller
                     }
                    return $flag;
                    
+                break;
+                case 'ingresardevolucion':
+                    $pedvue = $request->pedido;
+                    $ped = Pedido::find($pedvue['id']);
+                    $detpedvue = $request->detalle;
+                    //$ped->bodeguero_id =User::where("id",auth()->id())->value("rut");
+                    $ped->estadoped='FINALIZADO';
+                    $cantidad=0;
+                    foreach ($detpedvue as $dped) {
+                        $detalleped= DetallePedPosicione::find($dped['id']);
+                        if($dped["cantidaddevolucion"]!=null && $dped["cantidaddevolucion"]>0){
+                            $posi = Posicione::find($detalleped->posicion_id);
+                            $posi->cantidadpos =$posi->cantidadpos+$dped["cantidaddevolucion"];
+                            $posi->save();
+                            $detalleped->cantidaddevolucion = $dped["cantidaddevolucion"];
+                            $detalleped->save();
+                        }
+                        
+                    }
+                    $ped->cantidadproped = $cantidad;
+                    $ped->save();
+                    guardarnotificacion(auth()->id(), 'ACTUALIZACION','FINALIZADO', 'pedidos',$ped,null);
                 break;
                 default:
                     # code...

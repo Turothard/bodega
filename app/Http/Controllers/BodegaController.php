@@ -235,7 +235,7 @@ class BodegaController extends Controller
                     $mov->sectordes= $destino["sector_id"];
                     $mov->niveldes= $destino["nivel_id"];
                     $mov->cantidad = (int)$destino["cantidad"];
-                    $mov->usermov = User::where("id",auth()->id())->first()->value('rut');
+                    $mov->usermov = User::where("id",auth()->id())->value('rut');
                     $mov->posicionori_id =$posicionori_id;
                     $mov->posiciondes_id =$posiciondes_id;
                     $mov->fechamov = $fecha;
@@ -275,7 +275,7 @@ class BodegaController extends Controller
                         $ingreso->cantidading=(int)$det["cantidad"];
                         $ingreso->fechaing = $fecha;
                         $ingreso->posicion_id = $id;
-                        $ingreso->usering = User::where("id",auth()->id())->first()->value('rut');
+                        $ingreso->usering = User::where("id",auth()->id())->value('rut');
                         $ingreso->save();
                     }
                     break;
@@ -327,7 +327,7 @@ class BodegaController extends Controller
                         $inv->cantidadbodtotal = $invvue["cantidadbodtotal"];
                         $inv->cantidadinvtotal = $invvue["cantidadinvtotal"];
                         $inv->cantidaddiftotal = $invvue["cantidaddiftotal"];
-                        $inv->userinv = User::where("id",auth()->id())->first()->value('rut');
+                        $inv->userinv = User::where("id",auth()->id())->value('rut');
                         $inv->estadoinv = 'PROCESO';
                         $inv->fechainicioinv = date("Y-m-d H:i:s");
                         $inv->save();

@@ -47,17 +47,18 @@
            <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                <thead>
                    <tr>
-                       <th>Árticulo</th>
+                       <th class="all">Árticulo</th>
                        <th>Tipo entrega</th>
                        <th>Nombre Art</th>
                        <th v-if=" pedido.estadoped!='PENDIENTE'">Bodega</th>
                        <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Est</th>
                        <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">Sec</th>
                        <th v-if="pedido.estadoped=='INGRESADO' && user=='BODEGA'">nil</th>
-                       <th>Solicitados</th>
-                       <th>Procesado</th>
-                       <th>Receptor</th>
-                       <th>Devuelto</th>
+                       <th class="all">Solicitados</th>
+                       <th class="all">Procesado</th>
+                       <th class="all">Receptor</th>
+                       <th class="all" v-if="pedido.estadoped=='ENTREGADO' && user=='BODEGA'">Est</th>
+                       <th class="all">Devuelto</th>
                    </tr>
                </thead>
                <tbody>
@@ -91,10 +92,14 @@
                        </td>
                         <td v-else-if="item.receptor_prod!=null">{{colaboradores.find( items => items.rutcolaborador === item.receptor_prod ).nombrecortocolab}} </td>
                         <td v-else>-------</td>
+                        <td v-if="pedido.estadoped=='ENTREGADO' && user=='BODEGA'">EST {{item.nroestante}} - {{item.sectorpos}},{{item.nivelpos}}</td>
+                        <td v-if="pedido.estadoped=='INGRESADO' || pedido.estadoped=='PENDIENTE' || pedido.estadoped=='ANULADO'">-------</td>
                         <!-- cantidaddevolucion --> 
-                       <td v-if="pedido.estadoped=='INGRESADO' || pedido.estadoped=='PENDIENTE' || pedido.estadoped=='ANULADO'"></td>
                        <td v-else-if="pedido.estadoped=='ENTREGADO' && user=='BODEGA' && articulos.find(items => items.codigoart === item.codigoart ).periododevo_id>1">
-                           <input type="number" min="0" v-model="item.cantidaddevolucion" readonly class="form-control form-control-sm w-s">
+                           <input type="number" min="0" v-model="item.cantidaddevolucion" class="form-control form-control-sm w-s">
+                       </td>
+                       <td v-else-if="pedido.estadoped=='FINALIZADO' ">
+                           {{item.cantidaddevolucion}}
                        </td>
                        <td v-else>-------</td>
                    </tr>

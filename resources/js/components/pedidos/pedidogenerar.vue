@@ -75,6 +75,7 @@
                        Articulo:
                        <vue-bootstrap-typeahead 
                             v-model="newarticulo.codigo"
+                            :inputClass="'upcase form-control form-control-sm'"
                             :minMatchingChars="3"
                             ref="articulos"
                             :data="codigos">
@@ -89,6 +90,7 @@
                        <button class="btn btn-primary" @click="agregararticulo(newarticulo)">Agregar</button>
                    </div>
                    <div class="col-md-12">
+                       <br>
                        <table class="table table-striped table-dark table-sm t-regular">
                            <thead>
                                <tr>
