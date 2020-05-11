@@ -13,8 +13,11 @@
         }
         .tablaencabezado{
         font-size: 16px;
-        text-align:left;
+        
         border: black 1px;
+        }
+        #tablaencabezado tr th{
+            text-align:left;
         }
         #tabladetalle{
             font-size: 13px;
@@ -33,18 +36,24 @@
         .inline{
             display: inline-block;
         }
+        #eldiv{
+            width:99%;
+            
+            height:700px;
+        
+        }
     </style>
     </head>
     <body>
-    <div style="display: inline-block; width:25%; vertical-align: top; border: black 1px;">
+    <div style="display: inline-block; width:24%; vertical-align: top;">
         <img src="..\public\images\logozealserv.png" width="150" />
     </div>
-    <div  style="display: inline-block; width:50%; border: black 1px;">
-        <h2>
-            Entrega de Artículos
-        </h2>
+    <div  style="display: inline-block; width:50%; ">
+
+           <p style="font-size:24px;font-weight:bold;text-align:center;"> Entrega de Artículos</P>
+
     </div>
-    <div  style="display: inline-block; width:25%; border: black 1px;">
+    <div style="display: inline-block; width:25%; ">
         {{date("d-m-Y, H:i")}}
     </div>
     <br>
@@ -72,6 +81,7 @@
         </tr>
     </table>
     <br>
+    <div id="eldiv">
     <table id="tabladetalle">
         <thead>
             <tr>
@@ -100,9 +110,8 @@
             @endforeach
         </tbody>
     </table>
-    @for ($i = 0;  $i< 32-count($detalle) ; $i++)
-        <br/>
-    @endfor
+    </div>
+    <br>
     <div class="inline" style="width:10%"></div>
     <div class="inline" style="width:30%; text-align: center">
     _____________________ <br>
