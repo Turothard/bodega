@@ -31,6 +31,7 @@
                         <th>Cant Sistema</th>
                         <th>Cant Inventario</th>
                         <th>Diferencia</th>
+                        <th>Fecha</th>
                         <th>Estado</th>
                         <th>Funciones</th>
                     </tr>
@@ -46,6 +47,7 @@
                         <td>{{item.cantidadbodtotal}}</td>
                         <td>{{item.cantidadinvtotal}}</td>
                         <td>{{item.cantidaddiftotal}}</td>
+                        <td>{{item.fechainv}}</td>
                         <td>{{item.estadoinv}}</td>
                         <td>
                             <button class="btn btn-info btn-sm"

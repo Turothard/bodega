@@ -9,6 +9,9 @@ use App\Bodega;
 use App\Categoria;
 use App\Colaboradore;
 use App\User;
+use App\IngresoCaja;
+use App\Proveedore;
+use App\IngresoCajaDetalle;
 use App\Estante;
 use App\Ingreso;
 use App\PeriodoDevo;
@@ -71,14 +74,29 @@ class BodegaController extends Controller
                     return $bodega;
                     break;
                 case 'ingresos':
-                    $ingresos= Ingreso::where('cantidading','>','0')
+                    $ingresos[0]= Ingreso::where('cantidading','>','0')
                     ->join('estantes', 'estantes.id','=', 'ingresos.estante_id')
                     ->join('posiciones', 'posiciones.idposicion','=', 'ingresos.posicion_id')
                     ->join('articulos', 'articulos.codigoart','=', 'ingresos.codigoart')
                     ->join('colaboradores', 'colaboradores.rutcolaborador','=', 'ingresos.usering')
                     ->select('ingresos.id','ingresos.codigoart', 'articulos.nombreart', 'ingresos.bodega_id', 'ingresos.estante_id', 'estantes.nroestante', 'ingresos.sectoring', 'ingresos.niveling',
                      'ingresos.usering', 'colaboradores.nombrecortocolab', 'ingresos.cantidading','ingresos.posicion_id','ingresos.fechaing', 'ingresos.created_at','posiciones.updated_at')->get();
+                     $ingresos[1] = IngresoCaja::where('cantidading','>','0')
+                     ->join('colaboradores', 'colaboradores.rutcolaborador','=', 'ingresoscaja.usering')
+                     ->select('ingresoscaja.id','ingresoscaja.proveedor_id', 'ingresoscaja.usering','colaboradores.nombrecortocolab', 'ingresoscaja.nombreproving',
+                      'ingresoscaja.tipodocing', 'ingresoscaja.nrodocing','ingresoscaja.cantidading', 'ingresoscaja.montoing','ingresoscaja.fechaingresoing', 
+                      'ingresoscaja.created_at','ingresoscaja.updated_at')->get();
                      return $ingresos;
+                break;
+                case 'detallecompracaja':
+                    $detalle = IngresoCajaDetalle::where('ingresocaja_id','=',$request->detalle)
+                    ->join('estantes', 'estantes.id','=', 'ingresoscajadetalle.estante_id')
+                    ->join('posiciones', 'posiciones.idposicion','=', 'ingresoscajadetalle.posicion_id')
+                    ->join('articulos', 'articulos.codigoart','=', 'ingresoscajadetalle.codigoart')
+                    ->select('ingresoscajadetalle.id','ingresoscajadetalle.codigoart', 'articulos.nombreart', 'ingresoscajadetalle.bodega_id', 'ingresoscajadetalle.estante_id', 
+                    'estantes.nroestante', 'ingresoscajadetalle.sectoring', 'ingresoscajadetalle.niveling', 'ingresoscajadetalle.cantidading', 'ingresoscajadetalle.precioing', 
+                    'ingresoscajadetalle.totaling','ingresoscajadetalle.posicion_id','ingresoscajadetalle.fechaing', 'ingresoscajadetalle.created_at','posiciones.updated_at')->get();
+                    return $detalle;
                 break;
                 case 'movimientos':
                     $movi = Movimiento::where("cantidad",">","0")
@@ -279,6 +297,69 @@ class BodegaController extends Controller
                         $ingreso->save();
                     }
                     break;
+                case 'ingresararticuloscaja':
+                    $doc= $request->detalle[0];
+                    
+                    $detalle= $request->detalle[1];
+                    //return $detalle;
+                    $ingresodoc = new IngresoCaja();
+                    $prov = Proveedore::where("rutproveedor", $doc["rutproveedor"])->get()->first();
+                    if($prov==null){
+                        $prov = new Proveedore();
+                        $prov->rutproveedor = strtoupper($doc["rutproveedor"]);
+                        $prov->nombreprov = strtoupper($doc["nombreprov"]);
+                        $prov->codigoprov= (string)(1+(int)Proveedore::max("codigoprov"));
+                        $prov->save();
+                    }
+                    $ingresodoc->proveedor_id= $prov->rutproveedor;
+                    $ingresodoc->usering = User::where("id",auth()->id())->value('rut');
+                    $ingresodoc->nombreproving=$prov->nombreprov;
+                    $ingresodoc->tipodocing=$doc["tipodoc"];
+                    $ingresodoc->nrodocing=$doc["doc"];
+                    $ingresodoc->fechaingresoing=date("Y-m-d");
+                    $ingresodoc->cantidading=$doc["cantidad"];
+                    $ingresodoc->montoing=$doc["monto"];
+                    $ingresodoc->save();
+
+                    foreach ($detalle as $det) {
+                        $pos = Posicione::where("codigoart", $det["codigoart"])
+                        ->where("estante_id", $det["estante_id"])
+                        ->where("sectorpos",$det["sector_id"])
+                        ->where("nivelpos", $det["nivel_id"])->first();
+                        $fecha='';
+                        $id='';
+                        if($pos!=null){
+                            $pos->cantidadpos = $pos->cantidadpos+ (int)$det["cantidad"];
+                            $pos->save();
+                            $fecha= $pos->updated_at;
+                            $id = $pos->idposicion;
+                        }else{
+                            $newpos= new Posicione();
+                            $newpos->estante_id = $det["estante_id"];
+                            $newpos->sectorpos = $det["sector_id"];
+                            $newpos->nivelpos = $det["nivel_id"];
+                            $newpos->codigoart = $det["codigoart"];
+                            $newpos->cantidadpos = (int)$det["cantidad"];
+                            $newpos->save();
+                            $fecha= $newpos->updated_at;
+                            $id = $newpos->idposicion;
+                        }
+                        $ingreso = new IngresoCajaDetalle();
+                        $ingreso->codigoart=$det["codigoart"];
+                        $ingreso->ingresocaja_id = $ingresodoc->id;
+                        $ingreso->bodega_id=$det["bodega_id"];
+                        $ingreso->estante_id=$det["estante_id"];
+                        $ingreso->sectoring=$det["sector_id"];
+                        $ingreso->niveling=$det["nivel_id"];
+                        $ingreso->cantidading=(int)$det["cantidad"];
+                        $ingreso->precioing=(int)$det["precio"];
+                        $ingreso->totaling=(int)$det["precio"]*(int)$det["precio"];
+                        $ingreso->fechaing = $fecha;
+                        $ingreso->posicion_id = $id;
+                        //$ingreso->usering = User::where("id",auth()->id())->value('rut');
+                        $ingreso->save();
+                    }
+                break;
                 case 'revertiringreso':
                     $ingreso = Ingreso::find($request->detalle["id"]);
                     $posicion = Posicione::find($request->detalle["posicion_id"]);

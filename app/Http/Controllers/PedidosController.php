@@ -70,7 +70,8 @@ class PedidosController extends Controller
                         ->join('detallepedposiciones','detallepedidos.id','=','detallepedposiciones.detallepedido_id')
                         ->join('posiciones','detallepedposiciones.posicion_id','=','posiciones.idposicion')
                         ->join('estantes','estantes.id','=','posiciones.estante_id')
-                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante',DB::raw("'' as receptor_vue"))->get();
+                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante',DB::raw("'' as receptor_vue"))
+                        ->get();
                         return $detped;
                     }
                     if($ped->estadoped=='INGRESADO'){
@@ -80,7 +81,7 @@ class PedidosController extends Controller
                         foreach ($detped as $det) {
                             $cantidad=(int)$det->cantidaddetped;
                             //$copiadet = $det;
-                            $posis= Posicione::where('codigoart', $det->codigoart)->join('estantes', 'estantes.id','=','posiciones.estante_id')->select('posiciones.idposicion','estantes.bodega_id', 'estantes.nroestante','posiciones.sectorpos','posiciones.nivelpos', 'posiciones.cantidadpos')->orderBy('estantes.bodega_id')->orderBy('posiciones.cantidadpos')->get();
+                            $posis= Posicione::where('codigoart', $det->codigoart)->where('cantidadpos','>','0')->join('estantes', 'estantes.id','=','posiciones.estante_id')->select('posiciones.idposicion','estantes.bodega_id', 'estantes.nroestante','posiciones.sectorpos','posiciones.nivelpos', 'posiciones.cantidadpos')->orderBy('estantes.bodega_id')->orderBy('posiciones.cantidadpos')->get();
                             //return $posis;
                             foreach ($posis as $posi) {
                                 $copiadet = clone ($det);

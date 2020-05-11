@@ -114,6 +114,7 @@
                                         <th class="all">Cant Total</th>
                                         <th class="desktop">Monto total</th>
                                         <th class="all">Estado</th>
+                                        <th class="all">Funciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -142,10 +143,28 @@
                                             <td>
                                             {{oc.estadooc}} 
                                             </td>
+                                            <td>
+                                                <button @click="agregardocsus(item)" class="btn btn-info btn-sm" title="Agregar Documento Sustentatorio">
+                                                    <img style="width:23px;heigth:23px;" src="css/img/agregardoc.png" />
+                                                </button>
+                                            </td>
                                             
                                         </tr>
                                     </tbody>
                                     </table>
+                                <div class="row">
+                                    <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
+                                            <thead>
+                                                <tr>
+                                                    <th>TIPO DOC</th>
+                                                    <th>NRO DOC</th>
+                                                    <th>FOTO DOC</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                    </table>
+                                </div>
                                 <div class="row" v-if="tipomodal =='recepcionaroc'">
                                     <div class="col-8">
                                         <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
@@ -242,28 +261,31 @@
                                     </tbody>
                                 </table>
                                 <table id="tabladetalleoc" class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100"  v-if="tipomodal =='recepcionaroc'">
-                                        <thead>
-                                            <tr>
-                                                <th class="desktop">Documento</th>
-                                                <th class="all">Detalle Art</th>
-                                                <th class="desktop">Marca</th>
-                                                <th class="desktop">Color</th>
-                                                <th class="all">Talla</th>
-                                                <th class="all">Cant</th>
-                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item,index) in detdococ" :key="index">
-                                                <td>{{item.nrodocvue}}</td>
-                                                <td>{{item.articulodetoc}}</td>
-                                                <td>{{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}</td>
-                                                <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
-                                                <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
-                                                <td>{{item.cantvuerec}}</td>                                            
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                    <thead>
+                                        <tr>
+                                            <th class="desktop">Documento</th>
+                                            <th class="all">Detalle Art</th>
+                                            <th class="desktop">Marca</th>
+                                            <th class="desktop">Color</th>
+                                            <th class="all">Talla</th>
+                                            <th class="all">Cant</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item,index) in detdococ" :key="index">
+                                            <td>{{item.nrodocvue}}</td>
+                                            <td>{{item.articulodetoc}}</td>
+                                            <td>{{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}</td>
+                                            <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
+                                            <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
+                                            <td>{{item.cantvuerec}}</td>                                            
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div>
+
+                                </div>
                                 <div v-if="tipomodal !='ingresaroc'">
                                     
                                     <div v-if="datadococ.length>0">
@@ -286,7 +308,14 @@
                                                     <td>{{item.tipodocumento}}</td>
                                                     <td>{{item.nrodocumento}}</td>
                                                     <td>{{dataordencompra[9].find( items => items.rutproveedor === item.proveedor_id ).nombreprov}}</td>
-                                                    <td>{{item.dctofisico}}</td>
+                                                    <td v-if="item.dctofisico != null">
+                                                        <button class="btn btn-info btn-sm" >
+                                                            <img style="width:23px;heigth:23px;" src="css/img/verimage.png"/>
+                                                        </button>
+                                                    </td>
+                                                    <td v-else>
+                                                        ----------
+                                                    </td>
                                                     <td>{{dataordencompra[0].find( items => items.id === item.user_id).name }}</td>
                                                     <td>{{item.created_at}}</td>                                      
                                                 </tr>
@@ -325,8 +354,6 @@
                                         </table>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
                     </div>
                     <div class="modal-footer">
@@ -445,7 +472,6 @@
                 this.tipomodal ='detalleoc';
                 this.oc = _.cloneDeep(item);
                 axios.post('/ordencompra/getdatos', {tipo:'detalleoc', oc: parseInt(this.oc.nrooc)}).then((res) =>{
-                    
                     if(res.data!=null){
                         this.detordencompra= res.data[0];
                         this.datadococ = res.data[1];

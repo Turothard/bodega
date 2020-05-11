@@ -62,7 +62,7 @@ class SistemaController extends Controller
     {
         if($request->ajax()){
             $arreglo[0]=User::all();
-            $arreglo[1]=Colaboradore::all();
+            $arreglo[1]= Colaboradore::orderBy('nombrecortocolab')->get();
             $arreglo[2]=Categoria::all();
             $arreglo[3]=SubCategoria::all();
             $arreglo[4]=Articulo::all();
@@ -88,6 +88,7 @@ class SistemaController extends Controller
                     $arreglo[9]=Estante::all();
                     $arreglo[10]=Posicione::all();
                     $arreglo[11]=User::where("id",auth()->id())->value("department");
+                    $arreglo[12]=Proveedore::all();
                 break;
                 case 'Mantenedores':
                     $arreglo[8]=Proveedore::all();

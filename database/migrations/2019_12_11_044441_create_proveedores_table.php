@@ -18,11 +18,11 @@ class CreateProveedoresTable extends Migration
             $table->primary('rutproveedor');
             $table->string('nombreprov');
             $table->string('codigoprov');
-            $table->string('giroprov');
-            $table->string('comunaprov');
-            $table->string('direccionprov');
-            $table->string('telefonoprov');
-            $table->string('correoprov');
+            $table->string('giroprov')->nullable();
+            $table->string('comunaprov')->nullable();
+            $table->string('direccionprov')->nullable();
+            $table->string('telefonoprov')->nullable();
+            $table->string('correoprov')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

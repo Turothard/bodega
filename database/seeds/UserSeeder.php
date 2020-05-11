@@ -51,7 +51,7 @@ class UserSeeder extends Seeder
         ]);
         User::Create([
             'name' => 'Bodega Zeal',
-            'rut' => '13877058-3',
+            'rut' => '16106197-2',
             'email' => 'bodega@servicios.zeal.cl',
             'password' => bcrypt('12345678'),
             'department'=>'BODEGA'

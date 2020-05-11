@@ -13,7 +13,8 @@ class BodegasSeeder extends Seeder
      */
     public function run()
     {
-        $arreglo= ['BOD01_Bodega Principal_Principal_Oficina Zeal Servicios 3er Piso','BOD02_Bodega Planta Zeal_Principal_Oficina Zeal Servicios 1er Piso'];
+        $arreglo= ['BOD01_Bodega Principal_Principal_Oficina Zeal Servicios 3er Piso','BOD02_Bodega Planta Zeal_Principal_Oficina Zeal Servicios 1er Piso'
+        ,'BOD03_Bodega prueba_Principal_prueba'];
         for ($i=0; $i < count($arreglo); $i++) { 
             $array = explode("_",$arreglo[$i]);
             Bodega::create([

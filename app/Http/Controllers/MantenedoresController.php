@@ -69,7 +69,9 @@ class MantenedoresController extends Controller
                     $arreglo[1] = Correlativo::selectRaw("subcategoria_id,max(correlativo) as correlativo")->groupBy("subcategoria_id")->orderBy("subcategoria_id")->get();
                     return $arreglo;
                     break;
-                
+                case 'categorias':
+                    
+                    break;
                 default:
                     # code...
                     break;

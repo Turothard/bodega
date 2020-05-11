@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/ordencompra', 'OrdenCompraController@index')->name("ordencompra");
     Route::post('/ordencompra/setdatos', 'OrdenCompraController@setdatos')->name("ordencompra.setdatos");
     Route::post('/ordencompra/getdatos', 'OrdenCompraController@getdatos')->name("ordencompra.getdatos");
+    Route::name('imprimir')->get('imprimir/{id}', 'ImpresionController@imprimir');
+    Route::name('cajachica')->get('cajachica/{fechai}/{fechaf}', 'ImpresionController@cajachica');
 
     
 });

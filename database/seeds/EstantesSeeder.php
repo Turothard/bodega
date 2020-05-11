@@ -13,7 +13,7 @@ class EstantesSeeder extends Seeder
      */
     public function run()
     {
-        $arreglo= ["1_BOD01_1_2_Estante BOD01 Nro 1","2_BOD01_1_2_Estante BOD01 Nro 2","3_BOD01_1_3_Estante BOD01 Nro 3","4_BOD01_1_3_Estante BOD01 Nro 4","5_BOD01_1_3_Estante BOD01 Nro 5","6_BOD01_1_2_Estante BOD01 Nro 6","7_BOD01_1_2_Estante BOD01 Nro 7","8_BOD01_1_2_Estante BOD01 Nro 8","9_BOD01_1_4_Estante BOD01 Nro 9","10_BOD01_1_4_Estante BOD01 Nro 10","11_BOD01_1_4_Estante BOD01 Nro 11","12_BOD01_1_4_Estante BOD01 Nro 12","1_BOD02_2_3_Estante BOD02 Nro"];
+        $arreglo= ["1_BOD01_1_2_Estante BOD01 Nro 1","2_BOD01_1_2_Estante BOD01 Nro 2","3_BOD01_1_3_Estante BOD01 Nro 3","4_BOD01_1_3_Estante BOD01 Nro 4","5_BOD01_1_3_Estante BOD01 Nro 5","6_BOD01_1_2_Estante BOD01 Nro 6","7_BOD01_1_2_Estante BOD01 Nro 7","8_BOD01_1_2_Estante BOD01 Nro 8","9_BOD01_1_4_Estante BOD01 Nro 9","10_BOD01_1_4_Estante BOD01 Nro 10","11_BOD01_1_4_Estante BOD01 Nro 11","12_BOD01_1_4_Estante BOD01 Nro 12","1_BOD02_2_3_Estante BOD02 Nro","1_BOD03_1_1_Estante BOD03 Nro 1"];
         for ($i=0; $i < count($arreglo); $i++) { 
             $array = explode("_",$arreglo[$i]);
             Estante::create([
