@@ -93,7 +93,7 @@ User::Create([
         ]);
 User::Create([
             'name' => 'MARCOS ABALLAY',
-            'rut' => '172732011-1',
+            'rut' => '17273201-1',
             'email' => 'admin@servicios.zeal.cl',
             'password' => bcrypt('admin.2020'),
             'department'=>'ADMIN'

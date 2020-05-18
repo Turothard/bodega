@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div v-show="pressaveflag" class="col-md-8">
-                        <input type="number" min="0" v-model="pedido.preestablecido" class="form-control form-control-sm">
+                        <input type="text" v-model="pedido.preestablecido" class="form-control form-control-sm">
                     </div>
                     </div>
                 

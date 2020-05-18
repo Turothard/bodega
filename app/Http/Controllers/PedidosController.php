@@ -164,7 +164,7 @@ class PedidosController extends Controller
                     }else{
                         $ped->estadoped='PENDIENTE';
                     }
-                    
+                    $ped->preestablecidoped= $pedvue['preestablecido'];
                     $ped->save();
                     time_nanosleep(0, 200000000);
                     foreach ($detpedvue as $dped) {

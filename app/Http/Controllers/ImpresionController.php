@@ -47,8 +47,8 @@ class ImpresionController extends Controller
         ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped',
         'detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id',
         'detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','articulos.nombreart',
-        'detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante', 'colaboradores.nombrecortocolab')
-        ->orderBy("detallepedposiciones.receptor_prod","ASC")
+        'detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante', 'colaboradores.nombrecortocolab', 
+        'colaboradores.cargocolab')->orderBy("detallepedposiciones.receptor_prod","ASC")
         ->get();
         //dd($id);
         //$id=1;

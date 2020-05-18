@@ -152,7 +152,7 @@
                                         </tr>
                                     </tbody>
                                     </table>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
                                             <thead>
                                                 <tr>
@@ -164,7 +164,7 @@
                                             <tbody>
                                             </tbody>
                                     </table>
-                                </div>
+                                </div> -->
                                 <div class="row" v-if="tipomodal =='recepcionaroc'">
                                     <div class="col-8">
                                         <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">

@@ -134,15 +134,18 @@ class OrdenCompraController extends Controller
                     foreach ($arts as $art) {
                         $ar = new RecepcionOc();
                         $ar->nrooc = $request->oc;
-                        $detooc = DocumentoOrdenCompra::where(['nrooc' => $request->oc,'nrodocumento' => $art["nrodocvue"]])->first();
-                        $ar->doc_id = $detooc->id;
+                        $docooc = DocumentoOrdenCompra::where(['nrooc' => $request->oc,'nrodocumento' => $art["nrodocvue"]])->first();
+                        $detoc = DetalleOrdenCompra::find($art["iddetalleoc"]);
+                        $ar->doc_id = $docooc->id;
                         $ar->detoc_id = $art["iddetalleoc"];
                         $ar->cantidaddetoc = $art["cantidaddetoc"];
-                        $detooc->cantidadrecoc = $detooc->cantidadrecoc + $art["cantvuerec"];
+                        $detoc->cantidadrecoc = (int)$detoc->cantidadrecoc + (int)$art["cantvuerec"];
                         $ar->cantidaddococ = $art["cantvuerec"];
                         $ar->montounitariodetoc = $art["montounitariodetoc"];
                         $ar->montototaldococ = $art["cantvuerec"] * $art["montounitariodetoc"];
                         $ar->save();
+                        $detoc->save();
+                        
                     }
                     if($request->porcentaje=='completo'){
                         $oc->estadooc ='RECEPCIONADO';
