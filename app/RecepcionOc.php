@@ -20,6 +20,6 @@ class RecepcionOc extends Model
     }
 
     public function detalleordencompra(){
-        return $this->belongsTo("App\detalleordencompras",'detoc_id', 'iddetalleoc');
+        return $this->belongsTo("App\DetalleOrdenCompra",'detoc_id', 'iddetalleoc');
     }
 }

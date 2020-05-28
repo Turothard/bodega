@@ -103,7 +103,7 @@
                     </div>
                     <div class="modal-body">
                         <div>
-                                <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100" >
+                                <table  v-if="tipomodal !='ingresaroc'" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100" >
                                     <thead>
                                         <tr>
                                         <th class="all">OC</th>
@@ -219,9 +219,182 @@
                                         
                                     </div>
                                 </div>
-                                
-                                
-                                <table id="tabladetalleoc" class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100">
+                                <div v-if="tipomodal =='ingresaroc'">
+                                    <table  class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100" >
+                                    <thead>
+                                        <tr>
+                                        <th class="all">OC</th>
+                                        <th class="desktop">Categoría</th>
+                                        <th class="all">Proveedor</th>
+                                        <th class="desktop">Fecha</th>
+                                        <th class="all">Usuario</th>
+                                        <th class="all">Cant Total</th>
+                                        <th class="desktop">Monto total</th>
+                                        <th>
+
+                                        </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                            {{oc.nrooc}} 
+                                            </td>
+                                            <td v-if="oc.categoria_id!=''">
+                                            {{ categorias.find( items => items.idcategoria === oc.categoria_id ).nombrecat }}
+                                            </td>
+                                            <td>
+                                            {{ proveedores.find( items => items.rutproveedor === oc.proveedor_id ).nombreprov }}
+                                            </td>
+                                            <td>
+                                            {{oc.fechaoc}} 
+                                            </td>
+                                            <td>
+                                            {{ usuarios.find( items => items.id === oc.user_id ).name }}
+                                            </td>
+                                            <td>
+                                            {{oc.cantidadoc}} 
+                                            </td>
+                                            <td>
+                                            {{oc.montooc}} 
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm w-d t-regular" v-model="docelegido" @change="cambiodoc()" >
+                                                    <option value="">---</option>
+                                                    <option v-for="(item, index) in documentosoc" :key="index" :value="item.id">
+                                                        {{ item.tipodocumento }}-{{ item.nrodocumento }}
+                                                    </option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                    <table id="tabladetalleoc" class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100">
+                                        <thead>
+                                            <tr>
+                                                <th class="all">Detalle Art</th>
+                                                <th class="desktop">Código Art</th>
+                                                <th class="desktop">Bodega</th>
+                                                <th class="desktop">Sector</th>
+                                                <th class="all">Color</th>
+                                                <th class="all">Marca</th>
+                                                <th class="all">Talla</th>
+                                                <th class="all">Recepción</th>
+                                                <th class="all">Ingreso</th>
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item,index) in detordencompra" :key="index" v-show="item.cantidaddetoc - item.cantidadrecoc!=0">
+                                                <td>{{item.articulodetoc}}</td>
+                                                <td>{{item.codigoart}}</td>
+                                                <td>{{item.bodega_id}}</td>
+                                                <td>{{dataordencompra[5].find( items => items.idsector === item.sector_id ).nombresec}}</td>
+                                                <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
+                                                <td>{{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}</td>
+                                                <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
+                                                <td>{{item.cantidaddococ}}</td>
+                                                <td>{{item.cantidadingoc}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>Artículo</th>
+                                                <th>Código / Subcat</th>
+                                                <th>Bodega</th>
+                                                <th>Est</th>
+                                                <th>Sec</th>
+                                                <th>Niv</th>
+                                                <th>Cant</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <select class="form-control form-control-sm upcase t-regular w-xl" name="ingarticulo" id="" v-model="newingreso.id" @change="cambioart()">
+                                                        <option value="">-----------</option>
+                                                        <option v-for="(item,index) in detordencompra" :key="index" :value="item.id">
+                                                            <label v-if="item.codigoart==null">
+                                                                {{item.articulodetoc}}
+                                                                {{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}
+                                                                {{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}
+                                                                {{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}
+                                                            </label>
+                                                            <label v-else>
+                                                                {{item.articulodetoc}}
+                                                            </label>
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td v-if="newingreso.codigoart!=null">{{newingreso.codigoart}}</td>
+                                                <td v-else>
+                                                    <select class="form-control form-control-sm w-d t-regular" v-model="newingreso.subcategoria">
+                                                    <option value="">---</option>
+                                                    <option v-for="(item, index) in subcategoriasing" :key="index" :value="item.idsubcategoria">
+                                                        {{ item.nombresubcat }}
+                                                    </option>
+                                                </select>
+                                                </td>
+                                                <td>{{newingreso.bodega_id}}</td>
+                                                <td>
+                                                    <select class="form-control form-control-sm w-xs2 t-regular" v-model="newingreso.estante_id" >
+                                                        <option value="">---</option>
+                                                        <option v-for="(item, index) in estantefiltradomov" :key="index" :value="item.id">
+                                                            {{ item.nroestante }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control form-control-sm w-xs2 t-regular" v-model="newingreso.sector_id" >
+                                                        <option value="">---</option>
+                                                        <option v-for="n in parseInt(sectorfiltradormov)" :key="n" :value="n">
+                                                            {{ n }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class="form-control form-control-sm w-xs2 t-regular" v-model="newingreso.nivel_id" >
+                                                        <option value="">---</option>
+                                                        <option v-for="n in parseInt(nivelfiltradormov)" :key="n" :value="n">
+                                                            {{ n }}
+                                                        </option>
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <input class="form-control form-control-sm w-xs2 t-regular" type="number" v-model="newingreso.cantidading"
+                                                    @focus="quitarcero1(newingreso)"
+                                                    @focusout="ponercero1(newingreso)" 
+                                                     :max="newingreso.cantidadingoc">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-primary" @click="agregararting()">
+                                                        agregar
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr v-for="(item,index) in detalleingresos" :key="index">
+                                                <td>{{item.articulodetoc}}</td>
+                                                <td v-if="item.codigoart!=null">{{item.codigoart}}</td>
+                                                <td v-else>{{subcategorias.find( items => items.idsubcategoria === item.subcategoria ).nombresubcat}}</td>
+                                                <td>{{item.bodega_id}}</td>
+                                                <td>{{dataordencompra[15].find( items => items.id === item.estante_id ).nroestante}}</td>
+                                                <td>{{item.sector_id}}</td>
+                                                <td>{{item.nivel_id}}</td>
+                                                <td>{{item.cantidading}}</td>
+                                                <td>
+                                                    <button @click="eliminarart(item,index)" class="btn btn-danger btn-sm">
+                                                        <img style="width:23px;heigth:23px;" src="css/img/delete.png" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div v-else>
+                                    <table id="tabladetalleoc" class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100">
                                     <thead>
                                         <tr>
                                             <th class="all">Detalle Art</th>
@@ -238,8 +411,29 @@
                                             <th class="all">Total</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody v-if="tipomodal=='recepcionaroc'" >
                                         <tr v-for="(item,index) in detordencompra" :key="index" v-show="item.cantidaddetoc - item.cantidadrecoc!=0">
+                                            <td>{{item.articulodetoc}}</td>
+                                            <td>{{item.codigoart}}</td>
+                                            <td>{{item.bodega_id}}</td>
+                                            <td>{{dataordencompra[5].find( items => items.idsector === item.sector_id ).nombresec}}</td>
+                                            <td>{{item.colordetoc}}</td>
+                                            <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
+                                            <td>{{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}</td>
+                                            <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
+                                            <td>{{item.cantidaddetoc - item.cantidadrecoc}}</td>
+                                            <td v-if="tipomodal=='recepcionaroc'">
+                                                <input type="number" minlength="0" class="form-control form-control-sm w-xs2" v-model="item.cantvuerec"
+                                                @focus="quitarcero(item)"
+                                                @focusout="ponercero(item)" />
+                                            </td>
+                                            <td>{{item.montounitariodetoc}}</td>
+                                            <td>{{item.montototaldetoc}}</td>
+                                            
+                                        </tr>
+                                    </tbody>
+                                    <tbody v-else >
+                                        <tr v-for="(item,index) in detordencompra" :key="index">
                                             <td>{{item.articulodetoc}}</td>
                                             <td>{{item.codigoart}}</td>
                                             <td>{{item.bodega_id}}</td>
@@ -283,6 +477,8 @@
                                         </tr>
                                     </tbody>
                                 </table>
+                                </div>
+                                
                                 <div>
 
                                 </div>
@@ -300,7 +496,7 @@
                                                     <th class="desktop">Foto</th>
                                                     <th class="all">Usuario</th>
                                                     <th class="all">Ingresado</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -358,8 +554,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" v-if="tipomodal=='recepcionaroc'" class="btn btn-primary" @click="ingresarrecepcion()">Ingresar Recepción </button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                        
+                        <button type="button" v-if="tipomodal=='ingresaroc' && detalleingresos.length>0" class="btn btn-primary" @click="guardaringreso()">Ingresar Artículos </button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button> 
                     </div>
                 </div>
             </div>
@@ -385,19 +581,28 @@
                 ordencompras:[],
                 componenteactual:'',
                 detordencompra:null,
+                detalleoc:{},
+                detoccompras:null,
                 datadococ:[],
                 datarecepoc:[],
                 detdococ: [],
+                detalleingresos:[],
                 dococ:[],
                 oc :[],
                 usuarios: [],
                 colaboradores: [],
                 newrecepcion:{tipodocumento:'', nrodocumento:'', fotodocumento:''},
+                newingreso:{id:'',nrooc:'',detoc_id:'',articulodetoc:'',codigoart:'',bodega_id:'',sector_id:'',color_id:'',unidad_id:'', marca_id:'', estante_id:'',
+                nivelest:'', sectorest:'',cantidadingoc:0, cantidading:0, subcategoria:''},
+                ingresos:{},
                 areas: [],
                 categorias: [],
+                subcategorias: [],
                 sectores: [],
                 tipomodal: '',
                 proveedores: [],
+                docelegido:'',
+                documentosoc:'',
                 terminado:0,
                 cantidaddetdocs:0,
                 file: '',
@@ -405,6 +610,54 @@
                 showPreview: false,
                 imagePreview: '',
                 user:null
+            }
+        },
+        computed: {
+            estantefiltradomov: function(){
+                if(this.newingreso.bodega_id!=''){
+                    let estantes = this.estantes;
+                    return _.filter(estantes, {'bodega_id':this.newingreso.bodega_id});
+                }
+                
+                return null;
+                
+            },
+            sectorfiltradormov: function(){
+                if(this.newingreso.estante_id!=''){
+                    console.log("estante "+this.newingreso.estante_id);
+                    let estantes = this.estantes;
+                    let est =_.filter(estantes, {'id':this.newingreso.estante_id});
+                    console.log(est);
+                    return est[0].sectoresest;
+                    
+                }
+                
+                return 1;
+                
+            },
+            nivelfiltradormov: function(){
+                if(this.newingreso.estante_id!=''){
+                    console.log("estante "+this.newingreso.estante_id);
+                    let estantes = this.estantes;
+                    let est =_.filter(estantes, {'id':this.newingreso.estante_id});
+                    console.log(est);
+                    return est[0].nivelesest;
+                    
+                }
+                
+                return 1;
+                
+            },
+            subcategoriasing: function(){
+                if(this.oc.categoria_id!=''){
+                    //console.log("estante "+this.newingreso.estante_id);
+                    //let estantes = this.estantes;
+                    let subs =_.filter(this.subcategorias, ['categoria_id', this.oc.categoria_id]);
+                    console.log(subs);
+                    return subs;
+                    
+                }
+                return null;
             }
         },
         created() {
@@ -418,8 +671,10 @@
                 this.sectores = this.dataordencompra[5];
                 this.areas = this.dataordencompra[6];
                 this.categorias = this.dataordencompra[2];
+                this.subcategorias = this.dataordencompra[3];
                 this.ordencompras = this.dataordencompra[8];
                 this.proveedores = this.dataordencompra[9];
+                this.estantes = this.dataordencompra[15];
                 console.log(this.ordencompras);
                 this.terminado=1;
                 //this.;
@@ -449,15 +704,19 @@
                 console.log("cargado");
                 this.terminado = 1;
                 });
-            }).catch((error) =>{
-                console.log(error.response.data.errors);
-                this.err_list = error.response.data.errors;
-                if (this.err_list.rut != null) {
-                    this.server_alert.rut = 'fa fa-exclamation-circle';
-                };
-                if (this.err_list.correo != null) {
-                    this.server_alert.correo = 'fa fa-exclamation-circle';
-                };
+            }).catch(function (error) {
+                if (error.response) {
+                // Request made and server responded
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+                } else if (error.request) {
+                // The request was made but no response was received
+                console.log(error.request);
+                } else {
+                // Something happened in setting up the request that triggered an Error
+                console.log('Error', error.message);
+                }
             });
             
         },
@@ -466,6 +725,96 @@
                 let data= _.filter(this.datarecepoc, ['doc_id', item]);
                 console.log(data);
                 return data;
+            },
+            cambioart(){
+                if(this.newingreso.id!=''){
+                    let art =this.detordencompra.find( items => items.id === this.newingreso.id );
+                    this.newingreso.codigoart = art.codigoart;
+                    this.newingreso.nrooc = art.nrooc;
+                    this.newingreso.detoc_id = art.detoc_id;
+                    this.newingreso.bodega_id = art.bodega_id;
+                    this.newingreso.cantidadingoc = art.cantidaddococ;
+                }else{
+                    this.newingreso.codigoart ='';
+                    this.newingreso.nrooc ='';
+                    this.newingreso.detoc_id ='';
+                    this.newingreso.bodega_id = '';
+                    this.newingreso.cantidadingoc = 0;  
+                }
+            },
+            eliminarart(ing, index){
+                let art =this.detoccompras.find( items => items.id === ing.id );
+                art.cantidadingoc = parseInt(art.cantidadingoc) - parseInt(ing.cantidading);
+                this.newingreso={id:'',nrooc:'',detoc_id:'',articulodetoc:'',codigoart:'',bodega_id:'',sector_id:'',color_id:'',unidad_id:'', marca_id:'', estante_id:'',
+                nivelest:'', sectorest:'',cantidadingoc:0, cantidading:0, subcategoria:''};
+                this.detalleingresos.splice(index,1);
+            },
+            cambiodoc(){
+                this.detordencompra= _.filter(this.detoccompras, {'doc_id':this.docelegido});
+            
+            },
+            guardaringreso(){
+                if (confirm("¿Está seguro de ingresar estos artículos a bodega?")) {
+                    axios
+                    .post("/ordencompra/setdatos", {
+                        tipo: "guardaringresooc",
+                        detalle: this.detalleingresos
+                    })
+                    .then(res => {
+                        
+                        this.$toastr.s("Pedido ingresado exitosamente");
+                        this.detallepedido = [];
+                        
+                        setTimeout(function() {
+                            $(".close").click();
+                            location.reload();
+                        }, 2000);
+                        console.log(res.data);
+                    })
+                    .catch(function(error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log("Error", error.message);
+                        }
+                    });
+                }
+            },
+            agregararting(){
+                console.log(this.newingreso);
+                let art =this.detoccompras.find( items => items.id === this.newingreso.id );
+                if(this.newingreso.id=='' || this.newingreso.estante_id=='' || this.newingreso.nivel_id=='' || this.newingreso.sector_id==''  || this.newingreso.cantidading==''){
+                    this.$toastr.w("Todos los datos son obligatorios, favor revisar");
+                    return;
+                }
+                if(this.newingreso.codigoart==null && this.newingreso.subcategoria==''){
+                    this.$toastr.w("Todos los datos son obligatorios, favor revisar");
+                    return;
+                }
+                if( ((parseInt(art.cantidaddococ)-parseInt(art.cantidadingoc))- parseInt(this.newingreso.cantidading))<0){
+                    this.$toastr.w("La cantidad ingresada supera el monto máximo de ingreso, favor revisar");
+                    return;
+                }
+                if(art.codigoart!=null){
+                    this.newingreso.codigoart = art.codigoart;
+                    this.newingreso.articulodetoc = art.articulodetoc;
+                }else{
+                    let docart = this.detalleoc.find( items => items.iddetalleoc === this.newingreso.detoc_id );
+                    //console.log(this.detalleoc, "ble");
+                    this.newingreso.articulodetoc = art.articulodetoc+" "+this.dataordencompra[12].find( items => items.idmarca === docart.marca_id ).nombremar+" "+ this.dataordencompra[10].find( items => items.idcolor === docart.color_id ).nombrecol +" "+this.dataordencompra[11].find( items => items.idunidad === docart.unidad_id).descripcionunimed;
+                }
+                art.cantidadingoc = parseInt(art.cantidadingoc) + parseInt(this.newingreso.cantidading);
+                this.detalleingresos.push(this.newingreso);
+                this.newingreso={id:'',nrooc:'',detoc_id:'',articulodetoc:'',codigoart:'',bodega_id:'',sector_id:'',color_id:'',unidad_id:'', marca_id:'', estante_id:'',
+                nivelest:'', sectorest:'',cantidadingoc:0, cantidading:0, subcategoria:''};
+                console.log(this.detalleingresos);
             },
             buscardetalleoc(item, index){
                 this.detordencompra = null;
@@ -555,13 +904,17 @@
                     });
             },
             ingresaroc(item, index){
-                this.detordencompra = null;
+                this.detordencompra = [];
+                this.detoccompras=null;
                 this.tipomodal ='ingresaroc';
                 this.oc = _.cloneDeep(item);
-                axios.post('/ordencompra/getdatos', {tipo:'detalleoc', oc: parseInt(this.oc.nrooc)}).then((res) =>{
+                axios.post('/ordencompra/getdatos', {tipo:'detalleocing', oc: parseInt(this.oc.nrooc)}).then((res) =>{
                     if(res.data!=null){
-                        this.detordencompra= res.data[0];
-                        this.$nextTick(function() {
+                        //this.detordencompra= res.data[2];
+                        this.detalleoc= res.data[0];
+                        this.detoccompras= res.data[2];
+                        this.documentosoc = res.data[1];
+                        /*this.$nextTick(function() {
                             if(this.dt2!=null){
                                 this.dt2.destroy();
                             }
@@ -571,7 +924,7 @@
                             });
                         
                             
-                        });
+                        });*/
                     }
                 }).catch(function (error) {
                     if (error.response) {
@@ -603,6 +956,17 @@
                 //console.log("poner cero 1 "+this.inventario.cantidaddiftotal);
                 if(art.cantvuerec==''){
                     art.cantvuerec=0;
+                }
+            },
+            quitarcero1(item){
+                if(parseInt(item.cantidading)==0){
+                    item.cantidading='';
+                }
+            },
+            ponercero1(art){
+                //console.log("poner cero 1 "+this.inventario.cantidaddiftotal);
+                if(art.cantidading==''){
+                    art.cantidading=0;
                 }
             },
             handleFileUpload(doc){
@@ -734,7 +1098,7 @@
                         
                             setTimeout(function() {
                                 $(".close").click();
-                                //location.reload();
+                                location.reload();
                             }, 2000);                     
                     }).catch(function (error) {
                         if (error.response) {

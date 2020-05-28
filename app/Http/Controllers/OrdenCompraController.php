@@ -3,12 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Articulo;
+use App\Categoria;
+use App\DetalleInventario;
 use App\User;
 use App\Marca;
+use App\Colore;
+use App\Unidade;
+use App\Correlativo;
+use App\Posicione;
 use App\OrdenCompra;
 use App\DetalleOrdenCompra;
 use App\DocumentoOrdenCompra;
 use App\RecepcionOc;
+use App\IngresoOrdenCompra;
+use App\SubCategoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -47,6 +55,18 @@ class OrdenCompraController extends Controller
                     $arreglo[2] = RecepcionOc::where("nrooc",$request->oc)
                     ->join('detalleordencompras','recepcionocs.detoc_id','=','detalleordencompras.iddetalleoc')
                     ->select('recepcionocs.id','recepcionocs.nrooc','recepcionocs.doc_id','recepcionocs.detoc_id','recepcionocs.cantidaddetoc','recepcionocs.cantidaddococ','recepcionocs.montounitariodetoc','recepcionocs.montototaldococ','recepcionocs.created_at','recepcionocs.updated_at','recepcionocs.deleted_at','detalleordencompras.articulodetoc', 'detalleordencompras.color_id','detalleordencompras.unidad_id','detalleordencompras.marca_id')->get();
+                    return $arreglo;
+                    break;
+                case 'detalleocing':
+                    $arreglo[0] = DetalleOrdenCompra::where("ordencompra_id",$request->oc)->get();
+                    $arreglo[1] = DocumentoOrdenCompra::where("nrooc", $request->oc)->where("estadodococ",null)->get();
+                    $arreglo[2] = RecepcionOc::where("nrooc",$request->oc)
+                    ->join('detalleordencompras','recepcionocs.detoc_id','=','detalleordencompras.iddetalleoc')
+                    ->select('recepcionocs.id','recepcionocs.nrooc','recepcionocs.doc_id','recepcionocs.detoc_id','recepcionocs.cantidaddetoc'
+                    ,'recepcionocs.cantidaddococ','recepcionocs.cantidadingoc','recepcionocs.montounitariodetoc','recepcionocs.montototaldococ'
+                    ,'recepcionocs.created_at','recepcionocs.updated_at','detalleordencompras.articulodetoc'
+                    ,'detalleordencompras.codigoart','detalleordencompras.bodega_id','detalleordencompras.sector_id'
+                    ,'detalleordencompras.color_id','detalleordencompras.unidad_id','detalleordencompras.marca_id')->get();
                     return $arreglo;
                     break;
                 case 'recepcionaroc':
@@ -140,6 +160,7 @@ class OrdenCompraController extends Controller
                         $ar->detoc_id = $art["iddetalleoc"];
                         $ar->cantidaddetoc = $art["cantidaddetoc"];
                         $detoc->cantidadrecoc = (int)$detoc->cantidadrecoc + (int)$art["cantvuerec"];
+                        $ar->cantidadingoc=0;
                         $ar->cantidaddococ = $art["cantvuerec"];
                         $ar->montounitariodetoc = $art["montounitariodetoc"];
                         $ar->montototaldococ = $art["cantvuerec"] * $art["montounitariodetoc"];
@@ -155,6 +176,79 @@ class OrdenCompraController extends Controller
                         $oc->save();
                     }
                 break;
+                case 'guardaringresooc':
+                    $dets =$request->detalle;
+                    foreach ($dets as $det) {
+                        $detoc= DetalleOrdenCompra::where("iddetalleoc", $det["detoc_id"]);
+                        if($detoc->codigoart==null){
+                            $oc = OrdenCompra::find($det["nrooc"]);
+                            $subcat = SubCategoria::find($det["subcategoria"]);
+                            $cat = Categoria::find($oc->categoria_id);
+                            $correlativo =Correlativo::where("subcategoria_id",$det["subcategoria"])->max("correlativo");
+                            $correlativo = "".((int)$correlativo+1);
+                            $corre= $correlativo;
+                            while(strlen($correlativo)<5){
+                                $correlativo ="0".$correlativo;
+                            }
+                            $cor = new Correlativo();
+                            $cor->subcategoria_id = $subcat->idsubcategoria;
+                            $cor->subcategoria = $subcat->codigosubcat;
+                            $cor->correlativo = $corre;
+                            $cor->correlativofinal = $subcat->codigosubcat.$correlativo;
+                            $cor->save;
+
+
+                            $art->codigoart = $detoc->marca_id.$subcat->codigosubcat;
+                            $art->categoria_id = $oc->categoria_id;
+                            $art->subcategoria_id = $det["subcategoria"];
+                            
+                            $art->proveedorart = $oc->proveedor_id;
+                            $art->descripcionart = strtoupper($detoc->descripcionart);
+                            $art->color_id = $detoc->color_id;
+                            $col = Colore::find($detoc->color_id);
+                            $uni = Unidade::find($detoc->unidad_id);
+                            $art->unidad_id = $detoc->unidad_id;
+                            $art->marca_id = $detoc->marca_id;
+                            $art->nombreart = strtoupper($detoc->articulodetoc." ".$col->nombrecol." ".$uni->codigounimed);
+                            switch ($oc->categoria_id) {
+                                case '1':
+                                    $art->stockcriticoart = '1';
+                                    $art->indicerotacionart = '180';
+                                    $art->periododevo_id = '1';
+                                    break;
+                                case '2':
+                                    $art->stockcriticoart = '1';
+                                    $art->indicerotacionart = '365';
+                                    $art->periododevo_id = '6';
+                                    break;
+                                case '3':
+                                    $art->stockcriticoart = '1';
+                                    $art->indicerotacionart = '7';
+                                    $art->periododevo_id = '0';
+                                    break;
+                                default:
+                                    # code...
+                                    break;
+                            }
+                            
+                            $art->yearart = date("Y");
+                            
+                            $art->save();
+                        }
+                        $ddoc = new IngresoOrdenCompra();
+                        $ddoc->nrooc = $det["nrooc"];
+                        $ddoc->recep_id  = $det["id"];
+                        $ddoc->cantidadrecep = $doc["cantidadingoc"];
+                        $ddoc->bodega_id = $doc["bodega_id"];
+                        $ddoc->sector_id = $doc["sector_id"];
+                        $ddoc->sector_id = $doc["sector_id"];
+                        $ddoc->sector_id = $doc["sector_id"];
+                        $ddoc->sector_id = $doc["sector_id"];
+                        $ddoc->dctofisico = '';
+                        $ddoc->user_id= auth()->id();
+                        $ddoc->save();
+                    }
+                    break;
                 default:
                     # code...
                     break;

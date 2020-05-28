@@ -24,6 +24,7 @@ use App\Pedido;
 use App\DetalleInventario;
 use App\Posicione;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ImpresionController extends Controller
 {
