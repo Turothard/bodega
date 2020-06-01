@@ -372,10 +372,10 @@
                 
                 this.detoc.articulodetoc = this.detoc.articulodetoc.toUpperCase();
                 this.detoc.colordetoc = this.detoc.colordetoc.toUpperCase();
-                this.detoc.montototaldetoc = parseInt(this.detoc.cantidaddetoc) * parseInt(this.detoc.montounitariodetoc);
+                this.detoc.montototaldetoc = parseInt(this.detoc.cantidaddetoc) * parseFloat(this.detoc.montounitariodetoc);
                 
                 this.newoc.cantidadoc = parseInt(this.newoc.cantidadoc) + parseInt(this.detoc.cantidaddetoc);
-                this.newoc.montooc = parseInt(this.newoc.montooc) + parseInt(this.detoc.montototaldetoc);
+                this.newoc.montooc = parseFloat(this.newoc.montooc) + parseInt(this.detoc.montototaldetoc);
                 console.log(this.detoc);
                 this.detnewoc.push(_.cloneDeep(this.detoc));
                 sessionStorage.setItem("newoc",JSON.stringify(this.newoc));

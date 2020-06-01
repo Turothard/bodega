@@ -826,7 +826,7 @@
                     art.codigoart=code[0].codigoart;
                     this.artingresocaja.push(art);
                     this.ingresocaja.cantidad=_.sumBy(this.artingresocaja, function(o) { return parseInt(o.cantidad); });
-                    this.ingresocaja.monto=_.sumBy(this.artingresocaja, function(o) { return parseInt(o.cantidad)*parseInt(o.precio); });
+                    this.ingresocaja.monto=_.sumBy(this.artingresocaja, function(o) { return parseInt(o.cantidad)*parseFloat(o.precio); });
                     this.newingresocaja={
                     codigoart:'',
                     bodega_id:'',
