@@ -483,9 +483,38 @@
 
                                 </div>
                                 <div v-if="tipomodal !='ingresaroc'">
-                                    
+                                    <div v-if="dataingoc.length>0">
+                                        <h3>Detalle Ingreso Bodega</h3>
+                                        <table  class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100"
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th class="desktop">Código Art</th>
+                                                    <th class="all">Nombre Art</th>
+                                                    <th class="desktop">Bodega</th>
+                                                    <th class="desktop">Estante</th>
+                                                    <th class="all">Sector</th>
+                                                    <th class="all">Nivel</th>
+                                                    <th class="all">Cantidad</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item,index) in dataingoc" :key="index">
+                                                    <td>{{item.codigoart}}</td>
+                                                    <td>{{item.nombreart}}</td>
+                                                    <td>{{item.bodega_id}}</td>
+                                                    <td>{{item.nroestante}}</td>
+                                                    <td>{{item.sectoring}}</td>
+                                                    <td>{{item.niveling}}</td>
+                                                    <td>{{item.cantidading}}</td>                                   
+                                                </tr>
+                                            
+                                            </tbody>
+                                        </table>
+                                    </div>                                    
                                     <div v-if="datadococ.length>0">
-                                        <h2>Detalle Documentos</h2>
+                                        <h3>Detalle Documentos</h3>
                                         <table  class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100"
                                         v-for="(item,index) in datadococ" :key="index">
                                             <thead>
@@ -584,6 +613,7 @@
                 detalleoc:{},
                 detoccompras:null,
                 datadococ:[],
+                dataingoc:[],
                 datarecepoc:[],
                 detdococ: [],
                 detalleingresos:[],
@@ -762,7 +792,7 @@
                     })
                     .then(res => {
                         
-                        this.$toastr.s("Pedido ingresado exitosamente");
+                        this.$toastr.s("Pedido ingresado a bodega exitosamente");
                         this.detallepedido = [];
                         
                         setTimeout(function() {
@@ -825,6 +855,7 @@
                         this.detordencompra= res.data[0];
                         this.datadococ = res.data[1];
                         this.datarecepoc = res.data[2];
+                        this.dataingoc = res.data[3];
                         console.log(this.datadococ);
                         this.$nextTick(function() {
                             if(this.dt2!=null){

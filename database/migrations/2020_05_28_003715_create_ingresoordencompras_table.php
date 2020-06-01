@@ -26,8 +26,7 @@ class CreateIngresoordencomprasTable extends Migration
             $table->integer("sectoring");
             $table->integer("niveling");
             $table->integer("cantidading");
-            $table->integer("montounitariodetoc");
-            $table->integer("montototaldococ");
+            $table->string("usering");
             $table->timestamps();
             $table->softDeletes();
         });

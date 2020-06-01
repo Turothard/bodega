@@ -55,6 +55,12 @@ class OrdenCompraController extends Controller
                     $arreglo[2] = RecepcionOc::where("nrooc",$request->oc)
                     ->join('detalleordencompras','recepcionocs.detoc_id','=','detalleordencompras.iddetalleoc')
                     ->select('recepcionocs.id','recepcionocs.nrooc','recepcionocs.doc_id','recepcionocs.detoc_id','recepcionocs.cantidaddetoc','recepcionocs.cantidaddococ','recepcionocs.montounitariodetoc','recepcionocs.montototaldococ','recepcionocs.created_at','recepcionocs.updated_at','recepcionocs.deleted_at','detalleordencompras.articulodetoc', 'detalleordencompras.color_id','detalleordencompras.unidad_id','detalleordencompras.marca_id')->get();
+                    $arreglo[3]= IngresoOrdenCompra::where("nrooc",$request->oc)
+                    ->join('articulos', 'ingresoordencompras.codigoart', '=','articulos.codigoart')
+                    ->join("estantes",'ingresoordencompras.estante_id','=', 'estantes.id')
+                    ->select('ingresoordencompras.codigoart','ingresoordencompras.bodega_id','ingresoordencompras.estante_id',
+                    'ingresoordencompras.sectoring','ingresoordencompras.niveling','ingresoordencompras.cantidading', 
+                    'articulos.nombreart','estantes.nroestante')->get();
                     return $arreglo;
                     break;
                 case 'detalleocing':
@@ -168,7 +174,16 @@ class OrdenCompraController extends Controller
                         $detoc->save();
                         
                     }
-                    if($request->porcentaje=='completo'){
+                    $detalleoc = DetalleOrdenCompra::where("ordencompra_id",$oc->nrooc)->get()->sum("cantidaddetoc");
+                    $recepcionado = RecepcionOc::where("nrooc",$oc->nrooc)->get()->sum("cantidaddococ");
+                    /*if($request->porcentaje=='completo'){
+                        $oc->estadooc ='RECEPCIONADO';
+                        $oc->save();
+                    }else{
+                        $oc->estadooc ='RECEPCIÓN IMCOMPLETA';
+                        $oc->save();
+                    }*/
+                    if($detalleoc==$recepcionado){
                         $oc->estadooc ='RECEPCIONADO';
                         $oc->save();
                     }else{
@@ -178,8 +193,15 @@ class OrdenCompraController extends Controller
                 break;
                 case 'guardaringresooc':
                     $dets =$request->detalle;
+                    $ocx=null;
                     foreach ($dets as $det) {
-                        $detoc= DetalleOrdenCompra::where("iddetalleoc", $det["detoc_id"]);
+                        $detoc= DetalleOrdenCompra::find($det["detoc_id"]);
+                        
+                        if($ocx==null){
+                            $ocx=$det["nrooc"];
+                        }
+                        //return $detoc;
+                        $recep = RecepcionOc::find($det["id"]);
                         if($detoc->codigoart==null){
                             $oc = OrdenCompra::find($det["nrooc"]);
                             $subcat = SubCategoria::find($det["subcategoria"]);
@@ -190,15 +212,15 @@ class OrdenCompraController extends Controller
                             while(strlen($correlativo)<5){
                                 $correlativo ="0".$correlativo;
                             }
-                            $cor = new Correlativo();
+                            $cor = new Correlativo();   
                             $cor->subcategoria_id = $subcat->idsubcategoria;
                             $cor->subcategoria = $subcat->codigosubcat;
                             $cor->correlativo = $corre;
                             $cor->correlativofinal = $subcat->codigosubcat.$correlativo;
-                            $cor->save;
+                            $cor->save();
+                            $art = new Articulo();
 
-
-                            $art->codigoart = $detoc->marca_id.$subcat->codigosubcat;
+                            
                             $art->categoria_id = $oc->categoria_id;
                             $art->subcategoria_id = $det["subcategoria"];
                             
@@ -207,6 +229,7 @@ class OrdenCompraController extends Controller
                             $art->color_id = $detoc->color_id;
                             $col = Colore::find($detoc->color_id);
                             $uni = Unidade::find($detoc->unidad_id);
+                            $art->codigoart = $detoc->marca_id.$subcat->codigosubcat.$correlativo.$col->idcolor.$uni->idunidad;
                             $art->unidad_id = $detoc->unidad_id;
                             $art->marca_id = $detoc->marca_id;
                             $art->nombreart = strtoupper($detoc->articulodetoc." ".$col->nombrecol." ".$uni->codigounimed);
@@ -234,19 +257,47 @@ class OrdenCompraController extends Controller
                             $art->yearart = date("Y");
                             
                             $art->save();
+                            $detoc->codigoart= $art->codigoart;
+                            $detoc->save();
                         }
                         $ddoc = new IngresoOrdenCompra();
                         $ddoc->nrooc = $det["nrooc"];
                         $ddoc->recep_id  = $det["id"];
-                        $ddoc->cantidadrecep = $doc["cantidadingoc"];
-                        $ddoc->bodega_id = $doc["bodega_id"];
-                        $ddoc->sector_id = $doc["sector_id"];
-                        $ddoc->sector_id = $doc["sector_id"];
-                        $ddoc->sector_id = $doc["sector_id"];
-                        $ddoc->sector_id = $doc["sector_id"];
-                        $ddoc->dctofisico = '';
-                        $ddoc->user_id= auth()->id();
+                        $ddoc->cantidadrecep = $det["cantidadingoc"];
+                        $ddoc->bodega_id = $det["bodega_id"];
+                        $ddoc->codigoart = $detoc->codigoart ;
+                        $ddoc->estante_id = $det["estante_id"];
+                        $ddoc->sectoring = $det["sector_id"];
+                        $ddoc->niveling = $det["nivel_id"];
+                        $ddoc->cantidading = $det["cantidading"];
+                        $ddoc->usering= auth()->id();
                         $ddoc->save();
+                        $recep->cantidadingoc = (int)$recep->cantidadingoc + (int)$det["cantidading"];
+                        $recep->save();
+                        $posi = Posicione::where("estante_id",$det["estante_id"])->where("sectorpos",$det["sector_id"])
+                        ->where("nivelpos",$det["nivel_id"])->where("codigoart",$ddoc->codigoart)->get()->first();
+                        if($posi!=null){
+                            $posi->cantidadpos= $posi->cantidadpos + $det["cantidading"];
+                            $posi->save();
+                        }else{
+                            $pos = new Posicione();
+                            $pos->estante_id = $det["estante_id"];
+                            $pos->sectorpos = $det["sector_id"];
+                            $pos->nivelpos = $det["nivel_id"];
+                            $pos->codigoart = $ddoc->codigoart;
+                            $pos->cantidadpos = $det["cantidading"];
+                            $pos->save();
+                        }
+                    }
+                    $oc = OrdenCompra::find($ocx);
+                    if($oc->estadooc=="RECEPCIONADO"){
+                        $recepcionado = RecepcionOc::where("nrooc",$oc->nrooc)->get()->sum("cantidaddococ");
+                        $ingresado = RecepcionOc::where("nrooc",$oc->nrooc)->get()->sum("cantidadingoc");
+                        if($recepcionado==$ingresado){
+                            $oc->estadooc='FINALIZADO';
+                            $oc->save();
+                        }
+                        
                     }
                     break;
                 default:
