@@ -114,7 +114,7 @@ class OrdenCompraController extends Controller
                     $oc->proveedor_id = $ocvue["proveedor_id"];
                     $oc->fechaoc = $ocvue["fechaoc"];
                     $oc->cantidadoc = $ocvue["cantidadoc"];
-                    $oc->montooc = $ocvue["montooc"];
+                    $oc->montooc = ceil($ocvue["montooc"]);
                     $oc->user_id = auth()->id();
                     $oc->estadooc='INGRESADO';
                     $oc->save();
@@ -136,8 +136,8 @@ class OrdenCompraController extends Controller
                         $det->unidad_id = $detocvue["unidad_id"];
                         $det->cantidaddetoc = $detocvue["cantidaddetoc"];
                         $det->cantidadrecoc=0;
-                        $det->montounitariodetoc = $detocvue["montounitariodetoc"];
-                        $det->montototaldetoc = $detocvue["montototaldetoc"];
+                        $det->montounitariodetoc = ceil($detocvue["montounitariodetoc"]);
+                        $det->montototaldetoc = ceil($detocvue["montototaldetoc"]);
                         $det->save();
                     }
                     return '';
@@ -168,8 +168,8 @@ class OrdenCompraController extends Controller
                         $detoc->cantidadrecoc = (int)$detoc->cantidadrecoc + (int)$art["cantvuerec"];
                         $ar->cantidadingoc=0;
                         $ar->cantidaddococ = $art["cantvuerec"];
-                        $ar->montounitariodetoc = $art["montounitariodetoc"];
-                        $ar->montototaldococ = $art["cantvuerec"] * $art["montounitariodetoc"];
+                        $ar->montounitariodetoc = ceil($art["montounitariodetoc"]);
+                        $ar->montototaldococ = ceil($art["cantvuerec"] * $art["montounitariodetoc"]);
                         $ar->save();
                         $detoc->save();
                         

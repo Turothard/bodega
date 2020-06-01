@@ -318,7 +318,7 @@ class BodegaController extends Controller
                     $ingresodoc->nrodocing=$doc["doc"];
                     $ingresodoc->fechaingresoing=date("Y-m-d");
                     $ingresodoc->cantidading=$doc["cantidad"];
-                    $ingresodoc->montoing=$doc["monto"];
+                    $ingresodoc->montoing=ceil($doc["monto"]);
                     $ingresodoc->save();
 
                     foreach ($detalle as $det) {
