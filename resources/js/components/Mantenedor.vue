@@ -7,6 +7,7 @@
                     <li class="list-group-item pointer" @click="componenteactual='mantcat'">Categorías</li>
                     <li class="list-group-item pointer">Subcategorías</li>
                     <li class="list-group-item pointer">Colores</li>
+                    <li class="list-group-item pointer" @click="componenteactual='mantprov'">Proveedores</li>
                 </ul>
             </div>
             <div class="container-fluid">
@@ -21,6 +22,7 @@
     import mantart from './mantenedor/mantenedorart.vue';
 
     import mantcat from './mantenedor/mantenedorcat.vue';
+    import mantprov from './mantenedor/mantenedorprov.vue'
    /* import bodega_detalle from './mantenedor/mantenedorsubcat.vue';
     import bodega_detalle from './mantenedor/mantenedorcol.vue';
     import bodega_detalle from './mantenedor/mantenedormar.vue';
@@ -31,7 +33,8 @@
     export default {
         components: {
             mantart, 
-            mantcat
+            mantcat,
+            mantprov
         },
         data(){
             return{

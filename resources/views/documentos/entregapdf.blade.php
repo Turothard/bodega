@@ -98,13 +98,13 @@ $contador=0;
                 <th style="width: 5%">Estado</th>
                 <th style="width: 14%">Nombre</th>
                 <th style="width: 8%">Entrega</th>
-                <th style="width: 8%">Devolución {{count($detalle)}}</th>
+                <th style="width: 8%">Devolución</th>
             </tr>
         </thead>
         <tbody>
             @foreach ($detalle as $det)
             <tr>
-                <td>{{ucfirst(strtolower($det->nombreart))}}</td>
+                <td>{{ucfirst(Str::lower($det->nombreart))}}</td>
                 <td style="text-align: center">{{$det->cantidadproceso}}</td>
                 <td></td>
                 <td>{{ucwords(Str::lower($det->nombrecortocolab))}}</td>

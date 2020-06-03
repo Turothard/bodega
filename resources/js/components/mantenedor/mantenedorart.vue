@@ -79,7 +79,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <dir class="row">
+                        <div class="row">
                             <div class="col-3">
                                 Código (*)<br>
                                 <input v-if="tipoarticulo=='nuevoarticulo'" type="text"  class="form-control form-control-sm w-d" name="codigoart" readonly id="codigoart" v-model="codigoartvue">
@@ -181,7 +181,7 @@
                                 <input type="file" accept="image/*" ref="subirnewimage" capture="camera" id="newimage" @change="handleFileUpload()" style="display:none"/>
                                  <img v-bind:src="imagePreview" v-show="showPreview" style="width:100px; height:100px"/>
                             </div>
-                        </dir>                        
+                        </div>                        
                     </div>
                     <div class="modal-footer">
                         <p>(*) Datos obligatorios</p>
