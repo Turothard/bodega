@@ -10,7 +10,7 @@ use App\Categoria;
 use App\Colaboradore;
 use App\User;
 use App\Estante;
-
+use App\Proveedore;
 use App\PeriodoDevo;
 use App\SubCategoria;
 use App\Ubicacione;
@@ -133,6 +133,41 @@ class MantenedoresController extends Controller
                     $art->yearart = $artvue["yearart"];
                     $art->periododevo_id = $artvue["periododevo_id"];
                     $art->save();
+                break;
+                case 'nuevoproveedor':
+                    $provvue= $request->prov;
+                    $prov = Proveedore::find($provvue['rutproveedor']);
+                    if($prov==null){
+                        $codigo = Proveedore::max("codigoprov");
+                        $prov= new Proveedore();
+                        $prov->rutproveedor = $provvue['rutproveedor'];
+                        $prov->nombreprov = $provvue['nombreprov'];
+                        $prov->codigoprov = ((int)$codigo)+1;
+                        $prov->giroprov = $provvue['giroprov'];
+                        $prov->comunaprov = $provvue['comunaprov'];
+                        $prov->direccionprov = $provvue['direccionprov'];
+                        $prov->telefonoprov = $provvue['telefonoprov'];
+                        $prov->correoprov = $provvue['correoprov'];
+                        $prov->save();
+                        return;
+                    }else{
+                        return '1';
+                    }
+                break;
+                case 'editarproveedor':
+                    $provvue= $request->prov;
+                    $prov = Proveedore::find($provvue['rutproveedor']);
+                        $prov->rutproveedor = $provvue['rutproveedor'];
+                        $prov->nombreprov = $provvue['nombreprov'];
+                        
+                        $prov->giroprov = $provvue['giroprov'];
+                        $prov->comunaprov = $provvue['comunaprov'];
+                        $prov->direccionprov = $provvue['direccionprov'];
+                        $prov->telefonoprov = $provvue['telefonoprov'];
+                        $prov->correoprov = $provvue['correoprov'];
+                        $prov->save();
+                        return;
+                    
                 break;
                 default:
                     # code...

@@ -57,7 +57,7 @@
                         <div class="row">
                             <div class="col-4">
                                 Rut <br>
-                                <input type="text" v-model="proveedorvue.rutproveedor" class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
+                                <input type="text" v-model="proveedorvue.rutproveedor" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
                             </div>
                             <div class="col-4">
                                 Nombre <br>
@@ -81,13 +81,13 @@
                             </div>
                             <div class="col-3">
                                 Correo <br>
-                                <input type="email" v-model="proveedorvue.correoprov" class="form-control form-control-sm w-l t-regular" :id="'correoprov'" name="correoprov">
+                                <input type="email" v-model="proveedorvue.correoprov"  class="form-control form-control-sm w-l t-regular" :id="'correoprov'" name="correoprov">
                             </div>
                         </div>          
                     </div>
                     <div class="modal-footer">
                         <p>(*) Datos obligatorios</p>
-                        <button type="button" class="btn btn-primary" @click="guardararticulo(proveedorvue)">
+                        <button type="button" class="btn btn-primary" @click="guardarproveedor(proveedorvue)">
                             Guardar Proveedor
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -155,16 +155,47 @@
                 })(navigator.userAgent||navigator.vendor||window.opera);
                 return check;
             },
-            guardarcategoria(art){
-                if(this.tipoprov == 'nuevoproveedor'){
-                    art.codigoart = this.codigoartvue;
-                    art.marca_id = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux).idmarca;
-                }
-                if(art.codigoart.length<15 || art.proveedorart=='' || art.nombreart=='' || art.descripcionart =='' || art.stockcriticoart=='' || art.indicerotacionart=='' || art.yearart=='' || art.periododevo_id==''){
+            guardarproveedor(prov){
+                if(prov.rutproveedor=='' || prov.nombreprov==''  ){
                     this.$toastr.w("Favor de ingresar datos obligatorios!!");
                     return;
                 }
-                 
+                 axios.post('/mantenedores/setdatos', {tipo:this.tipoprov,prov:prov})
+                    .then((res) =>{
+                    console.log(res.data);
+                    if(res.data==''){
+                        if(this.tipoprov =='nuevoproveedor'){
+                            this.$toastr.s("Proveedor ingresado con éxito");
+                        }else{
+                            this.$toastr.s("Proveedor modificado con éxito");
+                        }
+                        
+                            $(".close").click();
+                            setTimeout(function() {
+                                location.reload();
+                            }, 2000);
+                    }else{
+                        if(res.data=='1'){
+                            this.$toastr.w("El rut del Proveedor ya existe, favor revisar");
+                        }else{
+                            this.$toastr.w("Ha ocurrido un error, favor contactarse con el desarrollador");
+                        }
+                    }
+                }).catch(function (error) {
+                    if (error.response) {
+                    // Request made and server responded
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                    console.log(error.response.headers);
+                    } else if (error.request) {
+                    // The request was made but no response was received
+                    console.log(error.request);
+                    } else {
+                    // Something happened in setting up the request that triggered an Error
+                    console.log('Error', error.message);
+                    }
+                });
+            
             },
             cargarcrear(){
                 this.tipoprov = 'nuevoproveedor';
