@@ -72,6 +72,9 @@ class MantenedoresController extends Controller
                 case 'categorias':
                     
                     break;
+                case 'colores':
+                    return  Colore::max("idcolor");
+                    break;
                 default:
                     # code...
                     break;
@@ -154,6 +157,80 @@ class MantenedoresController extends Controller
                         return '1';
                     }
                 break;
+                case 'nuevocolor':
+                    $colvue =$request->detalle;
+                    $col = new Colore();
+                    $col->idcolor = $colvue["idcolor"];
+                    $col->nombrecol = $colvue["nombrecol"];
+                    $col->hexcol = $colvue["hexcol"];
+                    $col->save();
+                    break;
+                case 'editarcolor':
+                    $colvue =$request->detalle;
+                    $col = Colore::find($colvue["idcolor"]);
+                    $col->nombrecol = $colvue["nombrecol"];
+                    $col->hexcol = $colvue["hexcol"];
+                    $col->save();
+                    break;
+                case 'eliminarcolor':
+                    $colvue =$request->detalle;
+                    $col = Colore::find($colvue["idcolor"]);
+                    $colart= Articulo::where("color_id",$colvue["idcolor"])->count();
+                    if($colart==0){
+                        $col->forceDelete();
+                        return 0;
+                    }else{
+                        return 1;
+                    }
+                    
+                    break;
+                case 'nuevacategoria':
+                    $catvue =$request->detalle;
+                    $cat = Categoria::where("codigocat",$catvue["codigocat"])->get()->first();
+                    if($cat!=null){
+                        return 1;
+                    }else{
+                        $cat = Categoria::where("nombrecat",$catvue["nombrecat"])->get()->first();
+                        if($cat!=null){
+                            return 2;
+                        }else{
+                            $cat = new Categoria();
+                            $cat->codigocat = $catvue["codigocat"];
+                            $cat->nombrecat = $catvue["nombrecat"];
+                            $cat->descripcioncat = $catvue["descripcioncat"];
+                            $cat->save();
+                            return 0;
+                        }
+                    }
+                break;
+                case 'editarcategoria':
+                    $catvue =$request->detalle;
+                    $cat = Categoria::where("codigocat",$catvue["codigocat"])->get()->first();
+                    
+                        $catw = Categoria::where("nombrecat",$catvue["nombrecat"])->get()->first();
+                        if($catw!=null){
+                            return 1;
+                        }else{
+                            //$cat->codigocat = $catvue["codigocat"];
+                            $cat->nombrecat = $catvue["nombrecat"];
+                            $cat->descripcioncat = $catvue["descripcioncat"];
+                            $cat->save();
+                            return 0;
+                        }
+                break;
+                case 'eliminarcategoria':
+                    $catvue =$request->detalle;
+                    $cat = Categoria::where("codigocat",$catvue["codigocat"])->get()->first();
+                    $catart= Articulo::where("categoria_id",$cat->idcategoria)->count();
+                    $subcatart= SubCategoria::where("categoria_id",$cat->idcategoria)->count();
+                    if($catart==0 && $subcatart==0){
+                        $cat->forceDelete();
+                        return 0;
+                    }else{
+                        return 1;
+                    }
+                    
+                    break;
                 case 'editarproveedor':
                     $provvue= $request->prov;
                     $prov = Proveedore::find($provvue['rutproveedor']);

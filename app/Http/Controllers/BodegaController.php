@@ -353,7 +353,7 @@ class BodegaController extends Controller
                         $ingreso->niveling=$det["nivel_id"];
                         $ingreso->cantidading=(int)$det["cantidad"];
                         $ingreso->precioing=(int)$det["precio"];
-                        $ingreso->totaling=(int)$det["precio"]*(int)$det["precio"];
+                        $ingreso->totaling=(int)$det["cantidad"]*(int)$det["precio"];
                         $ingreso->fechaing = $fecha;
                         $ingreso->posicion_id = $id;
                         //$ingreso->usering = User::where("id",auth()->id())->value('rut');

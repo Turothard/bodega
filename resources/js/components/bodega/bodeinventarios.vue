@@ -57,7 +57,7 @@
                                 <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
                             </button>
                             <button class="btn btn-info btn-sm" 
-                                v-if="item.estadoinv=='FINALIZADO' && user=='ADMIN'"
+                                v-if="item.estadoinv=='FINALIZADO'"
                                 data-toggle="modal"
                                 data-target="#inventariomodal"
                                 @click="tableresp('detalleajuste',item)">
@@ -72,7 +72,8 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Generar Inventario</h5>
+                    <h5 v-if="tipoinventario=='ingresar'" class="modal-title">Generar Inventario</h5>
+                    <h5 v-else class="modal-title">Detalle Inventario</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -185,8 +186,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Guardar Avance</button>
-                    <button type="button" class="btn btn-primary" @click="finalizarinventario()" v-show="newinventario.length>0">Finalizar Inventario</button>
+                    
+                    <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Guardar Avance</button>
+                    <button v-else type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Actualizar Inventario</button>
+                    <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="finalizarinventario()" v-show="newinventario.length>0">Finalizar Inventario</button>
+                    <button v-if="tipoinventario=='detalleajuste' && user=='ADMIN'"  type="button" class="btn btn-primary" @click="ajusteinventario()" v-show="newinventario.length>0">Ajustar Inventario a bodega</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
                 </div>
@@ -315,6 +319,20 @@
                     sessionStorage.setItem("newinventario",JSON.stringify(this.newinventario));
                     this.$nextTick(function () {              
                         this.dt2 = $('#newinventario').DataTable({
+                            "language": {
+                                "lengthMenu": "Mostrar _MENU_ filas por página",
+                                "zeroRecords": "Ningún resultado según criterio",
+                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                "infoEmpty": "No se encontraron resultados",
+                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                "search":         "Buscar:",
+                                "paginate": {
+                                    "first":      "Primero",
+                                    "last":       "Último",
+                                    "next":       "Siguiente",
+                                    "previous":   "Anterior"
+                                },
+                            }, 
                             "scrollY":        "250px",
                             "scrollCollapse": true,
                             "paging":         false                 
@@ -332,6 +350,20 @@
                         this.flaginventario = true;
                         this.$nextTick(function () {
                             this.dt2 = $('#newinventario').DataTable({
+                                "language": {
+                                "lengthMenu": "Mostrar _MENU_ filas por página",
+                                "zeroRecords": "Ningún resultado según criterio",
+                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                "infoEmpty": "No se encontraron resultados",
+                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                "search":         "Buscar:",
+                                "paginate": {
+                                    "first":      "Primero",
+                                    "last":       "Último",
+                                    "next":       "Siguiente",
+                                    "previous":   "Anterior"
+                                },
+                            }, 
                                 "scrollY":        "250px",
                                 "scrollCollapse": true,
                                 "paging":         false                 
@@ -441,6 +473,20 @@
                             setTimeout(function(){
                                 this.dt2.destroy();
                                 this.dt2 = $('#newinventario').DataTable({
+                                    "language": {
+                                "lengthMenu": "Mostrar _MENU_ filas por página",
+                                "zeroRecords": "Ningún resultado según criterio",
+                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                "infoEmpty": "No se encontraron resultados",
+                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                "search":         "Buscar:",
+                                "paginate": {
+                                    "first":      "Primero",
+                                    "last":       "Último",
+                                    "next":       "Siguiente",
+                                    "previous":   "Anterior"
+                                },
+                            }, 
                                     "scrollY": "250px",
                                     "scrollCollapse": true,
                                     "paging": false
@@ -534,6 +580,20 @@
                             this.$nextTick(function () {
                                 
                                 this.dt2 = $('#newinventario').DataTable({
+                                    "language": {
+                                "lengthMenu": "Mostrar _MENU_ filas por página",
+                                "zeroRecords": "Ningún resultado según criterio",
+                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                "infoEmpty": "No se encontraron resultados",
+                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                "search":         "Buscar:",
+                                "paginate": {
+                                    "first":      "Primero",
+                                    "last":       "Último",
+                                    "next":       "Siguiente",
+                                    "previous":   "Anterior"
+                                },
+                            }, 
                                     "scrollY": "250px",
                                     "scrollCollapse": true,
                                     "paging": false

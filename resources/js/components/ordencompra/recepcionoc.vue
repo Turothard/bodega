@@ -296,7 +296,7 @@
                 }
             },
             eliminararticulo(item, index){
-                if(confirm("¿Está seguro de eliminar este producto de la órden de compra?")){
+                if(confirm("¿Está seguro de eliminar este Artículo de la órden de compra?")){
                     this.detnewoc.splice(index,1);
                     this.newoc.cantidadoc = parseInt(this.newoc.cantidadoc) - parseInt(item.cantidaddetoc);
                     this.newoc.montooc = parseInt(this.newoc.montooc) - parseInt(item.montototaldetoc);

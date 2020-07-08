@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <h1>Movimisntos Bodega</h1>
+        <h1>Movimientos Bodega</h1>
         <div v-show="!cargando" class="container-fluid">
             <table id="tablamovimientos" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                 <thead>

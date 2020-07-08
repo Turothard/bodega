@@ -17,6 +17,7 @@ use App\DocumentoOrdenCompra;
 use App\RecepcionOc;
 use App\IngresoOrdenCompra;
 use App\SubCategoria;
+use App\DocSustentatorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -61,6 +62,7 @@ class OrdenCompraController extends Controller
                     ->select('ingresoordencompras.codigoart','ingresoordencompras.bodega_id','ingresoordencompras.estante_id',
                     'ingresoordencompras.sectoring','ingresoordencompras.niveling','ingresoordencompras.cantidading', 
                     'articulos.nombreart','estantes.nroestante')->get();
+                    $arreglo[4]= DocSustentatorio::where("nrooc",$request->oc)->get();
                     return $arreglo;
                     break;
                 case 'detalleocing':
@@ -191,6 +193,23 @@ class OrdenCompraController extends Controller
                         $oc->save();
                     }
                 break;
+                case 'guardarsustentatorio':
+                    $docvue =$request->documento;
+                    $doc = new DocSustentatorio();
+                    $doc->nrooc=$request->oc;
+                    $doc->tipodocumento = $docvue["tipodocumento"];
+                    $doc->descripciondoc = $docvue["descripciondoc"];
+                    $archivo = explode(".",$docvue["documento"]);
+                    $sus = DocSustentatorio::where("nrooc",$request->oc)->count();
+                    if($sus>0){
+                        $doc->dctofisico = "documents/supportive/".$request->oc."_DOC".((int)$sus+1).".".end($archivo);
+                    }else{
+                        $doc->dctofisico = "documents/supportive/".$request->oc."_DOC1.".end($archivo);
+                    }
+                    //$doc->dctofisico = $docvue["documento"];
+                    $doc->user_id= auth()->id();
+                    $doc->save();
+                    break;
                 case 'guardaringresooc':
                     $dets =$request->detalle;
                     $ocx=null;
@@ -247,7 +266,7 @@ class OrdenCompraController extends Controller
                                 case '3':
                                     $art->stockcriticoart = '1';
                                     $art->indicerotacionart = '7';
-                                    $art->periododevo_id = '0';
+                                    $art->periododevo_id = '1';
                                     break;
                                 default:
                                     # code...

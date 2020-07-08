@@ -53,7 +53,7 @@ class ImpresionController extends Controller
         ->get();
         //dd($id);
         //$id=1;
-        $pdf = \PDF::loadView('documentos/entregapdf', compact('pedido','detalle', 'bodeguero'));
+        $pdf = \PDF::loadView('documentos/entregapdf2', compact('pedido','detalle', 'bodeguero'));
         return $pdf->download('Entrega pedido '.$pedido->id.'.pdf');
    }
 

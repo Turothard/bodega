@@ -28,6 +28,7 @@ use App\Colore;
 use App\OrdenCompra;
 use App\DetalleOrdenCompra;
 use App\DocumentoOrdenCompra;
+use App\DocSustentatorio;
 use Illuminate\Support\Facades\DB;
 use Image;
 class SistemaController extends Controller
@@ -166,6 +167,21 @@ class SistemaController extends Controller
             return;
         }
     }
+    public function uploadfile(Request $request) {
+        
+        $name = $request->input("nombre");
+        $sus = DocSustentatorio::where("nrooc",$name)->count();
+        if($sus>0){
+            $name = $name."_DOC".$sus;
+        }else{
+            $name = $name."_DOC1";
+        }
+        $fileName = $name.'.'.$request->file->getClientOriginalExtension();
+        $request->file->move(public_path('documents/supportive/'), $fileName);
+              
+        return response()->json(['success'=>'You have successfully upload file.']);
+    }
+
     public function uploadimage(Request $request)
     {
         $this->validate($request, [

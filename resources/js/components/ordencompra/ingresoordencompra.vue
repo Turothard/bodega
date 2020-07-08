@@ -42,7 +42,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="date" v-model="newoc.fechaoc" class="form-control form-control-sm t-regular p-2 w-d1" id="fechaoc" name="fechaoc">
+                                            <input type="date" v-model="newoc.fechaoc" class="form-control form-control-sm t-regular p-2 w-d" id="fechaoc" name="fechaoc">
                                         </td>
                                         <td>
                                             <input type="number" v-model="newoc.cantidadoc" readonly class="form-control form-control-sm t-regular p-2 w-s" id="cantidadoc" name="cantidadoc">
@@ -53,6 +53,7 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <hr>
                             <div class="row" id="infodetoc" >
                                 <div class="col-6">
                                     Detalle Artículo:<br>
@@ -155,7 +156,7 @@
                                 </div>
                             </div>
                             <br>
-                            <div style="height:250px; overflow:auto;">
+                            <div style="height:220px; overflow:auto;">
                                 <table id="newingresooc" class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100">
                                     <thead>
                                         <tr>

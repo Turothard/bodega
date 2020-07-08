@@ -144,7 +144,7 @@
                                             {{oc.estadooc}} 
                                             </td>
                                             <td>
-                                                <button @click="agregardocsus(item)" class="btn btn-info btn-sm" title="Agregar Documento Sustentatorio">
+                                                <button @click="addsustenta=!addsustenta" class="btn btn-info btn-sm" title="Agregar Documento Sustentatorio">
                                                     <img style="width:23px;heigth:23px;" src="css/img/agregardoc.png" />
                                                 </button>
                                             </td>
@@ -152,21 +152,47 @@
                                         </tr>
                                     </tbody>
                                     </table>
-                                <!-- <div class="row">
-                                    <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
-                                            <thead>
-                                                <tr>
-                                                    <th>TIPO DOC</th>
-                                                    <th>NRO DOC</th>
-                                                    <th>FOTO DOC</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                    </table>
-                                </div> -->
+                                    <div v-show="addsustenta" class="row">
+                                        <div class="col-12">
+                                        <table class="table table-striped display table-sm table-bordered table-dark t-regular">
+                                                <thead>
+                                                    <tr>
+                                                        <th>TIPO DOC</th>
+                                                        <th>NRO DOC</th>
+                                                        <th>DOCUMENTO</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-control form-control-sm w-d1" name="tipodocumento" id="tipodocumento" v-model="sustentatorio.tipodocumento">
+                                                                <option value="">---------------</option>
+                                                                <option value="FACTURA">FACTURA</option>
+                                                                <option value="GUIA">GUÍA</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            
+                                                            <textarea class="form-control form-control-sm" style="overflow:auto;resize:none" id="exampleFormControlTextarea1" rows="3"  v-model="sustentatorio.descripciondoc"></textarea>
+                                                        </td>
+                                                        <td class="w-xxl">
+                                                            <button  v-if="sustentatorio.documento =='' || sustentatorio.documento ==null" class="btn btn-info btn-sm" @click="$refs.subirnewfile.click()"><img style="width:23px;heigth:23px;" src="css/img/agregarfile.png"/></button>
+                                                            <button  v-if="sustentatorio.documento !=''" class="btn btn-info btn-sm" @click="eliminarfile(sustentatorio)"><img style="width:23px;heigth:23px;" src="css/img/delete.png"/></button>
+                                                            <label v-if="sustentatorio.documento !=''">{{sustentatorio.documento.substring(0,30)}}</label>
+                                                            <input type="file" ref="subirnewfile" id="newfile" @change="handleFileUploadAny(sustentatorio)" style="display:none"/>
+                                                            
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-secondary" @click="guardardocsustentatorio()">Guardar Doc Sustentatorio</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                        </table>
+                                        </div>
+                                    </div> 
                                 <div class="row" v-if="tipomodal =='recepcionaroc'">
-                                    <div class="col-8">
+                                    <div class="col-10">
                                         <table class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular">
                                             <thead>
                                                 <tr>
@@ -230,9 +256,7 @@
                                         <th class="all">Usuario</th>
                                         <th class="all">Cant Total</th>
                                         <th class="desktop">Monto total</th>
-                                        <th>
-
-                                        </th>
+                                        <th class="all">Documentos</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -477,8 +501,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                </div>
-                                
+                                </div>                       
                                 <div>
 
                                 </div>
@@ -514,7 +537,7 @@
                                         </table>
                                     </div>                                    
                                     <div v-if="datadococ.length>0">
-                                        <h3>Detalle Documentos</h3>
+                                        <h3>Detalle Documentos de Recepción</h3>
                                         <table  class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100"
                                         v-for="(item,index) in datadococ" :key="index">
                                             <thead>
@@ -534,9 +557,11 @@
                                                     <td>{{item.nrodocumento}}</td>
                                                     <td>{{dataordencompra[9].find( items => items.rutproveedor === item.proveedor_id ).nombreprov}}</td>
                                                     <td v-if="item.dctofisico != null">
+                                                        <a target="_blank" :href="item.dctofisico">
                                                         <button class="btn btn-info btn-sm" >
+                                                            
                                                             <img style="width:23px;heigth:23px;" src="css/img/verimage.png"/>
-                                                        </button>
+                                                        </button></a>
                                                     </td>
                                                     <td v-else>
                                                         ----------
@@ -578,6 +603,40 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <div v-if="datasus.length>0">
+                                        <h3>Detalle Documentos Sustentatorios</h3>
+                                        <table  class="table table-striped display table-sm table-bordered table-dark t-regular dt-responsive w-100"
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th class="desktop">Tipo Documento</th>
+                                                    <th class="all">Detalle Documento</th>
+                                                    <th class="desktop">Documento</th>
+                                                    <th class="desktop">Usuario</th>
+                                                    <th class="desktop">Fecha</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item,index) in datasus" :key="index">
+                                                    <td>{{item.tipodocumento}}</td>
+                                                    <td>{{item.descripciondoc}}</td>
+                                                    <td v-if="item.dctofisico != null">
+                                                        <a target="_blank" :href="item.dctofisico">
+                                                        <button class="btn btn-info btn-sm" >
+                                                            
+                                                            <img style="width:23px;heigth:23px;" src="css/img/verimage.png"/>
+                                                        </button></a>
+                                                    </td>
+                                                    <td v-else>
+                                                        ----------
+                                                    </td>
+                                                    <td>{{dataordencompra[0].find( items => items.id === item.user_id).name }}</td>
+                                                    <td>{{item.created_at}}</td>    
+                                                </tr>
+                                            </tbody>
+                                                        
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                     </div>
@@ -614,6 +673,7 @@
                 detoccompras:null,
                 datadococ:[],
                 dataingoc:[],
+                datasus:[],
                 datarecepoc:[],
                 detdococ: [],
                 detalleingresos:[],
@@ -621,6 +681,8 @@
                 oc :[],
                 usuarios: [],
                 colaboradores: [],
+                addsustenta:false,
+                sustentatorio:{tipodocumento:'', descripciondoc:'', documento:''},
                 newrecepcion:{tipodocumento:'', nrodocumento:'', fotodocumento:''},
                 newingreso:{id:'',nrooc:'',detoc_id:'',articulodetoc:'',codigoart:'',bodega_id:'',sector_id:'',color_id:'',unidad_id:'', marca_id:'', estante_id:'',
                 nivelest:'', sectorest:'',cantidadingoc:0, cantidading:0, subcategoria:''},
@@ -636,6 +698,7 @@
                 terminado:0,
                 cantidaddetdocs:0,
                 file: '',
+                filesust:'',
                 ocexist:false,
                 showPreview: false,
                 imagePreview: '',
@@ -856,6 +919,7 @@
                         this.datadococ = res.data[1];
                         this.datarecepoc = res.data[2];
                         this.dataingoc = res.data[3];
+                        this.datasus = res.data[4];
                         console.log(this.datadococ);
                         this.$nextTick(function() {
                             if(this.dt2!=null){
@@ -1014,10 +1078,31 @@
                     }
                 }
             },
+            handleFileUploadAny(doc){
+                this.filesust = this.$refs.subirnewfile.files[0];
+                doc.documento = this.filesust.name;
+                let reader  = new FileReader();
+                reader.addEventListener("load", function () {
+                    this.showPreview1 = true;
+                    this.imagePreview1 = reader.result;
+                }.bind(this), false);
+                if( this.filesust ){
+                    reader.readAsDataURL( this.filesust );
+                    
+                }
+            },
             eliminarimagen(doc){
+                this.file='';
                 doc.fotodocumento='';
                 this.showPreview = false;
                 this.imagePreview = '';
+                //this.$refs.subirnewimage='';
+            },
+            eliminarfile(doc){
+                this.filesust='';
+                doc.documento='';
+                this.showPreview1 = false;
+                this.imagePreview1 = '';
                 //this.$refs.subirnewimage='';
             },
             eliminardoc(doc){
@@ -1131,6 +1216,63 @@
                                 $(".close").click();
                                 location.reload();
                             }, 2000);                     
+                    }).catch(function (error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                        }
+                    });
+            },
+            guardardocsustentatorio(){
+                if(this.sustentatorio.tipodocumento=='' || this.sustentatorio.descripciondoc==''|| this.sustentatorio.documento==null){
+                    this.$toastr.w("Para ingresar un documento sustentatorio el tipo de documento, la descripción y el archivo son obligatorios, favor revisar");
+                    return;
+                }
+                axios.post('/ordencompra/setdatos', {tipo:'guardarsustentatorio',documento: this.sustentatorio,  oc: this.oc.nrooc})
+                    .then((res) =>{
+                        let resp = res.data;
+                        console.log(resp);
+                        if(typeof this.sustentatorio.documento !=='undefined' && this.sustentatorio.documento !=null ){
+                            console.log("entro a guardar imagen");
+                            let formData = new FormData();
+                            formData.append('file',this.filesust);
+                            formData.append('nombre',this.oc.nrooc);
+                            axios.post('/sistema/uploadfile', formData, {
+                                headers: {
+                                'Content-Type': 'multipart/form-data'
+                                }
+                            })
+                            .then(response => {
+                                console.log(response.data.message, 'success');
+                            })
+                            .catch(function (error) {
+                                if (error.response) {
+                                // Request made and server responded
+                                console.log(error.response.data);
+                                console.log(error.response.status);
+                                console.log(error.response.headers);
+                                } else if (error.request) {
+                                // The request was made but no response was received
+                                console.log(error.request);
+                                } else {
+                                // Something happened in setting up the request that triggered an Error
+                                console.log('Error', error.message);
+                                }
+                            });
+                        }
+                        
+                        /*setTimeout(function() {
+                            $(".close").click();
+                            location.reload();
+                        }, 2000);  */                   
                     }).catch(function (error) {
                         if (error.response) {
                         // Request made and server responded

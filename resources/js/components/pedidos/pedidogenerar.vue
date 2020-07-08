@@ -72,7 +72,7 @@
             <div class="col-lg-8 col-md-9 col-sm-12">
                <div class="row">
                    <div class="col-md-6">
-                       Articulo:
+                       Artículo:
                        <vue-bootstrap-typeahead 
                             v-model="newarticulo.codigo"
                             :inputClass="'upcase form-control form-control-sm'"
@@ -94,7 +94,7 @@
                        <table class="table table-striped table-dark table-sm t-regular">
                            <thead>
                                <tr>
-                                   <th scope="col" >Árticulo</th>
+                                   <th scope="col" >Artículo</th>
                                    <th scope="col" >Descripción</th>
                                    <th scope="col" >Cantidad</th>
                                    <th scope="col" >Funciones</th>

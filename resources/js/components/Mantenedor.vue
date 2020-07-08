@@ -5,8 +5,8 @@
                 <ul id="ulbodega" class="list-group list-group-horizontal-sm">
                     <li class="list-group-item pointer" @click="componenteactual='mantart'">Artículos</li>
                     <li class="list-group-item pointer" @click="componenteactual='mantcat'">Categorías</li>
-                    <li class="list-group-item pointer">Subcategorías</li>
-                    <li class="list-group-item pointer">Colores</li>
+                    <li class="list-group-item pointer" @click="componenteactual='mantsubcat'">Subcategorías</li>
+                    <li class="list-group-item pointer" @click="componenteactual='mantcol'">Colores</li>
                     <li class="list-group-item pointer" @click="componenteactual='mantprov'">Proveedores</li>
                 </ul>
             </div>
@@ -23,6 +23,8 @@
 
     import mantcat from './mantenedor/mantenedorcat.vue';
     import mantprov from './mantenedor/mantenedorprov.vue'
+    import mantsubcat from './mantenedor/mantenedorsubcat.vue';
+    import mantcol from './mantenedor/mantenedorcol.vue';
    /* import bodega_detalle from './mantenedor/mantenedorsubcat.vue';
     import bodega_detalle from './mantenedor/mantenedorcol.vue';
     import bodega_detalle from './mantenedor/mantenedormar.vue';
@@ -34,7 +36,9 @@
         components: {
             mantart, 
             mantcat,
-            mantprov
+            mantprov,
+            mantsubcat,
+            mantcol
         },
         data(){
             return{
