@@ -439,7 +439,7 @@
                         }
                         marc = letra+number.toString();
                     }
-                    this.lamarca ={idmarca: marca, nombremar: marc};
+                    this.lamarca ={idmarca: marc, nombremar: marca};
                     return marc;
                     //console.log(number);
                 }
@@ -541,14 +541,40 @@
                 }
             },
             guardararticulo(art){
-                if(this.tipoarticulo == 'nuevoarticulo'){
-                    art.codigoart = this.codigoartvue;
-                    art.marca_id = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux).idmarca;
+                console.log(this.lamarca);
+                let lemarc = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux.toUpperCase());
+                if(lemarc!=null){
+                    if(this.tipoarticulo == 'nuevoarticulo'){
+                        art.codigoart = this.codigoartvue;
+                        art.marca_id = this.datamantenedor[11].find( items => items.nombremar === this.marcaaux).idmarca;
+                    }
+                    
+                }else{
+                    if(this.tipoarticulo == 'nuevoarticulo'){
+                        art.codigoart = this.codigoartvue;
+                        art.marca_id = this.lamarca.idmarca;
+                        axios.post('/mantenedores/setdatos', {tipo:'nuevamarca', detalle: this.lamarca}).then((res) =>{
+                            
+                        }).catch(function (error) {
+                            if (error.response) {
+                                // Request made and server responded
+                                console.log(error.response.data);
+                                console.log(error.response.status);
+                                console.log(error.response.headers);
+                                } else if (error.request) {
+                                // The request was made but no response was received
+                                console.log(error.request);
+                                } else {
+                                // Something happened in setting up the request that triggered an Error
+                                console.log('Error', error.message);
+                            }
+                        });
+                    }
                 }
                 if(art.codigoart.length<15 || art.proveedorart=='' || art.nombreart=='' || art.descripcionart =='' || art.stockcriticoart=='' || art.indicerotacionart=='' || art.yearart=='' || art.periododevo_id==''){
-                    this.$toastr.w("Favor de ingresar datos obligatorios!!");
-                    return;
-                }
+                        this.$toastr.w("Favor de ingresar datos obligatorios!!");
+                        return;
+                    }
                  axios.post('/mantenedores/setdatos', {tipo:this.tipoarticulo,detalle: art, correlativo: this.correlativox})
                     .then((res) =>{
                         console.log(res.data);
@@ -615,7 +641,7 @@
                                     });
                                     this.cargando=false;
                                 });  
-                                
+                                $(".close").click();
                             }).catch(function (error) {
                                 if (error.response) {
                                     // Request made and server responded
@@ -630,7 +656,7 @@
                                     console.log('Error', error.message);
                                 }
                             });
-                            $(".close").click();
+                            
                         }
                     }).catch(function (error) {
                         if (error.response) {

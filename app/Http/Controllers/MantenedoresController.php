@@ -10,6 +10,7 @@ use App\Categoria;
 use App\Colaboradore;
 use App\User;
 use App\Estante;
+use App\Marca;
 use App\Proveedore;
 use App\PeriodoDevo;
 use App\SubCategoria;
@@ -87,6 +88,13 @@ class MantenedoresController extends Controller
     {
         if($request->ajax()){
             switch ($request->tipo) {
+                case 'nuevamarca':
+                    $marcvue=$request->detalle;
+                    $marca = new Marca();
+                    $marca->idmarca = $marcvue["idmarca"];
+                    $marca->nombremar = $marcvue["nombremar"];
+                    $marca->save();
+                    break;
                 case 'nuevoarticulo':
                     $artvue=$request->detalle;
                     $art = new Articulo();         
