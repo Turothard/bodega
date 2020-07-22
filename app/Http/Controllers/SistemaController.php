@@ -92,7 +92,7 @@ class SistemaController extends Controller
                     $arreglo[12]=Proveedore::all();
                 break;
                 case 'Mantenedores':
-                    $arreglo[8]=Proveedore::all();
+                    $arreglo[8]=Proveedore::orderBy('nombreprov')->get();;
                     $arreglo[9]=Colore::all();
                     $arreglo[10]=Unidade::all();
                     $arreglo[11]=Marca::all();

@@ -2,23 +2,25 @@
     <div class="container-fluid">
         <br>
         <div>
-            <button class="btn btn-info btn-sm"  data-toggle="modal" data-target="#articulosmodal" @click="cargarcrear()">Agregar Categoría</button>
+            <button class="btn btn-info btn-sm"  data-toggle="modal" data-target="#articulosmodal" @click="cargarcrear()">Agregar SubCategoría</button>
         </div>
         <div>
             <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                 <thead>
                     <tr>
-                        <th class="all">Código Categoría</th>
-                        <th class="desktop">Nombre Categoría</th>
-                        <th class="desktop">Descripción Categoría</th>
+                        <th class="all">Código Categoría asociada</th>
+                        <th class="desktop">Código SubCategoría</th>
+                        <th class="desktop">Nombre SubCategoría</th>
+                        <th class="desktop">Descripción SubCategoría</th>
                         <th class="all">Funciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,index) in datamantenedor[2]" :key="index">
-                        <td>{{item.codigocat}}</td>
-                        <td>{{item.nombrecat}}</td>
-                        <td>{{item.descripcioncat}}</td>
+                    <tr v-for="(item,index) in datamantenedor[3]" :key="index">
+                        <td>{{ datamantenedor[2].find( items => items.idcategoria === item.categoria_id ).nombrecat}}</td>
+                        <td>{{item.codigosubcat}}</td>
+                        <td>{{item.nombresubcat}}</td>
+                        <td>{{item.descripcionsubcat}}</td>
                         <td>
                             <button 
                             class="btn btn-info btn-sm" 
@@ -39,8 +41,8 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-if="tipocat=='nuevacategoria'" class="modal-title" id="exampleModalLabel">Crear nueva Categoría</h5>
-                        <h5 v-if="tipocat=='editarcategoria'" class="modal-title" id="exampleModalLabel">Actualizar Categoría</h5>
+                        <h5 v-if="tipocat=='nuevacategoria'" class="modal-title" id="exampleModalLabel">Crear nueva SubCategoría</h5>
+                        <h5 v-if="tipocat=='editarcategoria'" class="modal-title" id="exampleModalLabel">Actualizar SubCategoría</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -49,17 +51,26 @@
                         <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                             <thead>
                                 <tr>
-                                    <th class="all">Código Categoría</th>
-                                    <th class="desktop">Nombre Categoría</th>
-                                    <th class="desktop">Descripción Categoría</th>
+                                    <th class="all">Código Categoría asociada (*)</th>
+                                    <th class="desktop">Código SubCategoría (*)</th>
+                                    <th class="desktop">Nombre SubCategoría (*)</th>
+                                    <th class="desktop">Descripción SubCategoría</th>
                                     
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td ><input type="text" v-model="categoriavue.codigocat" maxlength="3" class="form-control form-control-sm w-s t-regular" :id="'codigocat'" name="codigocat"></td>
-                                    <td ><input type="text" v-model="categoriavue.nombrecat" maxlength="3" class="form-control form-control-sm w-d t-regular" :id="'nombrecat'" name="nombrecat"></td>
-                                    <td ><input type="text" v-model="categoriavue.descripcioncat" maxlength="3" class="form-control form-control-sm t-regular" :id="'descripcioncat'" name="descripcioncat"></td>
+                                    <td>
+                                        <select v-model="subcategoriavue.categoria_id" :disabled=disabled class="form-control form-control-sm t-regular w-d text-uppercase">
+                                            <option value="">------</option>
+                                            <option v-for="(item, index) in datamantenedor[2]" :key="index" :value="item.idcategoria">
+                                                {{ item.nombrecat }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td ><input type="text" v-model="subcategoriavue.codigosubcat" :disabled=disabled maxlength="3" class="form-control form-control-sm w-s t-regular" :id="'codigocat'" name="codigocat"></td>
+                                    <td ><input type="text" v-model="subcategoriavue.nombresubcat" maxlength="3" class="form-control form-control-sm t-regular" :id="'nombrecat'" name="nombrecat"></td>
+                                    <td ><input type="text" v-model="subcategoriavue.descripcionsubcat" maxlength="3" class="form-control form-control-sm t-regular" :id="'descripcioncat'" name="descripcioncat"></td>
                                     
                                 </tr>
                             </tbody>
@@ -68,7 +79,7 @@
                     <div class="modal-footer">
                         <p>(*) Datos obligatorios</p>
                         <button type="button" class="btn btn-primary" @click="guardararticulo(categoriavue)">
-                            Guardar Artículo
+                            Guardar SubCategoría
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         
@@ -99,7 +110,7 @@
                 marcas:'',
                 lamarca:{},
                 ultimamarca:'',
-                categoriavue: {idcategoria:'',codigocat:'', nombrecat:'', descripciocat:''},
+                subcategoriavue: {idsubcategoria:'', categoria_id:'',codigosubcat:'', nombresubcat:'', descripcionsubcat:''},
                 letras: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] ,
                 articuloimagen:'',
                 imagenart:'',
@@ -187,12 +198,12 @@
             },
             cargarcrear(){
                 this.tipocat = 'nuevacategoria';
-                this.categoriavue= {idcategoria:'',codigocat:'', nombrecat:'', descripciocat:''};
+                this.subcategoriavue= {idsubcategoria:'', categoria_id:'',codigosubcat:'', nombresubcat:'', descripcionsubcat:''};
                 this.disabled = false;
             },
             cargareditar(cate){
                 this.tipocat = 'editarcategoria';
-                this.categoriavue = _.cloneDeep(cate);
+                this.subcategoriavue = _.cloneDeep(cate);
                 this.disabled = true;
             },
         },

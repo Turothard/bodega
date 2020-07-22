@@ -454,6 +454,17 @@ class BodegaController extends Controller
                         guardarnotificacion(auth()->id(), 'FINALIZADO','FINALIZADO', 'inventarios',$inv,null);
                     }
                 break;
+                case 'ajustarinventario':
+                    $inventario = Inventario::find($request->detalle);
+                    $detalles = DetalleInventario::where("inventario_id", $inventario->id)->get();
+                   foreach ($detalles as $value) {
+                    $posicion = Posicione::where("idposicion", $value->posicion_id)->where("codigoart", $value->codigoart)->get()->first();
+                    $posicion->cantidadpos = $value->cantidadinv;
+                    $posicion->save();
+                    
+                   }
+                   return 0;
+                break;
                 default:
                     # code...
                     break;

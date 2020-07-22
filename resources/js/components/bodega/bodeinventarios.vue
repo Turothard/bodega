@@ -471,7 +471,10 @@
                             console.log(res.data);
                             this.newinventario =res.data[0];
                             setTimeout(function(){
-                                this.dt2.destroy();
+                                if(this.dt2!=null){
+                                    this.dt2.destroy();
+                                }
+                                
                                 this.dt2 = $('#newinventario').DataTable({
                                     "language": {
                                 "lengthMenu": "Mostrar _MENU_ filas por página",
@@ -675,6 +678,39 @@
                     console.log("Error", error.message);
                     }
                 });
+            }
+            ,
+            ajusteinventario(){
+                console.log(this.inventario.id);
+                if(confirm("¿Está seguro de realizar el ajuste de este Inventario?. Recordar que este proceso no puede ser revertido.")){
+                    
+                    axios.post('/bodega/setdatos', {tipo:'ajustarinventario',detalle:this.inventario.id}).then((res) =>{
+                        //this.newinventario = res.data;
+                        console.log(res.data);
+                        if(parseInt(res.data)==0){
+                            this.$toastr.s("Inventario ajustado a bodega con éxito");
+                            $(".close").click();
+                            setTimeout(function(){
+                            location.reload();
+                        }.bind(this), 1000);
+                        }else{
+                            this.$toastr.e("Inventario no ha podido ser ajustado, favor de contactarse con el desarrollador del sistema");
+                        }
+                    }).catch(function(error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log("Error", error.message);
+                        }
+                    });
+                }
             }
         },
     }

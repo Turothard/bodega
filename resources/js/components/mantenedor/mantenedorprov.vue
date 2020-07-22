@@ -56,11 +56,11 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-4">
-                                Rut <br>
+                                Rut (*) <br>
                                 <input type="text" v-model="proveedorvue.rutproveedor" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
                             </div>
                             <div class="col-4">
-                                Nombre <br>
+                                Nombre (*) <br>
                                 <input type="text" v-model="proveedorvue.nombreprov" class="form-control form-control-sm t-regular" :id="'nombreprov'" name="nombreprov">
                             </div>
                             <div class="col-4">

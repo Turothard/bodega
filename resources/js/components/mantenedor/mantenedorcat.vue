@@ -49,9 +49,9 @@
                         <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
                             <thead>
                                 <tr>
-                                    <th class="all">Código Categoría</th>
-                                    <th class="desktop">Nombre Categoría</th>
-                                    <th class="desktop">Descripción Categoría</th>
+                                    <th class="all">Código Categoría (*)</th>
+                                    <th class="desktop">Nombre Categoría (*)</th>
+                                    <th class="desktop">Descripción Categoría (*)</th>
                                     
                                 </tr>
                             </thead>
