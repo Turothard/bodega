@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Exports\InformeStockExport;
+use App\Exports\InformeStockCriticoExport;
 use Illuminate\Http\Request;
-
+use Maatwebsite\Excel\Facades\Excel;
 class InformesController extends Controller
 {
     /**
@@ -47,7 +48,26 @@ class InformesController extends Controller
     {
         //
     }
-
+    public function export(Request $request) 
+    {   
+        $filtros =$request->detalle;
+        switch ($request->tipo) {
+            case 'informesstock':
+                $name ='InformeStock'.date('Ymd_His').'.xlsx';
+                Excel::store(new InformeStockExport($filtros["bodega"],$filtros["estante"]), $name, 'informex');
+                return $name;
+                break;
+                case 'informesstockcritico':
+                    $name ='InformeStockCritico'.date('Ymd_His').'.xlsx';
+                    Excel::store(new InformeStockCriticoExport($filtros["bodega"],$filtros["estante"]), $name, 'informex');
+                    return $name;
+                    break;
+            default:
+                # code...
+                break;
+        }
+        
+    }
     /**
      * Show the form for editing the specified resource.
      *

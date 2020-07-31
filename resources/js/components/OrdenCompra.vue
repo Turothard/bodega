@@ -445,7 +445,8 @@
                                             <td>{{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}</td>
                                             <td>{{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}</td>
                                             <td>{{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}</td>
-                                            <td>{{item.cantidaddetoc - item.cantidadrecoc}}</td>
+                                            <td v-if="oc.estadooc=='RECEPCIONADO' || oc.estadooc=='FINALIZADO'">{{item.cantidaddetoc}}</td>
+                                            <td v-else>{{item.cantidaddetoc - item.cantidadrecoc}}</td>
                                             <td v-if="tipomodal=='recepcionaroc'">
                                                 <input type="number" minlength="0" class="form-control form-control-sm w-xs2" v-model="item.cantvuerec"
                                                 @focus="quitarcero(item)"

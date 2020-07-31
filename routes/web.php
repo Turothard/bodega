@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/pedidos/getdatos', 'PedidosController@getdatos')->name("pedidos.getdatos");
     Route::post('/pedidos/store', 'PedidosController@store')->name("pedidos.store");
     Route::get('/informes', 'InformesController@index')->name("informes");
+    Route::post('/informes/export', 'InformesController@export')->name("informes.export");
     Route::get('/mantenedores', 'MantenedoresController@index')->name("mantenedores");
     Route::post('/mantenedores/getdatos', 'MantenedoresController@getdatos')->name("mantenedores.getdatos");
     Route::post('/mantenedores/setdatos', 'MantenedoresController@setdatos')->name("mantenedores.setdatos");

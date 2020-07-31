@@ -9,6 +9,10 @@ class Posicione extends Model
     use SoftDeletes;
     protected $primaryKey = 'idposicion';
     protected $table = 'posiciones';
+    protected $casts = [
+        'cantidadpos'  =>  'integer',
+
+    ];
 
     public function estantes(){
         return $this->belongsTo("App\Estante",'estante_id', 'id');

@@ -67,6 +67,10 @@ return [
             'driver' => 'local',
             'root' => storage_path().'/documents/supportive',
         ],
+        'informex' => [
+            'driver' => 'local',
+            'root' => public_path().'/documents/informes',
+        ],
     ],
 
 ];
