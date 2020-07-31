@@ -168,6 +168,7 @@
                                                         <td>
                                                             <select class="form-control form-control-sm w-d1" name="tipodocumento" id="tipodocumento" v-model="sustentatorio.tipodocumento">
                                                                 <option value="">---------------</option>
+                                                                <option value="DOCUMENTO">DOCUMENTO</option>
                                                                 <option value="FACTURA">FACTURA</option>
                                                                 <option value="GUIA">GUÍA</option>
                                                             </select>
