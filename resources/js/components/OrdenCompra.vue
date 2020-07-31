@@ -1254,6 +1254,7 @@
                             })
                             .then(response => {
                                 console.log(response.data.message, 'success');
+                                this.$toastr.s("Documento Asociado a orden de compra");
                             })
                             .catch(function (error) {
                                 if (error.response) {
@@ -1271,10 +1272,10 @@
                             });
                         }
                         
-                        /*setTimeout(function() {
+                        setTimeout(function() {
                             $(".close").click();
-                            location.reload();
-                        }, 2000);  */                   
+                            
+                        }, 1000);                  
                     }).catch(function (error) {
                         if (error.response) {
                         // Request made and server responded
