@@ -43,7 +43,11 @@ class PedidosController extends Controller
         if($request->ajax()){
             switch ($request->tipo) {
                 case 'stockarticulo':
-                    $cant =Posicione::where("codigoart",$request->codigo)->sum("cantidadpos");
+                    $cant =Posicione::where("codigoart",$request->codigo)
+                    ->join("estantes", "estantes.id", "posiciones.estante_id")
+                    ->join("bodegas", "bodegas.idbodega","estantes.bodega_id")
+                    ->where("bodegas.tipobod", "Principal")
+                    ->sum("posiciones.cantidadpos");
                     
                     $cant2=Pedido::where('estadoped', 'INGRESADO')->leftJoin('detallepedidos', 'pedidos.id', '=', 'detallepedidos.pedido_id')->select('detallepedidos.cantidaddetped')->where('detallepedidos.codigoart','=',$request->codigo)->sum('cantidaddetped');
                     

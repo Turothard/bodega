@@ -216,7 +216,7 @@ class BodegaController extends Controller
                     $pos = Posicione::where("codigoart", $origen["codigoart"])
                         ->where("estante_id", $destino["estante_id"])
                         ->where("sectorpos",$destino["sector_id"])
-                        ->where("nivelpos", $destino["nivel_id"])->first();
+                        ->where("nivelpos", $destino["nivel_id"])->get()->first();
                     $fecha='';
                     $posicionori_id='';
                     $posiciondes_id='';

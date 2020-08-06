@@ -174,8 +174,8 @@
         created() {
             this.articulos = this.datapedido[4];
             //this.pedido.id= this.datapedido[9];
-            var cod =_.mapValues(this.datapedido[4], function(o) { return o.codigoart; });
-            var nom = _.mapValues(this.datapedido[4], function(o) { return o.nombreart; });
+            var cod =_.mapValues(this.datapedido[13], function(o) { return o.codigoart; });
+            var nom = _.mapValues(this.datapedido[13], function(o) { return o.nombreart; });
             this.codigos =Object.values(cod).concat(Object.values(nom));
             console.log('lele',this.articulos);
             this.$toastr.defaultPosition = "toast-top-left";
