@@ -1254,7 +1254,13 @@
                             })
                             .then(response => {
                                 console.log(response.data.message, 'success');
+                                this.sustentatorio={tipodocumento:'', descripciondoc:'', documento:''};
+                                this.filesust='';
+                                doc.documento='';
+                                this.showPreview1 = false;
+                                this.imagePreview1 = '';
                                 this.$toastr.s("Documento Asociado a orden de compra");
+                                 $(".close").click();
                             })
                             .catch(function (error) {
                                 if (error.response) {
@@ -1270,12 +1276,7 @@
                                 console.log('Error', error.message);
                                 }
                             });
-                        }
-                        
-                        setTimeout(function() {
-                            $(".close").click();
-                            
-                        }, 1000);                  
+                        }                  
                     }).catch(function (error) {
                         if (error.response) {
                         // Request made and server responded
