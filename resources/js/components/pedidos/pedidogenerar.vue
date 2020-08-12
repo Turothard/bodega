@@ -177,7 +177,9 @@
             var cod =_.mapValues(this.datapedido[13], function(o) { return o.codigoart; });
             var nom = _.mapValues(this.datapedido[13], function(o) { return o.nombreart; });
             this.codigos =Object.values(cod).concat(Object.values(nom));
-            console.log('lele',this.articulos);
+            console.log('lele',this.datapedido[13]);
+            console.log('lelo',nom);
+            console.log('leli',this.codigos);
             this.$toastr.defaultPosition = "toast-top-left";
         }
         ,methods: {
