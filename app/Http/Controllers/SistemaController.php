@@ -78,8 +78,7 @@ class SistemaController extends Controller
                     $arreglo[10]=PedidoPreestabledido::all();
                     $arreglo[11]=User::where("id",auth()->id())->value("department");
                     $arreglo[12]=PeriodoDevo::all();
-                    $arreglo[13]=Posicione::where("cantidadpos",">","0")->join("articulos", "articulos.codigoart", "posiciones.codigoart")
-                    ->select("articulos.*")->get()->sortbyDesc("articulos.nombreart");
+                    $arreglo[13]=Posicione::where("cantidadpos",">","0")->join("articulos", "articulos.codigoart", "posiciones.codigoart")->join("estantes", "estantes.id", "posiciones.estante_id")->join("bodegas", "estantes.bodega_id", "bodegas.idbodega")->where("bodegas.tipobod","Principal")->where("bodegas.tipobod","Principal")->select("articulos.codigoart","articulos.nombreart")->groupBy(["articulos.codigoart", "articulos.nombreart"])->get()->sortbyDesc("articulos.nombreart");
                     break;
                 case 'notificaciones':
                     $notis = NotificacionesUser::where("user_id",auth()->id())->join('notificaciones', 'notificaciones.id','=','notificacionesuser.notificacion_id')->select('notificacionesuser.id','notificacionesuser.notificacion_id','notificaciones.tipo','notificaciones.tabla','notificaciones.id_tabla','notificaciones.destino','notificaciones.grupo','notificaciones.userproceso_id','notificaciones.userobjetivo_id','notificaciones.grupoobjetivo','notificaciones.mensaje','notificacionesuser.estado')->where("notificacionesuser.estado","<>","LEIDA")->get();
