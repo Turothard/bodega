@@ -33,7 +33,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(item,index) in pedidos" :key="index">
+            <tr v-for="(item,index) in pedidos" :key="index"  v-bind:class="clasepedido(item.estadoped)">
               <td>{{ item.id }}</td>
               <td>{{ item.tipopedido }}</td>
               <td
@@ -75,18 +75,35 @@
               <td>{{ item.estadoped }}</td>
               <td>
                 <button
-                  class="btn btn-info btn-sm"
+                  class="btn btn-sm" style="background-color:#20964D;"
                   v-if="item.estadoped=='PENDIENTE' && ( user=='ADMIN' ||  user=='SUPERVISORES')"
                   @click="aceptarpedido(item,item.id)"
                 >
                   <img style="width:23px;heigth:23px;" src="css/img/aceptar.png" />
                 </button>
                 <button
-                  class="btn btn-success btn-sm"
-                  data-toggle="modal"
-                  data-target="#pedidomodal"
-                  @click="detallepedidos(item,item.id)"
+                  class="btn btn-danger btn-sm"
+                  v-if="(item.estadoped=='PENDIENTE' || item.estadoped=='INGRESADO') && ( user=='ADMIN' ||  user=='SUPERVISORES')"
+                  @click="cancelarpedido(item,item.id)"
                 >
+                  <img style="width:23px;heigth:23px;" src="css/img/cancelar.png" />
+                </button>
+                <button v-if="item.estadoped=='INGRESADO'" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
+                  <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                </button>
+                <button v-else-if="item.estadoped=='PENDIENTE'" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
+                  <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                </button>
+                <button v-else-if="item.estadoped=='PROCESADO'" class="btn btn-success btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
+                  <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                </button>
+                <button v-else-if="item.estadoped=='ENTREGADO'" class="btn btn-info btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
+                  <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                </button>
+                <button v-else-if="item.estadoped=='FINALIZADO'" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
+                  <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
+                </button>
+                <button v-else-if="item.estadoped=='CANCELADO'" class="btn btn-sm" style="background-color:#EA8512" data-toggle="modal" data-target="#pedidomodal" @click="detallepedidos(item,item.id)" >
                   <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
                 </button>
               </td>
@@ -277,6 +294,31 @@ export default {
   },
   mounted() {},
   methods: {
+    clasepedido(estado){
+      switch (estado) {
+        case 'PENDIENTE':
+          return 'pendiente';
+          break;
+        case 'INGRESADO':
+          return 'ingresado';
+          break;
+        case 'PROCESADO':
+          return 'procesado';
+          break;
+        case 'ENTREGADO':
+          return 'entregado';
+          break;
+        case 'FINALIZADO':
+          return 'finalizado';
+          break;
+        case 'CANCELADO':
+          return 'cancelado';
+          break;
+        default:
+        return 'default';
+          break;
+      }
+    },
     generarpedido() {
       this.componenteactual = "pedido_generar";
     },
@@ -361,6 +403,33 @@ export default {
           .post("/pedidos/store", { tipo: "aceptarpedido", id: id })
           .then(res => {
             ped.estadoped = "INGRESADO";
+          })
+          .catch(function(error) {
+            if (error.response) {
+              // Request made and server responded
+              console.log(error.response.data);
+              console.log(error.response.status);
+              console.log(error.response.headers);
+            } else if (error.request) {
+              // The request was made but no response was received
+              console.log(error.request);
+            } else {
+              // Something happened in setting up the request that triggered an Error
+              console.log("Error", error.message);
+            }
+          });
+      }
+    },
+    cancelarpedido(ped,id){
+      if (
+        confirm("¿Está seguro de cancelar este pedido?")
+      ) {
+        axios
+          .post("/pedidos/store", { tipo: "cancelarpedido", id: id })
+          .then(res => {
+            ped.estadoped = "CANCELADO";
+            this.$toastr.s("Pedido cancelado con éxito");
+            $(".close").click();
           })
           .catch(function(error) {
             if (error.response) {
@@ -495,3 +564,21 @@ export default {
   }
 };
 </script>
+<style >
+  #tablapedidos tr td{
+    background-color: #907C5F;
+    font-weight: 600;
+  }
+  #tablapedidos .finalizado td{
+    background-color: #416041;
+    font-weight: 600;
+  }
+  #tablapedidos .cancelado td{
+    background-color: #6B6B6B;
+    font-weight: 600;
+  }
+  #tablapedidos .ingresado td,#tablapedidos .pendiente td{
+    background-color: #49647D;
+    font-weight: 600;
+  }
+</style>

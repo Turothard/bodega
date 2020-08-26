@@ -55,6 +55,13 @@ if ( !function_exists('guardarnotificacion') )
 						}
 						break;
 					case 'ACTUALIZACION':
+						if($detalletipo=='CANCELADO'){							
+							$receptor = Colaboradore::find($modeltabla->receptor_id);
+							$not->grupoobjetivo="SUPERVISORES";
+							$not->userobjetivo_id = $modeltabla->user_id;
+							$userobjetivo = $modeltabla->user_id;
+							$not->mensaje="Pedido <strong>".$modeltabla->id."</strong> ha sido cancelado. <br />Cancelado Por:".$usuario->name."<br />";
+						}
 						if($modeltabla->estadoped=='PROCESADO'){
 							if($detalletipo=='PROCESADO'){
 								$not->grupoobjetivo="SUPERVISORES";

@@ -64,7 +64,7 @@ class PedidosController extends Controller
                 case 'detallepedido':
                     $ped = Pedido::find($request->id);
                     
-                    if($ped->estadoped=='PENDIENTE' || $ped->estadoped=='ANULADO'){
+                    if($ped->estadoped=='PENDIENTE' || $ped->estadoped=='CANCELADO'){
                         $detped=DetallePedido::where("pedido_id",$request->id)->get();
                         return $detped;
                         
@@ -143,6 +143,14 @@ class PedidosController extends Controller
                     $ped->autorizado_id =User::where("id",auth()->id())->value("rut");
                     $ped->estadoped='INGRESADO';
                     guardarnotificacion(auth()->id(), 'INGRESO','INGRESADO', 'pedidos',$ped,null);
+                    $ped->save();
+                    return;
+                    break;
+                case 'cancelarpedido':
+                    $ped = Pedido::find($request->id);
+                    $ped->autorizado_id =User::where("id",auth()->id())->value("rut");
+                    $ped->estadoped='CANCELADO';
+                    guardarnotificacion(auth()->id(), 'ACTUALIZACION','CANCELADO', 'pedidos',$ped,null);
                     $ped->save();
                     return;
                     break;
