@@ -110,7 +110,7 @@ class InformesController extends Controller
                     ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", "2020-06-01 00:00:00")
@@ -122,7 +122,7 @@ class InformesController extends Controller
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }
                 return $detalle;
                 break;
@@ -141,7 +141,7 @@ class InformesController extends Controller
                     ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
@@ -151,7 +151,7 @@ class InformesController extends Controller
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }
                 return $detalle;
                 break;
@@ -195,7 +195,7 @@ class InformesController extends Controller
                     ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
@@ -207,7 +207,7 @@ class InformesController extends Controller
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }
                 //return $detalle;
                 //return $request->arreglo;
@@ -231,7 +231,7 @@ class InformesController extends Controller
                     ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
@@ -241,7 +241,7 @@ class InformesController extends Controller
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->select("detallepedidos.pedido_id","detallepedposiciones.updated_at","detallepedposiciones.codigoart", 
                     "colaboradores.nombrescolab","colaboradores.apellidoscolab", "colaboradores.nombrecortocolab", "articulos.nombreart",
-                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->get()->sortby("detallepedposiciones.updated_at");
+                    "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }
                 $name ='InformeEntregaColaboradores'.date('Ymd_His').'.xlsx';
                 Excel::store(new InformeEntColExport($detalle, $filtros["nombres"]), $name, 'informex');
