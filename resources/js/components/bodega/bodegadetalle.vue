@@ -35,8 +35,8 @@
                             <th class="all">Estante</th>
                             <th class="all">Sector</th>
                             <th class="all">Nivel</th>
-                            <th class="all">Código</th>
-                            <th class="desktop">Nombre Art</th>
+                            <th class="desktop">Código</th>
+                            <th class="all">Nombre Art</th>
                             <th class="all">Cantidad</th>
                             <th class="desktop">St Crítico</th>
                             <th class="desktop">Ind Rotación</th>
