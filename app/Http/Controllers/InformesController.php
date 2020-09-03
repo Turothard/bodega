@@ -113,8 +113,8 @@ class InformesController extends Controller
                     "detallepedposiciones.cantidadproceso","detallepedposiciones.cantidaddevolucion")->orderBy('detallepedposiciones.updated_at', 'desc')->get();
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
-                    ->where("detallepedposiciones.updated_at", ">=", "2020-06-01 00:00:00")
-                    ->where("detallepedposiciones.updated_at", "<=", "2020-08-30 00:00:00")
+                    ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
                     ->where("detallepedposiciones.receptor_prod","<>","''")
                     ->whereNotNull("detallepedposiciones.receptor_prod")
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
