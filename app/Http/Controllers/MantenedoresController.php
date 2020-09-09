@@ -21,7 +21,7 @@ use App\Pedido;
 use App\DetallePedido;
 use App\Correlativo;
 use App\Posicione;
-
+use Illuminate\Support\Str;
 class MantenedoresController extends Controller
 {
     /**
@@ -103,13 +103,13 @@ class MantenedoresController extends Controller
                     $art->subcategoria_id = $artvue["subcategoria_id"];
                     
                     $art->proveedorart = $artvue["proveedorart"];
-                    $art->descripcionart = strtoupper($artvue["descripcionart"]);
+                    $art->descripcionart = Str::upper($artvue["descripcionart"]);
                     $art->color_id = $artvue["color_id"];
                     $col = Colore::find($artvue["color_id"]);
                     $uni = Unidade::find($artvue["unidad_id"]);
                     $art->unidad_id = $artvue["unidad_id"];
                     $art->marca_id = $artvue["marca_id"];
-                    $art->nombreart = strtoupper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
+                    $art->nombreart = Str::upper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
                     $art->stockcriticoart = $artvue["stockcriticoart"];
                     $art->indicerotacionart = $artvue["indicerotacionart"];
                     $art->yearart = $artvue["yearart"];
@@ -135,10 +135,10 @@ class MantenedoresController extends Controller
                 case 'editararticulo':
                     $artvue=$request->detalle;
                     $art = Articulo::find($artvue["codigoart"]);         
-                    $art->descripcionart = strtoupper($artvue["descripcionart"]);
+                    $art->descripcionart = Str::upper($artvue["descripcionart"]);
                     $col = Colore::find($art->color_id);
                     $uni = Unidade::find($art->unidad_id);
-                    $art->nombreart = strtoupper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
+                    $art->nombreart = Str::upper($artvue["nombreart"]." ".$col->nombrecol." ".$uni->codigounimed);
                     $art->stockcriticoart = $artvue["stockcriticoart"];
                     $art->indicerotacionart = $artvue["indicerotacionart"];
                     $art->yearart = $artvue["yearart"];

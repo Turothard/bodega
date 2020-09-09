@@ -20,7 +20,7 @@ use App\SubCategoria;
 use App\DocSustentatorio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Str;
 class OrdenCompraController extends Controller
 {
     /**
@@ -244,14 +244,14 @@ class OrdenCompraController extends Controller
                             $art->subcategoria_id = $det["subcategoria"];
                             
                             $art->proveedorart = $oc->proveedor_id;
-                            $art->descripcionart = strtoupper($detoc->descripcionart);
+                            $art->descripcionart = Str::upper($detoc->descripcionart);
                             $art->color_id = $detoc->color_id;
                             $col = Colore::find($detoc->color_id);
                             $uni = Unidade::find($detoc->unidad_id);
                             $art->codigoart = $detoc->marca_id.$subcat->codigosubcat.$correlativo.$col->idcolor.$uni->idunidad;
                             $art->unidad_id = $detoc->unidad_id;
                             $art->marca_id = $detoc->marca_id;
-                            $art->nombreart = strtoupper($detoc->articulodetoc." ".$col->nombrecol." ".$uni->codigounimed);
+                            $art->nombreart = Str::upper($detoc->articulodetoc." ".$col->nombrecol." ".$uni->codigounimed);
                             switch ($oc->categoria_id) {
                                 case '1':
                                     $art->stockcriticoart = '1';

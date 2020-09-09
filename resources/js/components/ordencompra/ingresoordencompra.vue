@@ -149,6 +149,7 @@
                                 <div class="col-3">
                                     <br>
                                    <button type="button" @click="agregararticulo()" class="btn btn-sm btn-primary">Agregar Artículo </button>
+                                   <button type="button" @click="resetarticulo()" class="btn btn-sm btn-primary">Limpiar</button>
                                 </div>
                                 <div class="col-12">
                                     Descripción Artículo
@@ -193,6 +194,7 @@
                                                 <button class="btn btn-danger btn-sm">
                                                     <img style="width:23px;heigth:23px;" src="css/img/delete.png" @click="eliminararticulo(item, index)" title="Eliminar artículo" />
                                                 </button>
+                                                
                                             </td>
                                         </tr>
                                     </tbody>
@@ -235,6 +237,7 @@
                 usuarios: [],
                 colaboradores: [],
                 areas: [],
+                flag:0,
                 articulo:[],
                 correlativoint:'00001',
                 allmarcas:null,
@@ -252,6 +255,7 @@
         computed: {
         // a computed getter
             codigoartvue: function () {
+                this.flag;
                 if(this.readonly){
                     return this.articulo[0].codigoart;
                 }
@@ -355,6 +359,19 @@
             
         },
         methods: {
+            resetarticulo(){
+                this.detoc={articulodetoc:'', descripcionart:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0};
+                this.$refs.articulodetoc.inputValue = '';
+                this.$refs.marcas.inputValue = '';
+                this.readonly= false;
+                $("#lamarca input").val('');
+                //this.$recompute("codigoartvue")
+                this.marcaaux='';
+                
+                this.flag++;
+                this.correlativoint='00001';
+                
+            },
             agregararticulo(){
                 
                 let cant = 0;
@@ -366,7 +383,8 @@
                 if(cant>0){
                     this.$toastr.w("Favor de ingresar datos obligatorios!!");
                     return;
-                }this.detoc.codigoart = this.codigoartvue;
+                }
+                this.detoc.codigoart = this.codigoartvue;
                 this.readonly= false;
                 
                 this.detoc.marca_id = this.newmarca(this.marcaaux.toString().toUpperCase(),1);
@@ -385,8 +403,6 @@
                 this.$refs.marcas.inputValue = '';
                 $("#lamarca input").val('');
                 
-                
-                
                 this.detoc={articulodetoc:'', descripcionart:'', codigoart:'', bodega_id:'',sector_id:'', colordetoc:'', color_id:'', marca_id:'', unidad_id:'', cantidaddetoc:0,montounitariodetoc:0, montototaldetoc:0};
                 this.marcaaux='';
                 let codcorrel = (parseInt(this.correlativoint)+1).toString();
@@ -403,16 +419,22 @@
                     this.readonly.false;
                     return;
                 }
+                
                 this.articulo=_.filter(this.dataordencompra[4], {'nombreart':this.detoc.articulodetoc.toString().toUpperCase()});
                 if(this.articulo.length==0){
                     this.readonly.false;
                     return;
                 }
+                
                 this.readonly = true;
                 this.detoc.color_id = this.articulo[0].color_id;
                 this.detoc.codigoart = this.articulo[0].codigoart;
                 this.detoc.descripcionart = this.articulo[0].descripcionart;
-                this.marcaaux= this.dataordencompra[12].find( items => items.admarca === this.articulo.marca_id ).nombremar;
+                console.log(this.detoc.articulodetoc.toString().toUpperCase());
+                console.log(this.articulo);
+                this.marcaaux= this.dataordencompra[12].find( items => items.idmarca === this.articulo[0].marca_id ).nombremar;
+                
+                console.log(this.marcaaux);
                 $("#lamarca input").val(this.marcaaux);
                 this.detoc.unidad_id = this.articulo[0].unidad_id;
                 
