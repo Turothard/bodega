@@ -101,7 +101,7 @@ class InformesController extends Controller
                     
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->where("detallepedposiciones.receptor_prod","<>","''")
                     ->whereNotNull("detallepedposiciones.receptor_prod")
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
@@ -114,7 +114,7 @@ class InformesController extends Controller
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->where("detallepedposiciones.receptor_prod","<>","''")
                     ->whereNotNull("detallepedposiciones.receptor_prod")
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
@@ -134,7 +134,7 @@ class InformesController extends Controller
                 if($filtros["subcategoria"]!=''){                    
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->join("articulos", "articulos.codigoart", "detallepedposiciones.codigoart")
@@ -145,7 +145,7 @@ class InformesController extends Controller
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
                     ->join("articulos", "articulos.codigoart", "detallepedposiciones.codigoart")
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
@@ -186,7 +186,7 @@ class InformesController extends Controller
                     
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->where("detallepedposiciones.receptor_prod","<>","''")
                     ->whereNotNull("detallepedposiciones.receptor_prod")
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
@@ -199,7 +199,7 @@ class InformesController extends Controller
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.codigoart", $articulox)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->where("detallepedposiciones.receptor_prod","<>","''")
                     ->whereNotNull("detallepedposiciones.receptor_prod")
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
@@ -223,7 +223,7 @@ class InformesController extends Controller
                 if($filtros["subcategoria"]!=''){                    
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
                     ->join("articulos", "articulos.codigoart", "detallepedposiciones.codigoart")
@@ -235,7 +235,7 @@ class InformesController extends Controller
                 }else{
                     $detalle = DetallePedPosicione::whereIN("detallepedposiciones.receptor_prod", $nombrex)
                     ->where("detallepedposiciones.updated_at", ">=", $filtros['fechai'])
-                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'])
+                    ->where("detallepedposiciones.updated_at", "<=", $filtros['fechaf'].' 23:59:59')
                     ->join("colaboradores", "colaboradores.rutcolaborador", "detallepedposiciones.receptor_prod")
                     ->join("articulos", "articulos.codigoart", "detallepedposiciones.codigoart")
                     ->join("detallepedidos", "detallepedidos.id", "detallepedposiciones.detallepedido_id")
