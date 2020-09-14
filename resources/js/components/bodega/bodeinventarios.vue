@@ -41,9 +41,8 @@
                         <td>{{item.id}}</td>
                         <td>{{item.tipoinv}}</td>
                         <td>{{item.bodega_id}}</td>
-                        <td>{{item.estante_id}}</td>
-                        <!--<td v-if="item.estante_id==null">------</td>
-                         <td v-else>{{ estantes.find( items => items.id === item.estante_id ).nroestante }}</td> -->
+                        <td v-if="item.estante_id!=null">{{ estantes.find( items => items.id === item.estante_id ).nroestante }}</td>
+                         <td v-else>--------</td>
                         <td>{{item.nombrecortocolab}}</td>
                         <td>{{item.cantidadbodtotal}}</td>
                         <td>{{item.cantidadinvtotal}}</td>
@@ -240,8 +239,8 @@
             estantefiltrado: function(){
                 if(this.inventario.bodega_id!=''){
                   
-                      let estantes = this.estantes;
-                    return _.filter(estantes, {'bodega_id':this.inventario.bodega_id});
+                      let estantex = this.estantes;
+                    return _.filter(estantex, {'bodega_id':this.inventario.bodega_id});
                               
                   
                 }else{
@@ -418,7 +417,19 @@
                             setTimeout(function(){
                                 console.log("resize");
                                 $("#tablainv").show();
-                                this.dt2.columns.adjust().draw();
+                                if(this.dt2 ==null){
+                                    this.$nextTick(function () {
+                                        this.dt2 = $('#newinventario').DataTable({
+                                            "scrollY":        "300px",
+                                            "scrollCollapse": true,
+                                            "paging":         false                 
+                                        });
+                                        this.cargando=false;
+                                    });
+                                }else{
+                                    this.dt2.columns.adjust().draw();
+                                }
+                                
                                 console.log("resize");
                             }.bind(this), 500);
                         }).catch(function(error) {
@@ -443,14 +454,7 @@
                             this.inventario = JSON.parse(sessionStorage.getItem("inventario"));
                             this.newinventario = JSON.parse(sessionStorage.getItem("newinventario"));
                             this.tipoinventario ='ingresar';
-                            /*this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false                 
-                                });
-                                this.cargando=false;
-                            });*/
+                            
                             //sessionStorage.clear();
                         }else{
                             this.inventario={id:'',bodega_id:'', tipoinv:'',estante_id:'', cantidadbodtotal: 0, cantidadinvtotal: 0,
