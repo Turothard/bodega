@@ -41,7 +41,7 @@
                         <td>{{item.id}}</td>
                         <td>{{item.tipoinv}}</td>
                         <td>{{item.bodega_id}}</td>
-                        <td v-if="item.estante_id!=null">{{ estantes.find( items => items.id === item.estante_id ) }}</td>
+                        <td v-if="item.estante_id!=null">{{ estantes.find( items => items.id === parseInt(item.estante_id) ).nroestante }}</td>
                          <td v-else>--------</td>
                         <td>{{item.nombrecortocolab}}</td>
                         <td>{{item.cantidadbodtotal}}</td>
