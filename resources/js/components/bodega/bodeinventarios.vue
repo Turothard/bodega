@@ -188,7 +188,7 @@
                 <div class="modal-footer">
                     
                     <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Guardar Avance</button>
-                    <button v-if="inventario.estadoinv=='FINALIZADO' && user=='ADMIN'" type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Actualizar Inventario</button>
+                    <button v-if="tipoinventario=='detalleajuste' && inventario.estadoinv=='FINALIZADO' && user=='ADMIN'" type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Actualizar Inventario</button>
                     <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="finalizarinventario()" v-show="newinventario.length>0">Finalizar Inventario</button>
                     <button v-if="tipoinventario=='detalleajuste' && user=='ADMIN'"  type="button" class="btn btn-primary" @click="ajusteinventario()" v-show="newinventario.length>0">Ajustar Inventario a bodega</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
