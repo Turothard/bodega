@@ -175,7 +175,7 @@ class BodegaController extends Controller
                         ->select( 'inventarios.id', 'inventarios.tipoinv', 'inventarios.bodega_id', 'inventarios.estante_id', 'inventarios.fechainv', 
                         'inventarios.userinv','colaboradores.nombrecortocolab', 'inventarios.fechainicioinv', 'inventarios.fechafininv', 
                         'inventarios.cantidadbodtotal', 'inventarios.cantidadinvtotal', 'inventarios.cantidaddiftotal', 'inventarios.observacioninv', 
-                        'inventarios.estadoinv', 'inventarios.created_at', 'inventarios.updated_at', 'inventarios.deleted_at')->orderBy("inventario.created_at","DESC")->get();
+                        'inventarios.estadoinv', 'inventarios.created_at', 'inventarios.updated_at', 'inventarios.deleted_at')->orderBy("inventarios.created_at","DESC")->get();
                         $inventario = Inventario::where("estadoinv","PROCESO")->first();
                         if($inventario!=null){
                             $arreglo[1] = $inventario;
