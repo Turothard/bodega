@@ -18,7 +18,7 @@
                         <th class="desktop">Cargo</th>
                         <th class="all">Fecha Ingreso</th>
                         <th class="all">Fecha Salida</th>
-                        <th class="all">Estado</th>
+                        <th class="all">Activo</th>
                         <th class="all">Funciones</th>
                     </tr>
                 </thead>
@@ -43,9 +43,7 @@
                             data-target="#configuracioncolabmodal">
                                 <img style="width:23px;heigth:23px;" src="css/img/editar.png"/>
                             </button>
-                            <button class="btn btn-danger btn-sm">
-                                <img style="width:23px;heigth:23px;" src="css/img/delete.png"/>
-                            </button>
+
                         </td>
                     </tr>
                 </tbody>
@@ -55,41 +53,68 @@
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-if="tipoprov=='nuevocolaborador'" class="modal-title" id="exampleModalLabel">Crear nuevo colaborador</h5>
-                        <h5 v-if="tipoprov=='editarcolaborador'" class="modal-title" id="exampleModalLabel">Actualizar colaborador</h5>
+                        <h5 v-if="tipocol=='nuevocolaborador'" class="modal-title" id="exampleModalLabel">Crear nuevo colaborador</h5>
+                        <h5 v-if="tipocol=='editarcolaborador'" class="modal-title" id="exampleModalLabel">Actualizar colaborador</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-2">
                                 Rut (*) <br>
-                                <input type="text" v-model="colaboradorvue.rutcolaborador" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
+                                <input type="text" v-model="colaboradorvue.rutcolaborador" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutcolaborador'" name="rutcolaborador">
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 Nombre (*) <br>
-                                <input type="text" v-model="colaboradorvue.nombreprov" class="form-control form-control-sm t-regular" :id="'nombreprov'" name="nombreprov">
+                                <input type="text" v-model="colaboradorvue.nombrescolab" class="form-control form-control-sm t-regular" :id="'nombrescolab'" name="nombrescolab">
+                            </div>
+                            <div class="col-3">
+                                Apellido (*) <br>
+                                <input type="text" v-model="colaboradorvue.apellidoscolab" class="form-control form-control-sm t-regular" :id="'apellidoscolab'" name="apellidoscolab">
                             </div>
                             <div class="col-4">
-                                Giro <br>
-                                <input type="text" v-model="colaboradorvue.giroprov" class="form-control form-control-sm t-regular" :id="'giroprov'" name="giroprov">
+                                Nombre Corto (*)<br>
+                                <input type="text" v-model="colaboradorvue.nombrecortocolab" class="form-control form-control-sm t-regular" :id="'nombrecortocolab'" name="nombrecortocolab">
                             </div>
                             <div class="col-3">
-                                Comuna<br>
-                                <input type="text" v-model="colaboradorvue.comunaprov" class="form-control form-control-sm w-d t-regular" :id="'comunaprov'" name="comunaprov">
+                                Departamento (*) <br>
+                                <select name="deptocolab" class="form-control form-control-sm t-regular" id="deptocolab" v-model="colaboradorvue.deptocolab">
+                                    <option value="">-----</option>
+                                    <option value="TRABAJADORES">TRABAJADORES</option>
+                                    <option value="SUPERVISION">SUPERVISIÓN</option>
+                                    <option value="CAPATAZ">CAPATAZ</option>
+                                    <option value="BODEGA">BODEGA</option>
+                                    <option value="ADMINISTRACION">ADMINISTRACIÓN</option>
+                                </select>
                             </div>
                             <div class="col-3">
-                                Dirección <br>
-                                <input type="text" v-model="colaboradorvue.direccionprov" class="form-control form-control-sm t-regular" :id="'comunaprov'" name="comunaprov">
+                                Sector (*) <br>
+                                <select name="sectorcolab" class="form-control form-control-sm t-regular" id="sectorcolab" v-model="colaboradorvue.sectorcolab">
+                                    <option value="">------</option>
+                                    <option value="RDA">RDA</option>
+                                    <option value="ZAO">ZAO</option>
+                                    <option value="ADM">ADM</option>
+                                </select>
+                            </div>
+                            <div class="col-5">
+                                Cargo (*) <br>
+                                <input type="text" v-model="colaboradorvue.cargocolab"  class="form-control form-control-sm t-regular" :id="'cargocolab'" name="cargocolab">
                             </div>
                             <div class="col-3">
-                                Teléfono <br>
-                                <input type="text" v-model="colaboradorvue.telefonoprov" class="form-control form-control-sm w-d t-regular" :id="'telefonoprov'" name="telefonoprov">
+                                Fecha Ingreso (*) <br>
+                                <input type="date" v-model="colaboradorvue.fechaingresocolab" class="form-control form-control-sm t-regular" :id="'girocol'" name="girocol">
                             </div>
                             <div class="col-3">
-                                Correo <br>
-                                <input type="email" v-model="colaboradorvue.correoprov"  class="form-control form-control-sm w-l t-regular" :id="'correoprov'" name="correoprov">
+                                Fecha Salida <br>
+                                <input type="date" v-model="colaboradorvue.fechasalidacolab" class="form-control form-control-sm t-regular" :id="'girocol'" name="girocol">
+                            </div>
+                            <div class="col-3">
+                                Activo<br>
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="presshowflag" name="example1" v-model="colaboradorvue.estadocolab">
+                                    <label class="custom-control-label" for="presshowflag"></label>
+                                </div>
                             </div>
                         </div>          
                     </div>
@@ -118,8 +143,9 @@
                 preestablecidovue:null,
                 cargando:true,
                 disabled:false,
-                tipoprov:'',
-                colaboradorvue: {rutcolaborador:'',nombreprov:'', codigoprov:'', giroprov:'', comunaprov:'', direccionprov:'', telefonoprov:'', correoprov:''},
+                tipocol:'',
+                colaboradorvue: {rutcolaborador:'',nombrescolab:'', apellidoscolab:'', nombrecortocolab:'', deptocolab:''
+                , sectorcolab:'', cargocolab:'', fechaingresocolab:'', fechasalidacolab:'',estadocolab:true},
                 dt:null,
 
             }
@@ -164,15 +190,89 @@
                 return check;
             },
             cargarcrear(){
-                this.tipoprov = 'nuevocolaborador';
-                this.colaboradorvue= {rutcolaborador:'',nombreprov:'', codigoprov:'', giroprov:'', comunaprov:'', direccionprov:'', telefonoprov:'', correoprov:''};
+                this.tipocol = 'nuevocolaborador';
+                this.colaboradorvue= {rutcolaborador:'',nombrescolab:'', apellidoscolab:'', nombrecortocolab:'', deptocolab:''
+                , sectorcolab:'', cargocolab:'', fechaingresocolab:'', fechasalidacolab:'',estadocolab:true};
                 this.disabled = false;
             },
-            cargareditar(prov){
-                this.tipoprov = 'editarcolaborador';
-                this.colaboradorvue = _.cloneDeep(prov);
+            cargareditar(col){
+                this.tipocol = 'editarcolaborador';
+                this.colaboradorvue = _.cloneDeep(col);
                 this.disabled = true;
             },
+            guardarcolaborador(col){
+                //console.log(Fn.validaRut(col.rutcolaborador));
+                if(!Fn.validaRut(col.rutcolaborador)){
+                    this.$toastr.w("Rut invalido, favor revisar");
+                    return;
+                }
+                if(col.rutcolaborador=='' || col.nombrescolab=='' || col.apellidoscolab=='' || col.nombrecortocolab=='' || col.deptocolab=='' || sectorcolab=='' || col.cargocolab=='' || col.fechaingresocolab==''){
+                    this.$toastr.w("Faltan datos obligatorios por ingresar");
+                    return;
+                }
+                
+                console.log(col);
+                if(confirm("¿Está seguro de ingresar este nuevo colaborador?")){
+                    axios.post('/configuraciones/setdatos', {tipo:this.tipocol,detalle:col})
+                        .then((res) =>{
+                        let resp = res.data;
+                        console.log(res.data);
+                        if(parseInt(resp)==1){
+                            this.$toastr.w("Rut ingresado ya esta asociado a un colaborador, favor revisar");
+                            return;
+                        }
+                        if(parseInt(resp)==2){
+                            this.$toastr.w("Nombre Corto ingresado ya esta asociado a un colaborador, favor revisar");
+                            return;
+                        }
+                        if(parseInt(resp)==0){
+                            if(this.tipocol=='nuevocolaborador'){
+                                this.$toastr.s("Colaborador ingresado con éxito");
+                            
+                            }else{
+                                this.$toastr.s("Colaborador actualizado con éxito");
+                            
+                            }
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);
+                        
+                        $(".close").click();
+                        }
+                    }).catch(function (error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                        }
+                    });
+                }
+            }
         },
     }
+    var Fn = {
+	// Valida el rut con su cadena completa "XXXXXXXX-X"
+	validaRut : function (rutCompleto) {
+		if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test( rutCompleto ))
+			return false;
+		var tmp 	= rutCompleto.split('-');
+		var digv	= tmp[1]; 
+		var rut 	= tmp[0];
+		if ( digv == 'K' ) digv = 'k' ;
+		return (Fn.dv(rut) == digv );
+	},
+	dv : function(T){
+		var M=0,S=1;
+		for(;T;T=Math.floor(T/10))
+			S=(S+T%10*(9-M++%6))%11;
+		return S?S-1:'k';
+	}
+}
 </script>

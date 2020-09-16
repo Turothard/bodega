@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/mantenedores/getdatos', 'MantenedoresController@getdatos')->name("mantenedores.getdatos");
     Route::post('/mantenedores/setdatos', 'MantenedoresController@setdatos')->name("mantenedores.setdatos");
     Route::get('/configuraciones', 'ConfiguracionController@index')->name("configuraciones");
+    Route::post('/configuraciones/setdatos', 'ConfiguracionController@setdatos')->name("configuraciones.setdatos");
     Route::post('/sistema/getdatos', 'SistemaController@getdatos')->name("sistema.getdatos");
     Route::post('/sistema/setdatos', 'SistemaController@setdatos')->name("sistema.setdatos");
     Route::post('/sistema/uploadimage', 'SistemaController@uploadimage')->name("sistema.uploadimage");
