@@ -306,7 +306,7 @@
                             $("#tablacargando").hide();
                             $("#tablainv").show();
                         });
-                    }.bind(this), 500);
+                    }.bind(this), 1000);
                 }else{
                     this.cargando=false;
                 }
@@ -335,7 +335,7 @@
                             $("#tablacargando").hide();
                             $("#tablainv").show();
                         });
-                        }.bind(this), 500);
+                        }.bind(this), 1000);
                     this.flaginventario = true;
                 }else{
                     if (sessionStorage.getItem("inventario")) {
@@ -359,7 +359,7 @@
                             $("#tablacargando").hide();
                             $("#tablainv").show();
                         });
-                        }.bind(this), 500);
+                        }.bind(this), 1000);
                         //sessionStorage.clear();
                     }
                 }
