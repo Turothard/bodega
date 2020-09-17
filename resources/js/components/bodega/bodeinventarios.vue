@@ -283,7 +283,8 @@
             this.user = this.databodega[11];
             //this.posiciones = this.databodega[10];
             this.estantes = this.databodega[9];
-            
+            $("#tablacargando").show();
+                $("#tablainv").hide();
             console.log('Component created.');
             axios.post('/bodega/getdatos', {tipo:'inventarios'}).then((res) =>{
                 console.log(res.data);
@@ -291,28 +292,20 @@
                 if(this.detalleinventarios.length>0){
                     console.log(this.detalleinventarios);
                 // this.cargando=false;
-                setTimeout(function(){
-                    this.$nextTick(function () {
+                    setTimeout(function(){
+                        this.$nextTick(function () {
                         
-                        this.dt = $('#tablamovimientos').DataTable({
-                            "language": {
-                                "lengthMenu": "Mostrar _MENU_ filas por página",
-                                "zeroRecords": "Ningún resultado según criterio",
-                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                "infoEmpty": "No se encontraron resultados",
-                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                "search":         "Buscar:",
-                                "paginate": {
-                                    "first":      "Primero",
-                                    "last":       "Último",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            },                        
+                            this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
+                                })
+                            this.cargando=false;
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                         });
-                        this.cargando=false;
-                        
-                    });
                     }.bind(this), 500);
                 }else{
                     this.cargando=false;
@@ -328,28 +321,21 @@
                     }
                     sessionStorage.setItem("inventario",JSON.stringify(this.inventario));
                     sessionStorage.setItem("newinventario",JSON.stringify(this.newinventario));
-                    this.$nextTick(function () {              
-                        this.dt2 = $('#newinventario').DataTable({
-                            "language": {
-                                "lengthMenu": "Mostrar _MENU_ filas por página",
-                                "zeroRecords": "Ningún resultado según criterio",
-                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                "infoEmpty": "No se encontraron resultados",
-                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                "search":         "Buscar:",
-                                "paginate": {
-                                    "first":      "Primero",
-                                    "last":       "Último",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            }, 
-                            "scrollY":        "250px",
-                            "scrollCollapse": true,
-                            "paging":         false                 
+                   setTimeout(function(){
+                        this.$nextTick(function () {
+                        
+                            this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
+                                })
+                            this.cargando=false;
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                         });
-                        this.cargando=false;
-                    });
+                        }.bind(this), 500);
                     this.flaginventario = true;
                 }else{
                     if (sessionStorage.getItem("inventario")) {
@@ -359,21 +345,21 @@
                         this.newinventario = JSON.parse(sessionStorage.getItem("newinventario"));
                         this.tipoinventario ='ingresar';
                         this.flaginventario = true;
+                        setTimeout(function(){
                         this.$nextTick(function () {
-                            this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
+                        
+                            this.dt2 = $('#newinventario').DataTable({
                                     "scrollY":        "300px",
                                     "scrollCollapse": true,
                                     "paging":         false,
                                     "searching": false,
                                     "pageLength": 50000         
-                                });
-                                
-                            });
+                                })
+                            this.cargando=false;
                             $("#tablacargando").hide();
                             $("#tablainv").show();
-                            this.cargando=false;
                         });
+                        }.bind(this), 500);
                         //sessionStorage.clear();
                     }
                 }
@@ -426,18 +412,21 @@
                             if(this.dt2!=null){
                                 this.dt2.destroy();
                             }
-                            this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                });
+                             setTimeout(function(){
+                                this.$nextTick(function () {
                                 
-                            });
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
+                                    this.dt2 = $('#newinventario').DataTable({
+                                            "scrollY":        "300px",
+                                            "scrollCollapse": true,
+                                            "paging":         false,
+                                            "searching": false,
+                                            "pageLength": 50000         
+                                        })
+                                    this.cargando=false;
+                                    $("#tablacargando").hide();
+                                    $("#tablainv").show();
+                                });
+                            }.bind(this), 500);
 
                         }).catch(function(error) {
                             if (error.response) {
@@ -473,18 +462,19 @@
                                 this.dt2.destroy();
                             }
                             setTimeout(function(){
-                            this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                });
+                                this.$nextTick(function () {
                                 
-                            });
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
+                                    this.dt2 = $('#newinventario').DataTable({
+                                            "scrollY":        "300px",
+                                            "scrollCollapse": true,
+                                            "paging":         false,
+                                            "searching": false,
+                                            "pageLength": 50000         
+                                        })
+                                    this.cargando=false;
+                                    $("#tablacargando").hide();
+                                    $("#tablainv").show();
+                                });
                             }.bind(this), 500);
                              
                         }
@@ -497,18 +487,21 @@
                             if(this.dt2!=null){
                                 this.dt2.destroy();
                             }
-                            this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                });
+                            setTimeout(function(){
+                                this.$nextTick(function () {
                                 
-                            });
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
+                                    this.dt2 = $('#newinventario').DataTable({
+                                            "scrollY":        "300px",
+                                            "scrollCollapse": true,
+                                            "paging":         false,
+                                            "searching": false,
+                                            "pageLength": 50000         
+                                        })
+                                    this.cargando=false;
+                                    $("#tablacargando").hide();
+                                    $("#tablainv").show();
+                                });
+                            }.bind(this), 500);
                         }).catch(function(error) {
                             if (error.response) {
                             // Request made and server responded
@@ -595,18 +588,21 @@
                             if(this.dt2!=null){
                                 this.dt2.destroy();
                             }
-                            this.$nextTick(function () {
-                                this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                });
+                            setTimeout(function(){
+                                this.$nextTick(function () {
                                 
-                            });
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
+                                    this.dt2 = $('#newinventario').DataTable({
+                                            "scrollY":        "300px",
+                                            "scrollCollapse": true,
+                                            "paging":         false,
+                                            "searching": false,
+                                            "pageLength": 50000         
+                                        })
+                                    this.cargando=false;
+                                    $("#tablacargando").hide();
+                                    $("#tablainv").show();
+                                });
+                            }.bind(this), 500);
                         }else{
                             this.$toastr.e("Ya existe un inventario en proceso, para poder generar un nuevo pedido debe finalizar el que se encuentra en proceso");
                         }
