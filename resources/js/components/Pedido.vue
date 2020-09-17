@@ -243,7 +243,7 @@ export default {
         this.sectores = this.datapedido[5];
         this.areas = this.datapedido[6];
         this.ubicaciones = this.datapedido[7];
-
+  console.log(this.colaboradores);
         if (this.datapedido[9] != null) {
           this.pedido.id = parseInt(this.datapedido[9]) + 1;
         }

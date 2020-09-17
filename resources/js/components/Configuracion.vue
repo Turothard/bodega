@@ -50,7 +50,7 @@
             axios.post('/sistema/getdatos', {tipo:'Mantenedores'}).then((res) =>{
                 this.dataconfiguracion = res.data;
                 this.usuarios = this.dataconfiguracion[0];
-                this.colaboradores = this.dataconfiguracion[1];
+                this.colaboradores = this.dataconfiguracion[14];
                 this.sectores = this.dataconfiguracion[5];
                 this.areas = this.dataconfiguracion[6];
                 this.ubicaciones = this.dataconfiguracion[7];

@@ -339,20 +339,15 @@
                                         <tbody>
                                             <tr>
                                                 <td>
-                                                    <select class="form-control form-control-sm upcase t-regular w-xl" name="ingarticulo" id="" v-model="newingreso.id" @change="cambioart()">
-                                                        <option value="">-----------</option>
-                                                        <option v-for="(item,index) in detordencompra" :key="index" :value="item.id">
-                                                            <label v-if="item.codigoart==null">
-                                                                {{item.articulodetoc}}
-                                                                {{dataordencompra[12].find( items => items.idmarca === item.marca_id ).nombremar}}
-                                                                {{dataordencompra[10].find( items => items.idcolor === item.color_id ).nombrecol }}
-                                                                {{dataordencompra[11].find( items => items.idunidad === item.unidad_id).descripcionunimed }}
-                                                            </label>
-                                                            <label v-else>
-                                                                {{item.articulodetoc}}
-                                                            </label>
-                                                        </option>
-                                                    </select>
+            
+                                                    <vue-bootstrap-typeahead 
+                                                        v-model="newingreso.id"
+                                                        :inputClass="'upcase form-control form-control-sm'"
+                                                        :minMatchingChars="4"
+                                                        @hit="cambioart()"
+                                                        ref="articulosdet"
+                                                        :data="articulosdet">
+                                                    </vue-bootstrap-typeahead>
                                                 </td>
                                                 <td v-if="newingreso.codigoart!=null">{{newingreso.codigoart}}</td>
                                                 <td v-else>
@@ -696,6 +691,8 @@
                 tipomodal: '',
                 proveedores: [],
                 docelegido:'',
+                articulosdet:[],
+                articulosdocdet:[],
                 documentosoc:'',
                 terminado:0,
                 cantidaddetdocs:0,
@@ -822,8 +819,12 @@
                 return data;
             },
             cambioart(){
+                console.log(this.articulosdocdet);
+                
                 if(this.newingreso.id!=''){
-                    let art =this.detordencompra.find( items => items.id === this.newingreso.id );
+                    this.newingreso.id = this.articulosdocdet.find( items => items.codigo === this.newingreso.id ).id;
+                    console.log(this.newingreso.id);
+                    let art =this.detordencompra.find( items => parseInt(items.id) === parseInt(this.newingreso.id) );
                     this.newingreso.codigoart = art.codigoart;
                     this.newingreso.nrooc = art.nrooc;
                     this.newingreso.detoc_id = art.detoc_id;
@@ -846,7 +847,21 @@
             },
             cambiodoc(){
                 this.detordencompra= _.filter(this.detoccompras, {'doc_id':this.docelegido});
-            
+                this.articulosdet=[];
+                this.articulosdocdet=[];
+                console.log(this.detoccompras);
+                this.detordencompra.forEach(articulo => {
+                    if(articulo.cantidaddococ>articulo.cantidadingoc){
+                        if(articulo.codigoart!=null){
+                            this.articulosdet.push(this.dataordencompra[4].find( items => items.codigoart === articulo.codigoart).nombreart);
+                            this.articulosdocdet.push({id: articulo.id,codigo:this.dataordencompra[4].find( items => items.codigoart === articulo.codigoart).nombreart});
+                        }else{
+                            this.articulosdet.push(articulo.articulodetoc+" "+this.dataordencompra[12].find( items => items.idmarca === articulo.marca_id ).nombremar+" "+this.dataordencompra[10].find( items => items.idcolor === articulo.color_id ).nombrecol+" "+this.dataordencompra[11].find( items => items.idunidad === articulo.unidad_id).descripcionunimed);
+                            this.articulosdocdet.push({id: articulo.id,codigo:articulo.articulodetoc+" "+this.dataordencompra[12].find( items => items.idmarca === articulo.marca_id ).nombremar+" "+this.dataordencompra[10].find( items => items.idcolor === articulo.color_id ).nombrecol+" "+this.dataordencompra[11].find( items => items.idunidad === articulo.unidad_id).descripcionunimed});
+                        }
+                    }
+                    
+                });
             },
             guardaringreso(){
                 if (confirm("¿Está seguro de ingresar estos artículos a bodega?")) {

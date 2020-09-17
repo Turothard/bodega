@@ -143,6 +143,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <br>
                     <div id="tablainv" style="display:none">
                         <table id="newinventario" class="table table-striped display table-sm table-bordered table-dark dt-responsive w-100">
                             <thead>
@@ -183,6 +184,13 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                    <div id="tablacargando">
+                        <div class="d-flex justify-content-center">
+                        <div class="spinner-border" style="width: 4rem; height: 4rem;" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -283,6 +291,7 @@
                 if(this.detalleinventarios.length>0){
                     console.log(this.detalleinventarios);
                 // this.cargando=false;
+                setTimeout(function(){
                     this.$nextTick(function () {
                         
                         this.dt = $('#tablamovimientos').DataTable({
@@ -302,7 +311,9 @@
                             },                        
                         });
                         this.cargando=false;
-                    });  
+                        
+                    });
+                    }.bind(this), 500);
                 }else{
                     this.cargando=false;
                 }
@@ -349,25 +360,18 @@
                         this.tipoinventario ='ingresar';
                         this.flaginventario = true;
                         this.$nextTick(function () {
-                            this.dt2 = $('#newinventario').DataTable({
-                                "language": {
-                                "lengthMenu": "Mostrar _MENU_ filas por página",
-                                "zeroRecords": "Ningún resultado según criterio",
-                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                "infoEmpty": "No se encontraron resultados",
-                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                "search":         "Buscar:",
-                                "paginate": {
-                                    "first":      "Primero",
-                                    "last":       "Último",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            }, 
-                                "scrollY":        "250px",
-                                "scrollCollapse": true,
-                                "paging":         false                 
+                            this.$nextTick(function () {
+                                this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
+                                });
+                                
                             });
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                             this.cargando=false;
                         });
                         //sessionStorage.clear();
@@ -408,30 +412,33 @@
             },
             tableresp(tipo,inv){
                 this.tipoinventario=tipo;
+                console.log(this.dt2);
+                $("#tablacargando").show();
+                $("#tablainv").hide();
+                
                 switch (tipo) {
                     case 'detalle':
                         this.inventario = inv;
                         axios.post('/bodega/getdatos', {tipo:'inventarios',detalle:inv.id}).then((res) =>{
                             console.log(res.data);
                             this.newinventario =res.data[0];
-                            setTimeout(function(){
-                                console.log("resize");
-                                $("#tablainv").show();
-                                if(this.dt2 ==null){
-                                    this.$nextTick(function () {
-                                        this.dt2 = $('#newinventario').DataTable({
-                                            "scrollY":        "300px",
-                                            "scrollCollapse": true,
-                                            "paging":         false                 
-                                        });
-                                        this.cargando=false;
-                                    });
-                                }else{
-                                    this.dt2.columns.adjust().draw();
-                                }
+                           
+                            if(this.dt2!=null){
+                                this.dt2.destroy();
+                            }
+                            this.$nextTick(function () {
+                                this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
+                                });
                                 
-                                console.log("resize");
-                            }.bind(this), 500);
+                            });
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
+
                         }).catch(function(error) {
                             if (error.response) {
                             // Request made and server responded
@@ -462,12 +469,24 @@
                         this.newinventario=[];
                         }
                         if(this.newinventario.length>0){
+                            if(this.dt2!=null){
+                                this.dt2.destroy();
+                            }
                             setTimeout(function(){
-                                console.log("resize");
-                                $("#tablainv").show();
-                                this.dt2.columns.adjust().draw();
-                                console.log("resize");
+                            this.$nextTick(function () {
+                                this.dt2 = $('#newinventario').DataTable({
+                                    "scrollY":        "300px",
+                                    "scrollCollapse": true,
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
+                                });
+                                
+                            });
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                             }.bind(this), 500);
+                             
                         }
                         break;
                     case 'detalleajuste':
@@ -475,33 +494,21 @@
                         axios.post('/bodega/getdatos', {tipo:'inventariosajuste',detalle:inv.id}).then((res) =>{
                             console.log(res.data);
                             this.newinventario =res.data[0];
-                            setTimeout(function(){
-                                if(this.dt2!=null){
-                                    this.dt2.destroy();
-                                }
-                                
+                            if(this.dt2!=null){
+                                this.dt2.destroy();
+                            }
+                            this.$nextTick(function () {
                                 this.dt2 = $('#newinventario').DataTable({
-                                    "language": {
-                                "lengthMenu": "Mostrar _MENU_ filas por página",
-                                "zeroRecords": "Ningún resultado según criterio",
-                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                "infoEmpty": "No se encontraron resultados",
-                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                "search":         "Buscar:",
-                                "paginate": {
-                                    "first":      "Primero",
-                                    "last":       "Último",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            }, 
-                                    "scrollY": "250px",
+                                    "scrollY":        "300px",
                                     "scrollCollapse": true,
-                                    "paging": false
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
                                 });
-                                $("#tablainv").show();
-                                this.dt2.columns.adjust().draw();
-                            }.bind(this), 1000);
+                                
+                            });
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                         }).catch(function(error) {
                             if (error.response) {
                             // Request made and server responded
@@ -585,30 +592,21 @@
                             this.$toastr.s("Inventario Generado con éxito");
                             this.flaginventario = true;
                         // this.cargando=false;
+                            if(this.dt2!=null){
+                                this.dt2.destroy();
+                            }
                             this.$nextTick(function () {
-                                
                                 this.dt2 = $('#newinventario').DataTable({
-                                    "language": {
-                                "lengthMenu": "Mostrar _MENU_ filas por página",
-                                "zeroRecords": "Ningún resultado según criterio",
-                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
-                                "infoEmpty": "No se encontraron resultados",
-                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
-                                "search":         "Buscar:",
-                                "paginate": {
-                                    "first":      "Primero",
-                                    "last":       "Último",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            }, 
-                                    "scrollY": "250px",
+                                    "scrollY":        "300px",
                                     "scrollCollapse": true,
-                                    "paging": false
+                                    "paging":         false,
+                                    "searching": false,
+                                    "pageLength": 50000         
                                 });
-                                $("#tablainv").show();
-                                this.dt2.columns.adjust().draw();
-                            });  
+                                
+                            });
+                            $("#tablacargando").hide();
+                            $("#tablainv").show();
                         }else{
                             this.$toastr.e("Ya existe un inventario en proceso, para poder generar un nuevo pedido debe finalizar el que se encuentra en proceso");
                         }
