@@ -292,21 +292,7 @@
                 if(this.detalleinventarios.length>0){
                     console.log(this.detalleinventarios);
                 // this.cargando=false;
-                    setTimeout(function(){
-                        this.$nextTick(function () {
-                        
-                            this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                })
-                            this.cargando=false;
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
-                        });
-                    }.bind(this), 1000);
+                    this.cargando=false;
                 }else{
                     this.cargando=false;
                 }
@@ -321,21 +307,7 @@
                     }
                     sessionStorage.setItem("inventario",JSON.stringify(this.inventario));
                     sessionStorage.setItem("newinventario",JSON.stringify(this.newinventario));
-                   setTimeout(function(){
-                        this.$nextTick(function () {
-                        
-                            this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                })
-                            this.cargando=false;
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
-                        });
-                        }.bind(this), 1000);
+                    this.cargando=false;
                     this.flaginventario = true;
                 }else{
                     if (sessionStorage.getItem("inventario")) {
@@ -345,21 +317,7 @@
                         this.newinventario = JSON.parse(sessionStorage.getItem("newinventario"));
                         this.tipoinventario ='ingresar';
                         this.flaginventario = true;
-                        setTimeout(function(){
-                        this.$nextTick(function () {
-                        
-                            this.dt2 = $('#newinventario').DataTable({
-                                    "scrollY":        "300px",
-                                    "scrollCollapse": true,
-                                    "paging":         false,
-                                    "searching": false,
-                                    "pageLength": 50000         
-                                })
-                            this.cargando=false;
-                            $("#tablacargando").hide();
-                            $("#tablainv").show();
-                        });
-                        }.bind(this), 1000);
+                        this.cargando=false;
                         //sessionStorage.clear();
                     }
                 }
@@ -423,9 +381,10 @@
                                             "pageLength": 50000         
                                         })
                                     this.cargando=false;
-                                    $("#tablacargando").hide();
-                                    $("#tablainv").show();
+                                    
                                 });
+                                $("#tablacargando").hide();
+                                $("#tablainv").show();
                             }.bind(this), 500);
 
                         }).catch(function(error) {
@@ -471,10 +430,9 @@
                                             "searching": false,
                                             "pageLength": 50000         
                                         })
-                                    this.cargando=false;
-                                    $("#tablacargando").hide();
-                                    $("#tablainv").show();
                                 });
+                                $("#tablacargando").hide();
+                                $("#tablainv").show();
                             }.bind(this), 500);
                              
                         }
@@ -497,10 +455,9 @@
                                             "searching": false,
                                             "pageLength": 50000         
                                         })
-                                    this.cargando=false;
-                                    $("#tablacargando").hide();
-                                    $("#tablainv").show();
                                 });
+                                $("#tablacargando").hide();
+                                $("#tablainv").show();
                             }.bind(this), 500);
                         }).catch(function(error) {
                             if (error.response) {
@@ -598,10 +555,9 @@
                                             "searching": false,
                                             "pageLength": 50000         
                                         })
-                                    this.cargando=false;
-                                    $("#tablacargando").hide();
-                                    $("#tablainv").show();
                                 });
+                                $("#tablacargando").hide();
+                                $("#tablainv").show();
                             }.bind(this), 500);
                         }else{
                             this.$toastr.e("Ya existe un inventario en proceso, para poder generar un nuevo pedido debe finalizar el que se encuentra en proceso");

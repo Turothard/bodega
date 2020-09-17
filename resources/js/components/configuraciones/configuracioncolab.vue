@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,index) in dataconfiguracion[14]" :key="index">
+                    <tr v-for="(item,index) in dataconfiguracion[1]" :key="index">
                         <td>{{item.rutcolaborador}}</td>
                         <td>{{item.nombrescolab}}</td>
                         <td>{{item.apellidoscolab}}</td>
