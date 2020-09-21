@@ -57,7 +57,7 @@
                                 <img style="width:23px;heigth:23px;" src="css/img/moreinfo.png" />
                             </button>
                             <button class="btn btn-info btn-sm" 
-                                v-if="item.estadoinv=='FINALIZADO'"
+                                v-if="item.estadoinv=='FINALIZADO' && item.cantidaddiftotal!=0"
                                 data-toggle="modal"
                                 data-target="#inventariomodal"
                                 @click="tableresp('detalleajuste',item)">

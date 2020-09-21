@@ -463,7 +463,7 @@ class BodegaController extends Controller
                     $posicion->save();
                     
                    }
-                   $inventario->estado='AJUSTADO';
+                   $inventario->estadoinv='AJUSTADO';
                    $inventario->save();
                    return 0;
                 break;
