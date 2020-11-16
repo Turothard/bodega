@@ -150,13 +150,26 @@
             <div class="modal-footer">
               <select
                 v-if="componenteactual=='pedido_detalle' && pedido.estadoped=='PROCESADO' && user=='BODEGA'"
+                class="form-control form-control-sm t-regular w-s"
+                v-model="sectorvue"
+                required
+              >
+                <option value>------</option>
+                <option
+                  v-for="(itemxx, indexx) in sector"
+                  :key="indexx"
+                  :value="itemxx.sectorcolab"
+                >{{ itemxx.sectorcolab }}</option>
+              </select>
+              <select
+                v-if="componenteactual=='pedido_detalle' && pedido.estadoped=='PROCESADO' && user=='BODEGA'"
                 class="form-control form-control-sm t-regular w-l"
                 v-model="pedido.receptor_id"
                 required
               >
                 <option value>------</option>
                 <option
-                  v-for="(itemxx, indexx) in colaboradores"
+                  v-for="(itemxx, indexx) in colabs"
                   :key="indexx"
                   :value="itemxx.rutcolaborador"
                 >{{ itemxx.nombrecortocolab }}</option>
@@ -225,6 +238,9 @@ export default {
       pedidoactivo: [],
       usuarios: [],
       colaboradores: [],
+      colaboradores2: [],
+      sector:'',
+      sectorvue:'',
       areas: [],
       ubicaciones: [],
       sectores: [],
@@ -240,10 +256,12 @@ export default {
         this.pedidos = this.datapedido[8];
         this.usuarios = this.datapedido[0];
         this.colaboradores = this.datapedido[1];
+        this.colaboradores2 = this.datapedido[14];
+        this.sector = this.datapedido[15];
         this.sectores = this.datapedido[5];
         this.areas = this.datapedido[6];
         this.ubicaciones = this.datapedido[7];
-  console.log(this.colaboradores);
+        console.log(this.colaboradores);
         if (this.datapedido[9] != null) {
           this.pedido.id = parseInt(this.datapedido[9]) + 1;
         }
@@ -293,6 +311,19 @@ export default {
       });
   },
   mounted() {},
+  computed:{
+      colabs: function () {
+        console.log(this.colaboradores2);
+          let filtrete=this.colaboradores2;
+          let flagcete=false;
+          if(this.sectorvue!=''){
+              //let bodegas = this.detallebodega;
+              filtrete= _.filter(filtrete, {'sectorcolab':this.sectorvue});
+          }                
+          return _.orderBy(filtrete, ['nombrecortocolab']);
+          
+      },
+  },
   methods: {
     clasepedido(estado){
       switch (estado) {
@@ -493,6 +524,7 @@ export default {
       }
       if (pedido.estadoped == "PROCESADO") {
         console.log(pedido, this.detallepedido);
+        //return;
         axios
           .post("/pedidos/store", {
             tipo: "entregarpedido",

@@ -83,12 +83,21 @@
                         <!-- receptor --> 
                         <td v-if="pedido.estadoped=='INGRESADO' || pedido.estadoped=='PENDIENTE' || pedido.estadoped=='ANULADO'">-----</td>
                        <td v-else-if="pedido.estadoped=='PROCESADO' && user=='BODEGA' && item.tipodetped=='INDIVIDUAL' && item.receptor_prod==null">
-                           <select class="form-control form-control-sm t-regular" v-model="item.receptor_vue" required>
-                            <option value="">------</option>
-                            <option v-for="(itemx, index) in colaboradores" :key="index" :value="itemx.rutcolaborador">
-                                {{ itemx.nombrecortocolab }}
-                            </option>
-                        </select>
+                           <select class="form-control form-control-sm t-regular w-s d-inline" v-model="item.sectorvue" required >
+                                <option value>------</option>
+                                <option
+                                v-for="(itemxx, indexx) in sector"
+                                :key="indexx"
+                                :value="itemxx.sectorcolab"
+                                >{{ itemxx.sectorcolab }}</option>
+                            </select>
+                           <select class="form-control form-control-sm t-regular d-inline w-d" v-model="item.receptor_vue" required >
+                                <option value="">------</option>
+                                <option v-for="(itemx, index) in colaboradores2" :key="index" :value="itemx.rutcolaborador" v-show="filtrarsector(itemx.sectorcolab, item.sectorvue)">
+                                    {{ itemx.nombrecortocolab }}
+                                </option>
+                            </select>
+                            
                        </td>
                         <td v-else-if="item.receptor_prod!=null">{{colaboradores.find( items => items.rutcolaborador === item.receptor_prod ).nombrecortocolab}} </td>
                         <td v-else>-------</td>
@@ -118,6 +127,8 @@
                 codigos:null,
                 usuarios: [],
                 colaboradores: [],
+                colaboradores2: [],
+                sector:'',
                 areas: [],
                 ubicaciones: [],
                 sectores: [],
@@ -133,6 +144,8 @@
             this.pedidos = this.datapedido[8];
             this.usuarios = this.datapedido[0];
             this.colaboradores = this.datapedido[1];
+            this.colaboradores2 = this.datapedido[14];
+            this.sector = this.datapedido[15];
             this.sectores = this.datapedido[5];
             this.areas = this.datapedido[6];
             this.ubicaciones = this.datapedido[7];
@@ -161,6 +174,22 @@
                     paging: false
                 });
             });
+        },
+        methods:{
+            
+            filtrarsector(sectorcolav, sectorvue){
+                if(sectorvue==''){
+                    return true;
+                }else{
+                    if(sectorvue==sectorcolav){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+               
+            }
+           
         }
     }
 </script>

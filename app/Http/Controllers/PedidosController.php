@@ -74,7 +74,7 @@ class PedidosController extends Controller
                         ->join('detallepedposiciones','detallepedidos.id','=','detallepedposiciones.detallepedido_id')
                         ->join('posiciones','detallepedposiciones.posicion_id','=','posiciones.idposicion')
                         ->join('estantes','estantes.id','=','posiciones.estante_id')
-                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante',DB::raw("'' as receptor_vue"))
+                        ->select('estantes.bodega_id','detallepedidos.tipodetped','detallepedidos.pedido_id','identusodetped','obsentped','obsdevodetped','estadodetped','detallepedposiciones.id','detallepedposiciones.detallepedido_id','detallepedposiciones.codigoart','detallepedposiciones.posicion_id','detallepedposiciones.cantidadpedido','detallepedposiciones.cantidadproceso','detallepedposiciones.cantidaddevolucion','detallepedposiciones.receptor_prod','posiciones.sectorpos', 'posiciones.nivelpos','estantes.nroestante',DB::raw("'' as receptor_vue, '' as sectorvue"))
                         ->get();
                         return $detped;
                     }
