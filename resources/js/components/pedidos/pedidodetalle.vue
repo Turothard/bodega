@@ -145,6 +145,7 @@
             this.usuarios = this.datapedido[0];
             this.colaboradores = this.datapedido[1];
             this.colaboradores2 = this.datapedido[14];
+            this.colaboradores2 =_.orderBy(this.colaboradores2, ['nombrecortocolab']);
             this.sector = this.datapedido[15];
             this.sectores = this.datapedido[5];
             this.areas = this.datapedido[6];

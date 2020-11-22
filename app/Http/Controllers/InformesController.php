@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use App\Exports\InformeStockExport;
 use App\Exports\InformeEntArtExport;
 use App\Exports\InformeEntColExport;
+use App\Exports\InformeFrecCajaExport;
+use App\Exports\InformeFrecOcExport;
 use App\Exports\InformeStockCriticoExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -18,6 +20,7 @@ use App\Marca;
 use App\PeriodoDevo;
 use App\SubCategoria;
 use App\Ubicacione;
+use App\IngresoCaja;
 use App\Sectore;
 use App\Unidade;
 use App\Pedido;
@@ -153,6 +156,12 @@ class InformesController extends Controller
                 }
                 return $detalle;
                 break;
+            case 'informefrecuenciaoc';
+                return OrdenCompra::where("fechaoc", ">=",$filtros['fechai'])->where("fechaoc", "<=",$filtros['fechaf'])->orderBy("fechaoc", "desc")->get();
+                break;
+            case 'informefrecuenciacaja';
+                return IngresoCaja::where("fechaingresoing", ">=",$filtros['fechai'])->where("fechaingresoing", "<=",$filtros['fechaf'])->orderBy("fechaingresoing", "desc")->get();
+                break;
             default:
                 # code...
                 break;
@@ -243,6 +252,23 @@ class InformesController extends Controller
                 }
                 $name ='InformeEntregaColaboradores'.date('Ymd_His').'.xlsx';
                 Excel::store(new InformeEntColExport($detalle, $filtros["nombres"]), $name, 'informex');
+                return $name;
+                break;
+             case 'informefrecuenciaoc';      
+                $name ='InformeFrecuenciaOC'.date('Ymd_His').'.xlsx';
+                $detalle =
+                
+                OrdenCompra::where("fechaoc", ">=",$filtros['fechai'])->where("fechaoc", "<=",$filtros['fechaf'])
+                ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                ->select("ordencompras.fechaoc","ordencompras.nrooc","proveedores.nombreprov","ordencompras.estadooc","ordencompras.montooc")
+                ->orderBy("nrooc")->get();
+                Excel::store(new InformeFrecOcExport($filtros,$detalle), $name, 'informex');
+                return $name;
+                break;
+            case 'informefrecuenciacaja';      
+                $name ='InformeFrecuenciaCaja'.date('Ymd_His').'.xlsx';
+                $detalle =IngresoCaja::where("fechaingresoing", ">=",$filtros['fechai'])->where("fechaingresoing", "<=",$filtros['fechaf'])->orderBy("fechaingresoing", "desc")->get();
+                Excel::store(new InformeFrecCajaExport($filtros,$detalle), $name, 'informex');
                 return $name;
                 break;
             default:

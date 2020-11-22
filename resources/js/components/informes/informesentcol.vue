@@ -17,8 +17,8 @@
                     <tbody>
                         <tr>
                             <td>
-                                <input class="form-control form-control-sm t-regular" type="date" id="example-date-input" v-model="filtros.fechai">
-                                <input class="form-control form-control-sm t-regular" type="date" id="example-date-input" v-model="filtros.fechaf">
+                                <input class="form-control form-control-sm t-regular w-d" type="date" id="example-date-input" v-model="filtros.fechai">
+                                <input class="form-control form-control-sm t-regular w-d" type="date" id="example-date-input" v-model="filtros.fechaf">
                             </td>
                             <td>
                                 <select v-model="filtros.subcategoria" class="form-control form-control-sm t-regular w-l">
