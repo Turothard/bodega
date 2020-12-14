@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="row justify-content-start">
+        <div class="row">
             <div class="col-12">
                 <table class="table">
                     <thead>
@@ -52,17 +52,15 @@
                                     <img style="width:23px;heigth:23px;" src="css/img/agregar.png" />
                                 </button>
                             </td>
-                            <td>
-                                <button @click="descargarinforme()" v-show="detalleinforme!=null" class="btn btn-success" title="Descargar Informe">
-                                    <img style="width:30px;heigth:30px;" src="css/img/informeexcel.png" />
-                                </button>
-                            </td>
+                            <th v-if="detalleinforme!=null">
+                                <button type="button" @click="descargarinforme()" title="Generar Informe Costos" class="btn btn-success">Generar Informe</button>
+                            </th>
                         </tr>
                     </tbody>
                     
                 </table>
             </div>
-            <div class="col-8">
+            <div class="col-12">
                 <ul class="list-group list-group-horizontal-md">
                     <li class="list-group-item" v-for="(item, index) in filtros.articulos" :key="index">
                         {{item.nombreart}} <span class="badge badge-danger pointer" @click="eliminarart(index)">x</span>
@@ -75,22 +73,26 @@
                 >
                 <thead>
                     <tr>
-                    <th class="all">Pedido</th>
                     <th class="all">Fecha</th>
-                    <th class="all">Nombre Art</th>
-                    <th class="all">Colaborador</th>
-                    <th class="all">Cantidad Ent</th>
-                    <th class="all">Cantidad Dev</th>
+                    <th class="all">Proveedor</th>
+                    <th class="all">Artículo</th>
+                    <th class="all">Cantidad</th>
+                    <th class="all">Costo Unitario</th>
+                    <th class="all">Total Neto</th>
+                    <th class="all">I.V.A</th>
+                    <th class="all">Total Bruto</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(item,index) in detalleinforme" :key="index">
-                        <td>{{item.pedido_id}}</td>
-                        <td>{{item.updated_at}}</td>
+                        <td>{{item.fechaoc}}</td>
+                        <td>{{item.nombreprov}}</td>
                         <td>{{item.nombreart}}</td>
-                        <td>{{item.nombrescolab}} {{item.apellidoscolab}}</td>
-                        <td>{{item.cantidadproceso}}</td>
-                        <td>{{item.cantidaddevolucion}}</td>
+                        <td>{{item.cantidaddetoc}}</td>
+                        <td>{{item.montounitariodetoc}}</td>
+                        <td>{{item.montototaldetoc}}</td>
+                        <td>{{Math.round(parseInt(item.montototaldetoc)*0.19)}}</td>
+                        <td>{{parseInt(item.montototaldetoc)+Math.round(parseInt(item.montototaldetoc)*0.19)}}</td>
                     </tr>
                 </tbody>
                 </table>
@@ -163,7 +165,7 @@
              },
              filtrar(){
                  console.log(this.filtros);
-                axios.post('/informes/generar', {tipo:'informeentregaarticulos',detalle: this.filtros})
+                axios.post('/informes/generar', {tipo:'informecostos',detalle: this.filtros})
                     .then((res) =>{
                     
                     this.detalleinforme = res.data;
@@ -185,7 +187,7 @@
              },
              descargarinforme(){
                  console.log(this.filtros);
-                axios.post('/informes/export', {tipo:'informeentregaarticulos',detalle: this.filtros, arreglo:this.detalleinforme})
+                axios.post('/informes/export', {tipo:'informecostos',detalle: this.filtros, arreglo:this.detalleinforme})
                     .then((res) =>{
                     setTimeout(function() {
                         window.open("documents/informes/"+res.data);

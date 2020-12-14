@@ -22,14 +22,14 @@
                                 <input class="form-control form-control-sm t-regular" type="date" id="example-date-input" v-model="filtros.fechaf">
                             </td>
                             <th v-if="detalleinforme!=null">
-                                <button type="button" @click="descargarinforme()" title="Filtrar Stock" class="btn btn-primary">Generar Informe</button>
+                                <button type="button" @click="descargarinforme()" class="btn btn-success" title="Descargar Informe">Generar Informe</button>
                             </th>
                         </tr>
                     </tbody>
                     
                 </table>
             </div>
-            <div class="col-8">
+            <div class="col-12">
                 
                 <table
                 id="tablainformeentart"

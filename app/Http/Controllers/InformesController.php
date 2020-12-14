@@ -6,6 +6,7 @@ use App\Exports\InformeEntArtExport;
 use App\Exports\InformeEntColExport;
 use App\Exports\InformeFrecCajaExport;
 use App\Exports\InformeFrecOcExport;
+use App\Exports\InformeCostosExport;
 use App\Exports\InformeStockCriticoExport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -92,7 +93,55 @@ class InformesController extends Controller
                 Excel::store(new InformeStockCriticoExport($filtros["bodega"],$filtros["estante"]), $name, 'informex');
                 return $name;
                 break;
-
+            case 'informecostos':
+                $articulox =array();
+                foreach ($filtros["articulos"] as $articulo) {
+                   // return $articulo;
+                    array_push($articulox, $articulo["codigoart"]);
+                }
+                if($filtros["subcategoria"]!=''){       
+                    if($filtros["proveedor"]!=''){ 
+                        //return "entro 1";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
+                        ->where("proveedores.rutproveedor","=", $filtros['proveedor'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }else{
+                        //return "entro 2";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }
+                }else{
+                    if($filtros["proveedor"]!=''){ 
+                        //return "entro 3";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("proveedores.rutproveedor","=", $filtros['proveedor'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }else{
+                        //return "entro 4";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }
+                }
+                return $detalle;
+                break;
             case 'informeentregaarticulos':
                 $articulox =array();
                 foreach ($filtros["articulos"] as $articulo) {
@@ -220,6 +269,57 @@ class InformesController extends Controller
                 //return $request->arreglo;
                 $name ='InformeEntregaArticulos'.date('Ymd_His').'.xlsx';
                 Excel::store(new InformeEntArtExport($detalle, $filtros["articulos"]), $name, 'informex');
+                return $name;
+                break;
+            case 'informecostos':
+                $articulox =array();
+                foreach ($filtros["articulos"] as $articulo) {
+                    // return $articulo;
+                    array_push($articulox, $articulo["codigoart"]);
+                }
+                if($filtros["subcategoria"]!=''){       
+                    if($filtros["proveedor"]!=''){ 
+                        //return "entro 1";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
+                        ->where("proveedores.rutproveedor","=", $filtros['proveedor'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }else{
+                        //return "entro 2";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("articulos.subcategoria_id","=", $filtros['subcategoria'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }
+                }else{
+                    if($filtros["proveedor"]!=''){ 
+                        //return "entro 3";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->where("proveedores.rutproveedor","=", $filtros['proveedor'])
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }else{
+                        //return "entro 4";
+                        $detalle = OrdenCompra::where("fechaoc", ">=", $filtros['fechai'])->where("fechaoc", "<=", $filtros['fechaf'])
+                        ->join("proveedores", "proveedores.rutproveedor", "ordencompras.proveedor_id")
+                        ->join("detalleordencompras", "detalleordencompras.ordencompra_id", "ordencompras.nrooc")
+                        ->join("articulos", "articulos.codigoart", "detalleordencompras.codigoart")
+                        ->select("ordencompras.fechaoc", "ordencompras.proveedor_id", "proveedores.nombreprov", "articulos.nombreart", "detalleordencompras.cantidaddetoc", 
+                        "detalleordencompras.montounitariodetoc", "detalleordencompras.montototaldetoc")->orderBy("ordencompras.fechaoc", "desc")->get();
+                    }
+                }
+                $name ='InformeCostos'.date('Ymd_His').'.xlsx';
+                Excel::store(new InformeCostosExport($detalle, $filtros["articulos"]), $name, 'informex');
                 return $name;
                 break;
             case 'informeentregacolaborador':

@@ -8,7 +8,7 @@
                             <th>Bodega</th>
                             <th>Estante</th>
                             <th rowspan="2">
-                                <button type="button" @click="filtrar()" title="Filtrar Stock" class="btn btn-primary">Generar Informe</button>
+                                <button type="button" @click="descargarinforme()" title="Filtrar Stock" class="btn btn-primary">Generar Informe</button>
                             </th>
                         </tr>
                     </thead>
@@ -71,7 +71,7 @@
          methods: {
              filtrar(){
                  console.log(this.filtros);
-                axios.post('/informes/generar', {tipo:'informeentregaarticulos',detalle: this.filtros})
+                axios.post('/informes/generar', {tipo:'informesstockcritico',detalle: this.filtros})
                     .then((res) =>{
                     
                     this.detalleinforme = res.data;
@@ -93,7 +93,7 @@
              },
              descargarinforme(){
                  console.log(this.filtros);
-                axios.post('/informes/export', {tipo:'informeentregaarticulos',detalle: this.filtros, arreglo:this.detalleinforme})
+                axios.post('/informes/export', {tipo:'informesstockcritico',detalle: this.filtros, arreglo:this.detalleinforme})
                     .then((res) =>{
                     setTimeout(function() {
                         window.open("documents/informes/"+res.data);
