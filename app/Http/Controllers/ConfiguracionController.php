@@ -54,9 +54,10 @@ class ConfiguracionController extends Controller
     public function setdatos(Request $request)
     {
         if($request->ajax()){
-            $colvue = $request->detalle;
+            
             switch ($request->tipo) {
                 case 'nuevocolaborador':
+                    $colvue = $request->detalle;
                     $col= Colaboradore::find($colvue["rutcolaborador"]);
                     if($col!=null){
                         return 1;
@@ -82,6 +83,7 @@ class ConfiguracionController extends Controller
                     return 0;
                     break;
                 case 'editarcolaborador':
+                    $colvue = $request->detalle;
                     $col= Colaboradore::find($colvue["rutcolaborador"]);
                     $col->nombrescolab=Str::upper($colvue["nombrescolab"]);
                     $col->apellidoscolab=Str::upper($colvue["apellidoscolab"]);
@@ -96,6 +98,47 @@ class ConfiguracionController extends Controller
                     $col->estadocolab=$colvue["estadocolab"];
                     $col->save();
                     return 0;
+                    break;
+                case 'crearusuario':
+                    $uservue = $request->detalle;
+                    $user = User::where("name", $user["name"])->get()->first();
+                    if($user!=null){
+                        return 1;
+                    }
+                    $user = User::where("email", $user["email"])->get()->first();
+                    if($user!=null){
+                        return 2;
+                    }
+                    $user = User::where("rut", $user["rut"])->get()->first();
+                    if($user!=null){
+                        return 3;
+                    }
+                    $user= new User();
+                    $user->name =$user["name"];
+                    $user->email =$user["email"];
+                    $user->department =$user["department"];
+                    $user->password = bcrypt($request->password);
+                    
+                    $user->save();
+                    break;
+                case 'editarusuario':
+                    
+                    $user = User::where("name", $user["name"])->where("rut","<>", $user["rut"])->get()->first();
+                    if($user!=null){
+                        return 1;
+                    }
+                    $user = User::where("email", $user["email"])->where("rut","<>", $user["rut"])->get()->first();
+                    if($user!=null){
+                        return 2;
+                    }
+                    $user = User::where("rut", $user["rut"])->get()->first();
+                    $user->name =$user["name"];
+                    $user->email =$user["email"];
+                    $user->department =$user["department"];
+                    if($request->password!=""){
+                        $user->password = bcrypt($request->password);
+                    }
+                    $user->save();
                     break;
                 default:
                     # code...

@@ -381,8 +381,14 @@ class BodegaController extends Controller
                     break;
                 case 'guardaravance':
                     $invvue =$request->inventario;
+                    $tipoavance =$request->tipoavance;
                     $detinvvue =$request->detalle;
-                    $inv = Inventario::where("estadoinv","PROCESO")->first();
+                    if((int)$tipoavance==1){
+                        $inv = Inventario::where("estadoinv","PROCESO")->first();
+                    }else{
+                        $inv= Inventario::find($invvue["id"]);
+                    }
+                    
                     if($inv!=null){
                         $inv->cantidadbodtotal = $invvue["cantidadbodtotal"];
                         $inv->cantidadinvtotal = $invvue["cantidadinvtotal"];

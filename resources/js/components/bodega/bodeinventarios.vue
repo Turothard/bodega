@@ -195,8 +195,8 @@
                 </div>
                 <div class="modal-footer">
                     
-                    <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="guardaravance()" v-show="newinventario.length>0">Guardar Avance</button>
-                    <button v-if="tipoinventario=='detalleajuste' && inventario.estadoinv=='FINALIZADO'" v-show="newinventario.length>0" type="button" class="btn btn-primary" @click="guardaravance()">Actualizar Inventario</button>
+                    <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="guardaravance(1)" v-show="newinventario.length>0">Guardar Avance</button>
+                    <button v-if="tipoinventario=='detalleajuste' && inventario.estadoinv=='FINALIZADO'" v-show="newinventario.length>0" type="button" class="btn btn-primary" @click="guardaravance(0)">Actualizar Inventario</button>
                     <button v-if="tipoinventario=='ingresar'" type="button" class="btn btn-primary" @click="finalizarinventario()" v-show="newinventario.length>0">Finalizar Inventario</button>
                     <button v-if="tipoinventario=='detalleajuste' && user=='ADMIN'"  type="button" class="btn btn-primary" @click="ajusteinventario()" v-show="newinventario.length>0">Ajustar Inventario a bodega</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -578,9 +578,9 @@
                     });
                 }
             },
-            guardaravance(){
+            guardaravance($tipoavance){
                 this.inventario.estadoinv='PROCESO';
-                axios.post('/bodega/setdatos', {tipo:'guardaravance',inventario:this.inventario,detalle:this.newinventario }).then((res) =>{
+                axios.post('/bodega/setdatos', {tipo:'guardaravance',inventario:this.inventario,detalle:this.newinventario, tipoavance:$tipoavance }).then((res) =>{
                     console.log(res.data);
                     this.inventario.id = res.data;
                     this.$toastr.s("Avance de inventario guardado con éxito");

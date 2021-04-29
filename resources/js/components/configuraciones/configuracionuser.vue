@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <br>
         <div>
-            <button class="btn btn-info btn-sm"  data-toggle="modal" data-target="#proveedoresmodal" @click="cargarcrear()">Agregar Proveedor</button>
+            <button class="btn btn-info btn-sm"  data-toggle="modal" data-target="#usuarioesmodal" @click="cargarcrear()">Agregar Usuario</button>
         </div>
         <div>
             <table id="tabladetalleprov" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
@@ -10,87 +10,85 @@
                     <tr>
                         <th class="all">Rut</th>
                         <th class="all">Nombre</th>
-                        <th class="desktop">Apellido</th>
-                        <th class="desktop">Nombre Corto</th>
+                        <th class="desktop">email</th>
                         <th class="desktop">Departamento</th>
-                        <th class="desktop">Sector</th>
-                        <th class="desktop">Cargo</th>
-                        <th class="all">Fecha Ingreso</th>
-                        <th class="all">Fecha Salida</th>
-                        <th class="desktop">Estado</th>
+                        <th class="desktop">Creado</th>
+                        <th class="desktop">Actualizado</th>
+                        <th class="all">Funciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item,index) in dataconfiguracion[1]" :key="index">
-                        <td>{{item.rutproveedor}}</td>
-                        <td>{{item.nombreprov}}</td>
-                        <td>{{item.giroprov}}</td>
-                        <td>{{item.comunaprov}}</td>
-                        <td>{{item.direccionprov}}</td>
-                        <td>{{item.telefonoprov}}</td>
-                        <td>{{item.correoprov}}</td>
+                    <tr v-for="(item,index) in dataconfiguracion[0]" :key="index">
+                        <td>{{item.rut}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.email}}</td>
+                        <td>{{item.department}}</td>
+                        <td>{{item.created_at}}</td>
+                        <td>{{item.updated_at}}</td>
                         <td>
                             <button 
                             class="btn btn-info btn-sm" 
                             @click="cargareditar(item)" 
                             data-toggle="modal" 
-                            data-target="#proveedoresmodal">
+                            data-target="#usuarioesmodal">
                                 <img style="width:23px;heigth:23px;" src="css/img/editar.png"/>
                             </button>
-                            <button class="btn btn-danger btn-sm">
-                                <img style="width:23px;heigth:23px;" src="css/img/delete.png"/>
-                            </button>
+                            
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="modal fade" id="proveedoresmodal" tabindex="-1" role="dialog" aria-labelledby="articulomodallabel" aria-hidden="true">
+        <div class="modal fade" id="usuarioesmodal" tabindex="-1" role="dialog" aria-labelledby="articulomodallabel" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 v-if="tipoprov=='nuevoproveedor'" class="modal-title" id="exampleModalLabel">Crear nuevo Proveedor</h5>
-                        <h5 v-if="tipoprov=='editarproveedor'" class="modal-title" id="exampleModalLabel">Actualizar proveedor</h5>
+                        <h5 v-if="tipouser=='nuevousuario'" class="modal-title" id="exampleModalLabel">Crear nuevo Usuario</h5>
+                        <h5 v-if="tipouser=='editarusuario'" class="modal-title" id="exampleModalLabel">Actualizar usuario</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
+                    <br>
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-4">
                                 Rut (*) <br>
-                                <input type="text" v-model="proveedorvue.rutproveedor" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
+                                <input type="text" v-model="usuariovue.rut" :disabled=disabled class="form-control form-control-sm w-s t-regular" :id="'rutptoveedor'" name="rutptoveedor">
                             </div>
                             <div class="col-4">
                                 Nombre (*) <br>
-                                <input type="text" v-model="proveedorvue.nombreprov" class="form-control form-control-sm t-regular" :id="'nombreprov'" name="nombreprov">
+                                <input type="text" v-model="usuariovue.name" class="form-control form-control-sm t-regular" :id="'nombreprov'" name="nombreprov">
                             </div>
                             <div class="col-4">
-                                Giro <br>
-                                <input type="text" v-model="proveedorvue.giroprov" class="form-control form-control-sm t-regular" :id="'giroprov'" name="giroprov">
+                                Email <br>
+                                <input type="email" v-model="usuariovue.email" class="form-control form-control-sm t-regular" :id="'giroprov'" name="giroprov">
                             </div>
                             <div class="col-3">
-                                Comuna<br>
-                                <input type="text" v-model="proveedorvue.comunaprov" class="form-control form-control-sm w-d t-regular" :id="'comunaprov'" name="comunaprov">
+                                Departamento<br>
+                                <select v-model="usuariovue.department" class="form-control form-control-sm t-regular w-l">
+                                    <option value="">------</option>
+                                    <option value="ADMIN">Administración</option>
+                                    <option value="SUPERVISORES">Supervisores</option>
+                                    <option value="TRABAJADORES">Trabajadores</option>
+                                    <option value="BODEGA">Bodega</option>
+                                </select>
                             </div>
                             <div class="col-3">
-                                Dirección <br>
-                                <input type="text" v-model="proveedorvue.direccionprov" class="form-control form-control-sm t-regular" :id="'comunaprov'" name="comunaprov">
+                                Contraseña <br>
+                                <input type="password" :disabled="!usuariovue.cambiocorreo" v-model="password" class="form-control form-control-sm t-regular" :id="'comunaprov'" name="comunaprov">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="cambiopassword" name="example1" v-model="usuariovue.cambiocorreo" @click="usuariovue.cambiocorreo= !usuariovue.cambiocorreo">
+                                    <label class="custom-control-label" for="cambiopassword">Activar cambio Contraseña</label>
+                                </div>
                             </div>
-                            <div class="col-3">
-                                Teléfono <br>
-                                <input type="text" v-model="proveedorvue.telefonoprov" class="form-control form-control-sm w-d t-regular" :id="'telefonoprov'" name="telefonoprov">
-                            </div>
-                            <div class="col-3">
-                                Correo <br>
-                                <input type="email" v-model="proveedorvue.correoprov"  class="form-control form-control-sm w-l t-regular" :id="'correoprov'" name="correoprov">
-                            </div>
+                            
                         </div>          
                     </div>
                     <div class="modal-footer">
                         <p>(*) Datos obligatorios</p>
-                        <button type="button" class="btn btn-primary" @click="guardarproveedor(proveedorvue)">
-                            Guardar Proveedor
+                        <button type="button" class="btn btn-primary" @click="guardarusuario(usuariovue)">
+                            Guardar Usuario
                         </button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                         
@@ -111,9 +109,11 @@
             return{
                 preestablecidovue:null,
                 cargando:true,
+                cambiopassword:false,
+                password:'',
                 disabled:false,
-                tipoprov:'',
-                proveedorvue: {rutproveedor:'',nombreprov:'', codigoprov:'', giroprov:'', comunaprov:'', direccionprov:'', telefonoprov:'', correoprov:''},
+                tipouser:'',
+                usuariovue: {id:'',rut:'', name:'', email:'', department:'', password:''},
                 dt:null,
 
             }
@@ -158,15 +158,70 @@
                 return check;
             },
             cargarcrear(){
-                this.tipoprov = 'nuevoproveedor';
-                this.proveedorvue= {rutproveedor:'',nombreprov:'', codigoprov:'', giroprov:'', comunaprov:'', direccionprov:'', telefonoprov:'', correoprov:''};
+                this.tipouser = 'nuevousuario';
+                this.usuariovue= {id:'',rut:'', name:'', email:'', department:'', password:''};
                 this.disabled = false;
             },
-            cargareditar(prov){
-                this.tipoprov = 'editarproveedor';
-                this.proveedorvue = _.cloneDeep(prov);
+            cargareditar(user){
+                this.tipouser = 'editarusuario';
+                this.usuariovue = _.cloneDeep(user);
                 this.disabled = true;
             },
+            guardarusuario(user){
+                if(user.name=='' || user.email=='' || user.department==''){
+                    this.$toastr.w("Faltan datos obligatorios por ingresar");
+                    return;
+                }
+                if(user.cambiocorreo && this.password!=''){
+                    if(this.tipouser == 'nuevousuario'){
+
+                    }else{
+
+                    }
+                }
+                if(confirm("¿Está seguro de actualizar la contraseña este usuario?")){
+                         axios.post('/configuraciones/setdatos', {tipo:this.tipouser,detalle:user, password:this.password})
+                        .then((res) =>{
+                        let resp = res.data;
+                        console.log(res.data);
+                        if(parseInt(resp)==1){
+                            this.$toastr.w("Rut ingresado ya esta asociado a un usuario, favor revisar");
+                            return;
+                        }
+                        if(parseInt(resp)==2){
+                            this.$toastr.w("Nombre ingresado ya esta asociado a un usuario, favor revisar");
+                            return;
+                        }
+                        if(parseInt(resp)==0){
+                            if(this.tipocol=='nuevousuario'){
+                                this.$toastr.s("Usuario ingresado con éxito");
+                            
+                            }else{
+                                this.$toastr.s("Usuario actualizado con éxito");
+                            
+                            }
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1500);
+                        
+                        $(".close").click();
+                        }
+                    }).catch(function (error) {
+                        if (error.response) {
+                        // Request made and server responded
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                        } else if (error.request) {
+                        // The request was made but no response was received
+                        console.log(error.request);
+                        } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                        }
+                    });
+                    }
+            }
         },
     }
 </script>
