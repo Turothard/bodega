@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Area extends Model
 {
   use SoftDeletes;
-    protected $primaryKey = 'idarea';
-    protected $table = 'areas';
+  protected $primaryKey = 'idarea';
+  protected $table = 'areas';
 
    public function sectores()
   {
@@ -20,5 +20,10 @@ class Area extends Model
   public function pedidos(){
       return $this->hasMany("App\Pedido",'area_id', 'idarea');
   }
+    
+    public function detalleservicios()
+    {
+        return $this->hasMany('App\DetalleServicio','servicio_id', 'id');
+    }
   
 }

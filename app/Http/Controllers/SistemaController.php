@@ -25,6 +25,11 @@ use App\Notificacione;
 use App\NotificacionesUser;
 use App\Proveedore;
 use App\Colore;
+use App\Servicio;
+use App\Trabajo;
+use App\Agencia;
+use App\Contenido;
+use App\ServicioTrabajo;
 use App\OrdenCompra;
 use App\DetalleOrdenCompra;
 use App\DocumentoOrdenCompra;
@@ -59,7 +64,7 @@ class SistemaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function getdatos(Request $request)
+    public function getdatoswarehouse(Request $request)
     {
         if($request->ajax()){
             $arreglo[0]=User::all();
@@ -133,7 +138,39 @@ class SistemaController extends Controller
             return view('colaboradores.index');
         }
     }
+    public function getdatosoperation(Request $request)
+    {
+        if($request->ajax()){
+            $arreglo[0]=User::all();
+            $arreglo[1]=Colaboradore::orderBy('nombrecortocolab')->get();
+            $arreglo[2]=Sectore::where("nombresec","<>", "Z-Serv")->get();
+            $arreglo[3]=Area::all();
+            $arreglo[4]=Ubicacione::all();
+            $arreglo[5]=Agencia::all();
+            switch ($request->tipo) {
+                case 'Servicio':
+                    $arreglo[6]=Servicio::with("camposervicios")->where('nombre', "not like", "'%DUMMY%'")->get();
+                    $arreglo[7]=Trabajo::with("campotrabajo.campoformularios")->get();
+                    $arreglo[8]=ServicioTrabajo::with('trabajo.campotrabajo.campoformularios')->get();
+                    $arreglo[9]=Contenido::all();
+                    break;
+                case 'Informes':
+                    //$arreglo[5]=Servicio::all();
 
+                break;
+                case 'Mantenedores':
+                    //$arreglo[5]=Servicio::all();
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            return $arreglo;
+        }else{
+            return view('colaboradores.index');
+        }
+    }
     /**
      * Display the specified resource.
      *

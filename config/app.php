@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Bodega Zeal Servicios'),
+    'name' => env('APP_NAME', 'Sistema Zeal Servicios'),
 
     /*
     |--------------------------------------------------------------------------

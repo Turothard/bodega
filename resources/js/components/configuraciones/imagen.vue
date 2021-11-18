@@ -28,7 +28,7 @@
                             </tbody>
                         </table>
                     </div>
-                     <button class="btn btn-info btn-sm" @click="$refs.subirnewimageold.click()"><img style="width:23px;heigth:23px;" src="css/img/addimage.png"/></button>
+                     <button class="btn btn-info btn-sm" @click="$refs.subirnewimageold.click()"><img style="width:23px;heigth:23px;" src="/css/img/addimage.png"/></button>
                         <input type="file" accept="image/*" ref="subirnewimageold" capture="camera" id="newimage" @change="handleFileUpload()" style="display:none"/> 
                     <div v-if="imagen!=null">
                         

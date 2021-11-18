@@ -26,10 +26,10 @@
                                     <td data-label="Codigo" v-html="item.mensaje"></td>
                                     <td>
                                         <button class="btn btn-secondary btn-sm" title="Abrir Enlace" @click="abrirnotificacion(item,1)">
-                                            <img style="width:23px;heigth:23px;" src="css/img/abrirsobre.png"/>
+                                            <img style="width:23px;heigth:23px;" src="/css/img/abrirsobre.png"/>
                                         </button>
                                         <button class="btn btn-secondary btn-sm" title="Marcar como leída" @click="leernotificacion(item,1)">
-                                            <img style="width:23px;heigth:23px;" src="css/img/notileer.png"/>
+                                            <img style="width:23px;heigth:23px;" src="/css/img/notileer.png"/>
                                         </button>
                                     </td>
                                </tr>
@@ -61,12 +61,12 @@
          },
         created() {
             console.log('Notificaciones Montada.');
-            axios.post('/sistema/getdatos').then((res) =>{
+            axios.post('/sistema/getdatoswarehouse').then((res) =>{
                 this.usuarios = res.data[0];
                 this.colaboradores = res.data[1];
             });
             //$(".close").click();
-            this.audio = new Audio("audio/notificacion.ogg");
+            this.audio = new Audio("/audio/notificacion.ogg");
             //this.audio.play();
             /*this.audio.muted = true; // Turn off silent state
             this.audio.play();
@@ -119,7 +119,7 @@
                 if(!this.inicio){
                     return;
                 }
-                 axios.post('/sistema/getdatos', {tipo:'notificaciones'}).then((res) =>{
+                 axios.post('/sistema/getdatoswarehouse', {tipo:'notificaciones'}).then((res) =>{
                 let notif = res.data;
                 //console.log(notif);
                 if(notif.length==0){

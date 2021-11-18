@@ -7,7 +7,7 @@
 require('./bootstrap');
 require( 'jszip' );
 require( 'pdfmake' );
-require( 'datatables.net-bs4' );
+require( 'datatables.net-bs4');
 require( 'datatables.net-buttons-bs4' );
 require( 'datatables.net-buttons/js/buttons.colVis.js' );
 require( 'datatables.net-buttons/js/buttons.html5.js' );
@@ -34,14 +34,16 @@ Vue.use(VueToastr, {
 // files.keys.map(key => Vue.component(key.split('/').pop.split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('bodega-vue', require('./components/Bodega.vue').default);
-Vue.component('informe-vue', require('./components/Informe.vue').default);
-Vue.component('pedido-vue', require('./components/Pedido.vue').default);
-Vue.component('mantenedor-vue', require('./components/Mantenedor.vue').default);
-Vue.component('configuracion-vue', require('./components/Configuracion.vue').default);
-Vue.component('ordencompra-vue', require('./components/OrdenCompra.vue').default);
+Vue.component('warehousebodega-vue', require('./components/warehouse/Bodega.vue').default);
+Vue.component('warehouseinforme-vue', require('./components/warehouse/Informe.vue').default);
+Vue.component('warehousepedido-vue', require('./components/warehouse/Pedido.vue').default);
+Vue.component('warehousemantenedor-vue', require('./components/warehouse/Mantenedor.vue').default);
+Vue.component('warehouseconfiguracion-vue', require('./components/warehouse/Configuracion.vue').default);
+Vue.component('warehouseordencompra-vue', require('./components/warehouse/OrdenCompra.vue').default);
 Vue.component('nofiticacion-vue', require('./components/configuraciones/notificaciones.vue').default);
-
+Vue.component('operationservicio-vue', require('./components/operation/Servicio.vue').default);
+Vue.component('operationinforme-vue', require('./components/operation/Informe.vue').default);
+Vue.component('operationmantenedor-vue', require('./components/operation/Mantenedor.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

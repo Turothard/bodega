@@ -15,6 +15,14 @@ class CreateFacturacionesTable extends Migration
     {
         Schema::create('facturaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->timestamp('fechainicio');
+            $table->timestamp('fechatermino');
+            $table->unsignedInteger("user_id");
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('mesfacturacion');
+            $table->integer('netototal');
+            $table->integer('ivatotal');
+            $table->integer('brutofinal');
             $table->timestamps();
         });
     }

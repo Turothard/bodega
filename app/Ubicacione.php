@@ -20,4 +20,8 @@ class Ubicacione extends Model
         return $this->hasMany('App\Pedido', 'ubicacion_id', 'idubicacion');
     }
     
+    public function detalleservicios()
+    {
+        return $this->hasMany('App\DetalleServicio', 'ubicacion_id', 'id');
+    }
 }

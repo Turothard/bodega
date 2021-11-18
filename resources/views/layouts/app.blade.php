@@ -50,31 +50,7 @@
                                 </li>
                             @endif--}}
                         @else
-                            @if (Auth::user()->department=='ADMIN' || Auth::user()->department=='BODEGA')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('bodega') }}">{{ __('Bodega') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('ordencompra') }}">{{ __('Orden Compra') }}</a>
-                            </li>
-                            @endif
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('pedidos') }}">{{ __('Pedidos') }}</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('informes') }}">{{ __('Informes') }}</a>
-                            </li>
-                            @if (Auth::user()->department=='ADMIN' || Auth::user()->department=='BODEGA')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('mantenedores') }}">{{ __('Mantenedores') }}</a>
-                            </li>
-                            @endif
-                            @if (Auth::user()->department=='ADMIN')
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('configuraciones') }}">{{ __('Configuraciones') }}</a>
-                            </li>
                             
-                            @endif
                             <li id="notificacionesa" class="nav-item" data-toggle="modal" style="display: none;" data-target="#notificacionesmodal" >
                                 <a class="nav-link" href="#">
                                 Notificaciones <span class="badge badge-primary badge-pill" id="notifcant"></span>
@@ -107,7 +83,8 @@
             <nofiticacion-vue></nofiticacion-vue>
         @endauth
         <main class="py-4">
-            @yield('content')
+            @yield('content')       
+            
         </main>
         
     </div>

@@ -15,6 +15,15 @@ class CreateTrabajosTable extends Migration
     {
         Schema::create('trabajos', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('codigo');
+            $table->string('codigoalt')->nullable();
+            $table->string('nombre');
+            $table->string('descripcion')->nullable();
+            $table->unsignedInteger('sector_id');
+            $table->foreign('sector_id')->references('idsector')->on('sectores')->onDelete('cascade');
+            $table->unsignedInteger("user_id");
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->boolean('activo');
             $table->timestamps();
         });
     }

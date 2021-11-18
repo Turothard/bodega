@@ -15,6 +15,12 @@ class CreateTarifariosTable extends Migration
     {
         Schema::create('tarifarios', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('serviciotrabajo_id');
+            $table->foreign('serviciotrabajo_id')->references('id')->on('serviciotrabajos')->onDelete('cascade');
+            $table->date('fecha');
+            $table->integer('valor');
+            $table->unsignedInteger("user_id");
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

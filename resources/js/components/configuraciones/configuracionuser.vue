@@ -31,7 +31,7 @@
                             @click="cargareditar(item)" 
                             data-toggle="modal" 
                             data-target="#usuarioesmodal">
-                                <img style="width:23px;heigth:23px;" src="css/img/editar.png"/>
+                                <img style="width:23px;heigth:23px;" src="/css/img/editar.png"/>
                             </button>
                             
                         </td>

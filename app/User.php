@@ -51,4 +51,14 @@ class User extends Authenticatable
     public function ordenescompra(){
         return $this->hasMany("App\OrdenCompra",'user_id', 'id');
     }
+    public function detalleservicio(){
+        return $this->hasMany("App\DetallesServicio",'user_id', 'id');
+    }
+    public function servicio(){
+        return $this->hasMany("App\Servicio",'user_id', 'id');
+    }
+    public function trabajo(){
+        return $this->hasMany("App\Trabajo",'user_id', 'id');
+    }
+
 }
