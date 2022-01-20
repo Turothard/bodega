@@ -53,7 +53,7 @@ class ImpresionController extends Controller
         ->get();
         //dd($id);
         //$id=1;
-        $pdf = \PDF::loadView('documentos/entregapdf2', compact('pedido','detalle', 'bodeguero'));
+        $pdf = \PDF::loadView('warehouse/documentos/entregapdf2', compact('pedido','detalle', 'bodeguero'));
         return $pdf->download('Entrega pedido '.$pedido->id.'.pdf');
    }
 
@@ -66,7 +66,7 @@ class ImpresionController extends Controller
        'ingresoscajadetalle.codigoart', 'articulos.nombreart', 'ingresoscajadetalle.cantidading','ingresoscajadetalle.precioing',
        'ingresoscajadetalle.totaling', 'ingresoscaja.fechaingresoing')->orderBy("ingresoscaja.proveedor_id", "ASC")
        ->orderBy('ingresoscaja.fechaingresoing', "ASC")->get();
-       $pdf = \PDF::loadView('documentos/cajachica', compact('fechai','fechaf', 'compras'))->setPaper('a4', 'landscape');;
+       $pdf = \PDF::loadView('warehouse/documentos/cajachica', compact('fechai','fechaf', 'compras'))->setPaper('a4', 'landscape');;
         return $pdf->download('Informe Caja Chica '.date('dmY').'.pdf');
    }
 }
