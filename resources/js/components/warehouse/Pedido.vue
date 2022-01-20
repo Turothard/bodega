@@ -537,7 +537,7 @@ export default {
             this.$toastr.s("Pedido entregado con éxito");
             setTimeout(function() {
               $(".close").click();
-              window.open("imprimir/"+pedido.id);
+              window.open("/imprimir/"+pedido.id);
               location.reload();
             }, 1500);
             //location.reload();
