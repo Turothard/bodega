@@ -17,6 +17,7 @@ require( 'datatables.net-scroller-bs4' );
 require( 'datatables.net-select-bs4' );
 window.Vue = require('vue');
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead';
+
 import VueToastr from "vue-toastr";
 // use plugin
 Vue.use(VueToastr, {
@@ -44,6 +45,7 @@ Vue.component('nofiticacion-vue', require('./components/configuraciones/notifica
 Vue.component('operationservicio-vue', require('./components/operation/Servicio.vue').default);
 Vue.component('operationinforme-vue', require('./components/operation/Informe.vue').default);
 Vue.component('operationmantenedor-vue', require('./components/operation/Mantenedor.vue').default);
+Vue.component('Formulario-vue', require('./components/operation/servicio/formulario/Formulario.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

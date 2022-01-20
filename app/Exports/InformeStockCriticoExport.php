@@ -29,7 +29,7 @@ class InformeStockCriticoExport implements FromView,ShouldAutoSize
         
         
         if($this->bodega!=null && $this->estante!=null){
-            return view('informes.informesstockcritico', [
+            return view('warehouse.informes.informesstockcritico', [
                 'filtrosstock' => Posicione::where("cantidadpos",">","0")
                 ->join("estantes","posiciones.estante_id", "estantes.id")
                 ->join("articulos", "posiciones.codigoart", "articulos.codigoart")
@@ -42,7 +42,7 @@ class InformeStockCriticoExport implements FromView,ShouldAutoSize
             
         }else{
             if($this->bodega!=null){
-                return view('informes.informesstockcritico', [
+                return view('warehouse.informes.informesstockcritico', [
                     'filtrosstock' => Posicione::where("cantidadpos",">","0")
                     ->join("estantes","posiciones.estante_id", "estantes.id")
                     ->join("articulos", "posiciones.codigoart", "articulos.codigoart")
@@ -51,7 +51,7 @@ class InformeStockCriticoExport implements FromView,ShouldAutoSize
                     ->select("estantes.bodega_id", "articulos.nombreart","estantes.nroestante", "posiciones.sectorpos", "posiciones.nivelpos",
                      "posiciones.cantidadpos", "articulos.stockcriticoart")->get()
                 ]);
-                return view('informes.informesstock', [
+                return view('warehouse.informes.informesstock', [
                     'filtrosstock' => Posicione::where('cantidadpos','>','0')
                     ->join('estantes','posiciones.estante_id', 'estantes.id')
                     ->join('articulos', 'posiciones.codigoart', 'articulos.codigoart')
@@ -59,7 +59,7 @@ class InformeStockCriticoExport implements FromView,ShouldAutoSize
                     ->select('estantes.bodega_id', 'articulos.nombreart','estantes.nroestante', 'posiciones.sectorpos', 'posiciones.nivelpos', 'posiciones.cantidadpos')->get()
                 ]);
             }
-            return view('informes.informesstockcritico', [
+            return view('warehouse.informes.informesstockcritico', [
                 'filtrosstock' => Posicione::where("cantidadpos",">","0")
                 ->join("estantes","posiciones.estante_id", "estantes.id")
                 ->join("articulos", "posiciones.codigoart", "articulos.codigoart")

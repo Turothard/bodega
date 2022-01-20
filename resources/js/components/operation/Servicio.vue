@@ -3,7 +3,9 @@
         <div v-if="terminado==1" class="d-flex flex-row">
             <div class="p-2">
                 <ul id="ulservicio" class="list-group">
-                    <li v-for="(item,index) in sectores" :key="index" class="list-group-item pointer" @click="cambiacomponente(item['idsector'])" :value="item['idsector']">{{item['nombresec']}}</li>      
+                    <li v-for="(item,index) in sectores" :key="index" class="list-group-item pointer" @click="cambiacomponente(item['idsector'])" :value="item['idsector']">
+                        {{item['nombresec']}}
+                    </li>      
                 </ul>
             </div>
             <div class="container-fluid p-2">
@@ -41,8 +43,36 @@
                         </div>
                         <div class="p-2 col-12">
                         <!-- <li v-for="n  in 20 " :key="n">{{n}}</li>!-->
-                            <component v-bind:is="componenteactual" :dataservicios="dataservicios" :sectorservicio="sectorservicio" ></component>
+                            <table id="tabladetalle" class="table table-striped display table-sm table-bordered table-dark dt-responsive t-regular w-100">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Fecha</th>
+                                    <th>Servicio</th>
+                                    <th>Area</th>
+                                    <th>Encargado</th>
+                                    <th>Estado</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,index) in serviciosactivos" :key="index">
+                                    <td>{{item.id}}</td>
+                                    <td>{{item.inicio}}</td>
+                                    <td>{{dataservicios[6].find(items => items.id === item.servicio_id).nombre}}</td>
+                                    <td>{{dataservicios[3].find(items => items.idarea === item.area_id).nombrearea}}</td>
+                                    <td>{{dataservicios[0].find(items => items.id === item.responsable_id).name}}</td>
+                                    <td>{{item.estado}}</td>
+
+                                    <td>
+                                        <button class="btn btn-info btn-sm" title="Mover artículos" data-toggle="modal" data-target="#serviciodetallemodal" @click="elegirservicio(item)"><img style="width:23px;heigth:23px;" src="/css/img/moreinfo.png"/></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                           
                         </div>
+                         <component v-bind:is="componenteactual" :dataservicios="dataservicios" :sectorservicio="sectorservicio" :servicioelegido="servicioelegido" :key="detalleserviciokey"></component>
                     </div>
                 </div>
             </div>
@@ -56,7 +86,7 @@
                 </div>
             </div>
         </div>
-        <component v-bind:is="componente" :dataservicios="dataservicios" ></component>
+        <component v-bind:is="componente" :dataservicios="dataservicios" :sectorservicio="sectorservicio" :key="newserviciokey" ></component>
     </div>
     
 </template>
@@ -79,6 +109,7 @@
                 componenteactual:'',
                 sectorservicio:'',
                 servicios: [],
+                serviciosactivos:[],
                 terminado:0,
                 usuarios: [],
                 colaboradores: [],
@@ -86,14 +117,17 @@
                 ubicaciones: [],
                 componente: null,
                 terminado:0,
-                user:null
+                user:null,
+                newserviciokey:0,
+                detalleserviciokey:0,
+                servicioelegido:null,
             }
         },
         watch: {
             'componenteactual':function(val, oldVal){
                 if(val!=''){
                     //this.componenteactualvue= val;
-                    sessionStorage.setItem("componenteactualvue",(val));
+                   
                      $("#ulservicio li.active").removeClass('active');
                     $("#li_"+val).addClass('active');
                 }
@@ -104,9 +138,10 @@
                     this.dataservicios = res.data;
                     this.servicios = this.dataservicios[6];
                     this.sectores = this.dataservicios[2];
+                    this.user = this.dataservicios[11];
                     if (sessionStorage.getItem("componenteactualvue")) {
                     // Restaura el contenido al campo de texto
-                        this.componenteactual = sessionStorage.getItem("componenteactualvue");
+                        //this.componenteactual = sessionStorage.getItem("componenteactualvue");
                         switch (this.componenteactual) {
                             case 'RDA':
                                 $("#ulservicio li:nth-child(1)").addClass("active");
@@ -122,9 +157,11 @@
                         }
                         //sessionStorage.clear();
                     }
-                    this.user = this.dataservicios[0];
+                    //this.user = this.dataservicios[0];
+                    this.cargarservicios();
+                    this.componenteactual = 'servicios_detalle';
                  this.terminado=1;
-                console.log(this.servicios);
+                console.log(this.servicios,this.dataservicios[8]);
             }).catch((error) =>{
                 console.log(error.response.data.errors);
                 /*this.err_list = error.response.data.errors;
@@ -140,7 +177,41 @@
         methods: {
             cambiacomponente(sector){
                 this.sectorservicio=sector;
-                this.componenteactual='servicios_detalle';
+                this.cargarservicios();
+                //this.componenteactual='servicios_detalle';
+                this.newserviciokey+=1;
+                this.detalleserviciokey+=1;
+            },
+            cargarservicios(){
+                axios.post('/operation/getdatos', {tipo:'servicios',valor:this.sectorservicio, filtros: this.filtros}).then((res) =>{
+                    this.serviciosactivos = res.data;
+                    console.log(this.serviciosactivos);
+                    this.cargando=false;
+                    /*this.$nextTick(function () {
+                        this.dt = $('#tabladetalle').DataTable({
+                            "language": {
+                                "lengthMenu": "Mostrar _MENU_ filas por página",
+                                "zeroRecords": "Ningún resultado según criterio",
+                                "info": "Mostrando de _PAGE_ a _PAGES_ (_MAX_ totales)",
+                                "infoEmpty": "No se encontraron resultados",
+                                "infoFiltered": "(Filtrado desde _MAX_ resultados totales)",
+                                "search":         "Buscar:",
+                                "paginate": {
+                                    "first":      "Primero",
+                                    "last":       "Último",
+                                    "next":       "Siguiente",
+                                    "previous":   "Anterior"
+                                },
+                            },                        
+                        });
+                        this.cargando=false;
+                    });*/  
+                    
+                });
+            },
+            elegirservicio(serv){
+                this.servicioelegido = serv;
+                this.detalleserviciokey++;
             }
         }
     }

@@ -27,7 +27,7 @@ class InformeEntColExport implements FromView,ShouldAutoSize
   
     public function view(): View
     {
-        return view('informes.informesentcol', [
+        return view('warehouse.informes.informesentcol', [
             'filtrosentcol' => $this->arreglo,'noms' => $this->nombres
         ]);;
         

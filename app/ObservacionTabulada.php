@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ObservacionTabulada extends Model
 {
-    protected $table = 'facturaciones';
+    protected $table = 'observaciontabuladas';
 
     public function detalletrabajos()
     {

@@ -23,7 +23,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/warehouse', 'WareHouseController@index')->name("warehouse");
     Route::get('/operation', 'OperationController@index')->name("operation");
     Route::get('/operation/servicio', 'Operation\ServiciosController@index')->name("operation.servicios");
-    Route::get('/operation/servicio/getdatos', 'Operation\ServiciosController@getdatos')->name("operation.servicio.getdatos");
+    Route::post('/operation/getdatos', 'Operation\ServiciosController@getdatos')->name("operation.getdatos");
+    Route::post('/operation/setdatos', 'Operation\ServiciosController@setdatos')->name("operation.setdatos");
     Route::get('/operation/informe', 'Operation\InformesController@index')->name("operation.informes");
     Route::get('/operation/mantenedores', 'Operation\MantenedoresController@index')->name("operation.mantenedores");
     Route::get('/warehouse/bodega', 'Warehouse\BodegaController@index')->name("warehouse.bodega");

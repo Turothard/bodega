@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class ColaboradorTrabajo extends Model
 {
-    protected $table = 'colaboradortrabajo';
+    protected $table = 'colaboradortrabajos';
 
     public function colaborador()
     {
-        return $this->belongsTo('App\Colaboradore', 'colaborador_id', 'id');
+        return $this->belongsTo('App\Colaboradore', 'colaborador_id', 'rutcolaborador');
     }
     public function detalletrabajo()
     {

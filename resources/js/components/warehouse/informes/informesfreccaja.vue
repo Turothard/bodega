@@ -152,7 +152,7 @@
                     .then((res) =>{
                     setTimeout(function() {
                         console.log(res.data);
-                        window.open("documents/informes/"+res.data);
+                        window.open("/documents/informes/"+res.data);
                     }, 1000);
                 }).catch(function (error) {
                     if (error.response) {

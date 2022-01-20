@@ -29,7 +29,20 @@ class OperationController extends Controller
     {
         //
     }
-
+    public function setdatos(Request $request)
+    {
+        if($request->ajax()){
+            
+            switch ($request->tipo) {
+                
+                default:
+                    # code...
+                    break;
+            }
+        }else{
+            return view('servicios.index');
+        }
+    }
     /**
      * Store a newly created resource in storage.
      *

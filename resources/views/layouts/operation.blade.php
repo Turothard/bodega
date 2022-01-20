@@ -61,12 +61,14 @@
                                 <a class="nav-link" href="{{ route('operation.servicios') }}">{{ __('Servicios') }}</a>
                             </li>
                             @if (Auth::user()->department=='ADMIN' || Auth::user()->department=='SUPERVISORES')
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('operation.informes') }}">{{ __('Informes') }}</a>
-                            </li>
-                            <li class="nav-item">
+                            </li> --}}
+                            @endif
+                            @if (Auth::user()->department=='ADMIN')
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="{{ route('operation.mantenedores') }}">{{ __('Mantenedores') }}</a>
-                            </li>
+                            </li> --}}
                             @endif
                             
                             <li id="notificacionesa" class="nav-item" data-toggle="modal" style="display: none;" data-target="#notificacionesmodal" >

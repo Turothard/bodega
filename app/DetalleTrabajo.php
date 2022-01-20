@@ -8,9 +8,9 @@ class DetalleTrabajo extends Model
 {
     protected $table = 'detalletrabajos';
 
-    public function detalletrabajocampo()
+    public function detalletrabajocampos()
     {
-        return $this->hasOne('App\DetalleTrabajoCampo', 'detalletrabajo_id', 'id');
+        return $this->hasMany('App\DetalleTrabajoCampo', 'detalletrabajo_id', 'id');
     }
     public function colaboradortrabajos()
     {
@@ -30,5 +30,8 @@ class DetalleTrabajo extends Model
     public function detalleservicio()
     {
         return $this->belongsTo("App\DetalleServicio",'trabajo_id', 'id');
+    }
+    public function user(){
+        return $this->belongsTo("App\User",'user_id', 'id');
     }
 }

@@ -178,8 +178,8 @@
                                                             <textarea class="form-control form-control-sm" style="overflow:auto;resize:none" id="exampleFormControlTextarea1" rows="3"  v-model="sustentatorio.descripciondoc"></textarea>
                                                         </td>
                                                         <td class="w-xxl">
-                                                            <button  v-if="sustentatorio.documento =='' || sustentatorio.documento ==null" class="btn btn-info btn-sm" @click="$refs.subirnewfile.click()"><img style="width:23px;heigth:23px;" src="/css/img/agregarfile.png"/></button>
-                                                            <button  v-if="sustentatorio.documento !=''" class="btn btn-info btn-sm" @click="eliminarfile(sustentatorio)"><img style="width:23px;heigth:23px;" src="/css/img/delete.png"/></button>
+                                                            <button v-if="sustentatorio.documento =='' || sustentatorio.documento ==null" class="btn btn-info btn-sm" @click="$refs.subirnewfile.click()"><img style="width:23px;heigth:23px;" src="/css/img/agregarfile.png"/></button>
+                                                            <button v-if="sustentatorio.documento !=''" class="btn btn-info btn-sm" @click="eliminarfile(sustentatorio)"><img style="width:23px;heigth:23px;" src="/css/img/delete.png"/></button>
                                                             <label v-if="sustentatorio.documento !=''">{{sustentatorio.documento.substring(0,30)}}</label>
                                                             <input type="file" ref="subirnewfile" id="newfile" @change="handleFileUploadAny(sustentatorio)" style="display:none"/>
                                                             

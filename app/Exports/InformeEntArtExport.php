@@ -27,7 +27,7 @@ class InformeEntArtExport implements FromView,ShouldAutoSize
   
     public function view(): View
     {
-        return view('informes.informesentart', [
+        return view('warehouse.informes.informesentart', [
             'filtrosentart' => $this->arreglo,'arts' => $this->articulos
         ]);;
         

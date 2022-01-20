@@ -21,7 +21,7 @@ class CreateDetalleTrabajoCamposTable extends Migration
             $table->foreign('detalletrabajo_id')->references('id')->on('detalletrabajos')->onDelete('cascade');
             $table->unsignedInteger('campotrabajo_id');
             $table->foreign('campotrabajo_id')->references('id')->on('campotrabajos')->onDelete('cascade');
-            $table->integer('valor');
+            $table->string('valor');
             $table->unsignedInteger("user_id");
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

@@ -177,7 +177,7 @@
                 axios.post('/informes/export', {tipo:'informeentregaarticulos',detalle: this.filtros, arreglo:this.detalleinforme})
                     .then((res) =>{
                     setTimeout(function() {
-                        window.open("documents/informes/"+res.data);
+                        window.open("/documents/informes/"+res.data);
                     }, 1000);
                 }).catch(function (error) {
                     if (error.response) {

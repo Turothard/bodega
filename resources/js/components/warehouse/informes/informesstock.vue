@@ -77,7 +77,7 @@
                     .then((res) =>{
                     console.log(res.data);
                     setTimeout(function() {
-                        window.open("documents/informes/"+res.data);
+                        window.open("/documents/informes/"+res.data);
                     }, 1000);
                 }).catch(function (error) {
                     if (error.response) {

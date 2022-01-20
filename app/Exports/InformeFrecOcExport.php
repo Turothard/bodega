@@ -27,7 +27,7 @@ class InformeFrecOcExport implements FromView,ShouldAutoSize
   
     public function view(): View
     {
-        return view('informes.informesfrecoc', [
+        return view('warehouse.informes.informesfrecoc', [
             'filtrosfrecoc' => $this->arreglo,'ocs' => $this->ocs
         ]);;
         

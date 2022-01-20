@@ -34,6 +34,8 @@ use App\OrdenCompra;
 use App\DetalleOrdenCompra;
 use App\DocumentoOrdenCompra;
 use App\DocSustentatorio;
+use App\DetalleTrabajo;
+use App\ObservacionTabulada;
 use Illuminate\Support\Facades\DB;
 use Image;
 class SistemaController extends Controller
@@ -149,15 +151,19 @@ class SistemaController extends Controller
             $arreglo[5]=Agencia::all();
             switch ($request->tipo) {
                 case 'Servicio':
-                    $arreglo[6]=Servicio::with("camposervicios")->where('nombre', "not like", "'%DUMMY%'")->get();
+                    $arreglo[6]=Servicio::with(["camposervicios"=> function ($query) {
+                        $query->orderBy('campo', 'desc');
+                    }])->get();
                     $arreglo[7]=Trabajo::with("campotrabajo.campoformularios")->get();
                     $arreglo[8]=ServicioTrabajo::with('trabajo.campotrabajo.campoformularios')->get();
                     $arreglo[9]=Contenido::all();
+                    $arreglo[10]=ObservacionTabulada::all();
+                    $arreglo[11]=User::where("id",auth()->id())->value("department");
                     break;
                 case 'Informes':
                     //$arreglo[5]=Servicio::all();
 
-                break;
+                    break;
                 case 'Mantenedores':
                     //$arreglo[5]=Servicio::all();
                     break;
@@ -251,6 +257,30 @@ class SistemaController extends Controller
             $art = Articulo::find($name);
             $art->image = 'images/'.$fileName;
             $art->save();
+        }
+        if($tipo =='imagentrabajoinicio' || $tipo =='imagentrabajotermino'){
+            $id = $request->input("id");
+            $extension = $image->getClientOriginalExtension(); // Get the extension
+            if($tipo =='imagentrabajoinicio'){
+                $detallet = DetalleTrabajo::where("fotoinicio", $name)->where("serviciotrabajo_id", $id)->first();
+                $fileName = 'fotoinicio_'.$detallet->id. '.' . $extension;
+                $path = public_path('trabajoimages/'.$fileName);
+            
+                Image::make($image)->save($path);
+                $detallet->fotoinicio = 'trabajoimages/'.$fileName;
+                //$detallet->filefotoinicio = 'trabajoimages/'.$fileName;
+                $detallet->save();
+            }else{
+                $detallet = DetalleTrabajo::where("fototermino", $name)->where("serviciotrabajo_id", $id)->first();
+                $fileName = 'fototermino_'.$detallet->id.'.' . $extension;
+                $path = public_path('trabajoimages/'.$fileName);
+            
+                Image::make($image)->save($path);
+                $detallet->fototermino = 'trabajoimages/'.$fileName;
+                //$detallet->filefototermino = 'trabajoimages/'.$fileName;
+                $detallet->save();
+            }
+            
         }
         if($tipo=='documentooc'){
             

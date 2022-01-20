@@ -27,7 +27,7 @@ class InformeStockExport implements FromView,ShouldAutoSize
     public function view(): View
     {
         if($this->bodega!=null && $this->estante!=null){
-            return view('informes.informesstock', [
+            return view('warehouse.informes.informesstock', [
                 'filtrosstock' => Posicione::where('cantidadpos','>','0')
                 ->join('estantes','posiciones.estante_id', 'estantes.id')
                 ->join('articulos', 'posiciones.codigoart', 'articulos.codigoart')
@@ -37,7 +37,7 @@ class InformeStockExport implements FromView,ShouldAutoSize
             ]);;
         }else{
             if($this->bodega!=null){
-                return view('informes.informesstock', [
+                return view('warehouse.informes.informesstock', [
                     'filtrosstock' => Posicione::where('cantidadpos','>','0')
                     ->join('estantes','posiciones.estante_id', 'estantes.id')
                     ->join('articulos', 'posiciones.codigoart', 'articulos.codigoart')
@@ -45,7 +45,7 @@ class InformeStockExport implements FromView,ShouldAutoSize
                     ->select('estantes.bodega_id', 'articulos.nombreart','estantes.nroestante', 'posiciones.sectorpos', 'posiciones.nivelpos', 'posiciones.cantidadpos')->get()
                 ]);
             }
-            return view('informes.informesstock', [
+            return view('warehouse.informes.informesstock', [
                 'filtrosstock' => Posicione::where('cantidadpos','>','0')
                 ->join('estantes','posiciones.estante_id', 'estantes.id')
                 ->join('articulos', 'posiciones.codigoart', 'articulos.codigoart')
