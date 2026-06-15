@@ -1,0 +1,70 @@
+.t-regular{
+    font-size: 0.875em !important;
+    text-transform: uppercase;
+}
+.pointer{
+    cursor: pointer !important;
+}
+.table-dark th, .upcase{
+    text-transform: uppercase;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+.w-xs{
+    max-width: 4em;
+}
+.w-xs2{
+    max-width: 6em;
+}
+.w-s{
+    max-width: 8em;
+}
+.w-d1{
+    max-width: 10em;
+}
+.w-d{
+    max-width: 12em;
+}
+.w-l{
+    max-width: 16em;
+}
+.w-xl{
+    max-width: 20em;
+}
+.w-xxl{
+    max-width: 24em;
+}
+#notificacionesa{
+    display:none;
+}
+@media only screen and (max-width: 900px) and (orientation: portrait){
+    .modal-xl  {
+        max-width: 100% !important;
+        /* margin: 1.75rem auto; */
+    }
+    .modal-xl {
+        width: 98% !important;
+    }
+}
+@media (min-width: 576px){
+    .modal-xl  {
+        max-width: 100% !important;
+        /* margin: 1.75rem auto; */
+    }
+    .modal-xl {
+        width: 98% !important;
+    }
+}
+#tablainventario.dataTables_wrapper {
+    width: 800px;
+    margin: 0 auto;
+}
